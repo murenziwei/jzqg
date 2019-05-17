@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>商品详情</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<script src="__STATIC__/jzqg/js/jquery.min.js"></script>
+		<!--轮播js-->
+		<script src="__STATIC__/jzqg/js/swiper.min.js"></script>
+		<!--轮播样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/swiper.min.css" />
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+		<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+		<!-- layer.js -->
+		<script type="text/javascript" src="__STATIC__/jzqg/js/layer.js" ></script>
+		<!-- layer.js -->
+		<script type="text/javascript" src="__STATIC__/jzqg/js/layui.js" ></script>
+		
+		<style>
+		    .h-b-item{
+		    	position:relative;
+		    }
+		    .bg-item{
+		    	position:absolute;
+		    	width:100%;
+		    	height:100%;
+		    	top:0;
+		    	right:0;
+		    	left:0;
+		    	bottom:0;
+		    	background-position:center;
+		    	background-repeat:no-repeat;
+		    	background-size: cover;
+	            -webkit-filter: blur(40px);
+	            -moz-filter: blur(40px);
+	            -o-filter: blur(40px);
+	            -ms-filter: blur(40px);
+	            filter: blur(40px);
+	            z-index:-1;
+		    }
+		    .play-icon{
+		    	position:absolute;
+		    	top:0;
+		    	right:0;
+		    	bottom:0;
+		    	left:0;
+		    	width:100%;
+		    	height:100%;
+		    	z-index:2;
+		    	display:flex;
+		    	align-items:center;
+		    	justify-content: center;
+		    }
+		    .play-icon span{
+		    	color:#fff;
+		    }
+		    .home-banner{
+		    	background-color:#fff;
+		    }
+		    .hbi-img{
+		        /*width:100%;*/
+		        /*height:6rem;*/
+		        z-index:2;
+		    }
+		    #app{
+		    	padding-bottom:2rem;
+		    }
+			.p-header{
+				background-color:#fff;
+				margin-bottom:0.2rem;
+			}
+			.p-i-style{
+				width:100%;
+				height:10.43rem;
+			}
+			
+			.ph-center{
+				padding:0.3rem;
+				border-bottom: solid 0.03rem rgba(236,238,238,1);
+			}
+			.pc-p{
+				font-size:0.39rem;
+				color:#000;
+				white-space:nowrap;
+				text-overflow:ellipsis;
+				overflow:hidden;
+				
+			}
+			.pc-price{
+				padding:0.3rem 0;
+			}
+			.pp-new{
+				font-size:0.4rem;
+				color:#FF4444;
+			}
+			.pp-old{
+				font-size:0.3rem;
+				color:#999999;
+				text-decoration:line-through;
+			}
+			
+			.pc-data{
+				display:flex;
+				align-items:center;
+				color:#999999;
+				font-size:0.3rem;
+			}
+			.pc-d-item{
+				flex:1;
+				text-align:center;
+			}
+			.pc-d-item:last-child{
+				text-align:right;
+			}
+			.pc-d-item:first-child{
+				text-align:left;
+			}
+			
+			.pf-frame{
+				display:flex;
+				align-items:center;
+			}
+			
+			.pfp-icon{
+				height:1rem;
+				width:1rem;
+			}
+			.pft-site{
+				font-size:0.4rem;
+				color:#000;
+			}
+			.pf-f-text{
+				flex:1;
+				/*padding:0 0.2rem;*/
+			}
+			.pft-type{
+				font-size:0.3rem;
+				color:#999;
+			}
+			.pfi-right{
+				width:0.5rem;
+				height:0.5rem;
+			}
+			
+			.pc-footer{
+				padding:0.3rem;
+			}
+			.p-property{
+				margin-bottom: 0.2rem;
+			}
+			.pp-ul,.pp-u-li{
+				padding:0;
+				margin:0;
+			}
+			
+			.pp-ul{
+				background-color:#fff;
+			}
+			.pp-u-li{
+				display:flex;
+				padding:0.4rem 0;
+			}
+			.pul-left{
+				width:30%;
+				text-indent:0.3rem;
+				font-size:0.39rem;
+				color:#999;
+			}
+			.pul-left:after{
+				content:"：";
+			}
+			.pul-right{
+				font-size:0.39rem;
+				color:#000;
+			}
+			.pp-item{
+				width:100%;
+				height:10.43rem;
+				background-color:#fff;
+				margin-bottom:0.02rem;
+			}
+			.p-submit{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+			}
+			.ps-f-left{
+				display:flex;
+				height:1.2rem;
+				align-items:center;
+				width:2.5rem;
+				background-color:#fff;
+			}
+			.pfl-icon{
+				flex:1;
+				text-align:center;
+				display:flex;
+				align-items:center;
+				justify-content:center;
+				flex-direction:column;
+				color:#999;
+				font-size:0.3rem;
+			}
+			.callect{
+				display:none;
+			}
+			.pi-icon{
+				width:0.5rem;
+				height:0.5rem;
+			}
+			.ps-frame{
+				display:flex;
+				box-shadow:0 0 1px rgba(0,0,0,0.1);
+			}
+			.ps-f-btn{
+				flex:1;
+				height:1.2rem;
+				border:none;
+				outline:none;
+				font-size:0.3rem;
+				color:#fff;
+			}
+			.order{
+				background-color:#ff8855;
+			}
+			.buy{
+				background-color:#ff4444;
+			}
+			.pp-main{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				background-color:#fff;
+				padding:0.3rem;
+				z-index:-1;
+			}
+			
+			.pp-m-header{
+				display:flex;
+				align-items:center;
+				height: 1rem;
+				margin-bottom:0.3rem;
+			}
+			.pmh-pic{
+				width:3rem;
+				height:3rem;
+				align-self:flex-end;
+				border-radius:0.1rem;
+			}
+			.pmh-price{
+				font-size:0.39rem;
+				color:#FE5455;
+				flex:1;
+				text-indent:0.3rem;
+			}
+			.pmh-right{
+				width:1rem;
+				height:1rem;
+			}
+			.pmh-right:active{
+				opacity:0.7;
+			}
+			.pnu-name{
+				font-size:0.36rem;
+				color:#000;
+				margin-bottom:0.3rem;
+			}
+			.pnu-list{
+				display:flex;
+				padding:0;
+				margin:0;
+				flex-wrap:wrap;
+			}
+			.pl-li{
+				margin-right:0.35rem;
+				position:relative;
+				margin-bottom:0.35rem;
+			}
+			.pl-status{
+				font-size:0.3rem;
+				padding:0.05rem 0.3rem;
+				background-color: #e7e7e7;
+				border-radius: 0.07rem;
+				transition:all .4s;
+			}
+			.pl-checkbox{
+				position:absolute;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				height:100%;
+				z-index:2;
+				margin:0;
+				opacity:0;
+			}
+			.pl-checkbox:checked+.pl-status{
+				color:#fff;
+				background-color:#fe5455;
+			}
+			.ps-btn{
+				line-height:1rem;
+				width: 100%;
+			    height: 1rem;
+			    text-align: center;
+			    border-radius: 1rem;
+			    /*background-color: #ff4444;*/
+			    border: none;
+			    font-size: 0.42rem;
+			    color: #fff;
+			    outline: none;
+			}
+			.choose-count{
+				display:flex;
+				align-items:center;
+				margin-bottom:1rem;
+			}
+			.choose-count>.pnu-name{
+				flex:1;
+			}
+			.cc-val{
+				width:1rem;
+				height:0.5rem;
+				border:1px solid #BFBFBF;
+				text-align:center;
+			}
+			.cc-control{
+				display:flex;
+				align-items:center;
+			}
+			.cc-prev,.cc-next{
+				height:0.5rem;
+				width:0.5rem;
+				line-height:0.5rem;
+				text-align:center;
+				border:1px solid #BFBFBF;
+				font-size:0.4rem;
+			}
+			.cc-prev:active,.cc-next:active{
+				color:red;
+			}
+			.plug-tilt{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				top:0;
+				background-color:rgba(0,0,0,0.6);
+				z-index:888;
+				display:none;
+			}
+			.fade-enter-active,
+		    .fade-leave-active {
+			    transition: all .5s
+			}
+		   
+		    .fade-enter,
+		    .fade-leave-to {
+			    opacity: 0;
+			}
+
+			.video{
+				width:100%;
+				background-color:#000;
+			}
+
+
+			ul.layui-fixbar{
+				z-index:2;
+			}
+
+
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<lw-back back-v="商品详情"></lw-back>
+			<div class="product">
+
+				 <!--产品头部-->
+				 <div class="p-header" data-id="'{$list.g_video}'">
+					 <if condition="$list.g_video neq '0'">
+				          <div class="video" data-src="{$list.g_video}" onclick="videofn()">
+				             <div class='play-icon' id="playIcon">
+				             <!-- <span>
+				               播放
+				             </span> -->				             
+				             </div>
+				             <video autoplay class='video' preload='auto' src='{$list.g_video}' id="videosrc"  />
+				          </div>
+				          <else />
+						  <div class="home-banner swiper-container">
+						      <div class="hb-image swiper-wrapper" id="homeBanner" data-id="'{$list.g_video}'">
+						        
+						        <volist name="list.original_img" id="vo">
+						          <div class="h-b-item swiper-slide" onclick="prevImage('{$vo}')" style="height:6rem;text-align:center;">
+						            <div class='bg-item' style="background-image:url('{$vo}')"></div>
+						            <img src="{$vo}" type="" class="hbi-img" onerror="imgerr(this)" style="height:6rem;width:unset;">
+						          </div>
+						        </volist>
+						      </div>
+						      <!-- <div class="hb-p">
+						        <ul class="hb-point">
+						          <li class="h-b-control active"></li>
+						          <li class="h-b-control"></li>
+						        </ul>
+						      </div> -->
+						      <div class="swiper-pagination"></div>
+						  </div>
+					 </if>
+
+				 	<div class='ph-center'>
+				 		<p class='pc-p'>{$list['goods_name']}</p>
+				 		<!-- <div class='pc-price'>
+				 			<span class='pp-new'>￥{$list['shop_price']}</span>
+				 			<span class='pp-old'>$2332.2</span>
+				 		</div> -->
+				 		<div class='pc-data'>
+				 			<div class='pc-d-item'>
+				 				<span>运费：{$list['is_free_shipping']}</span>
+				 			</div>
+				 			<!-- <div class='pc-d-item'>
+				 				<span>销量：{$list['sales_sum']}</span>
+				 			</div> -->
+				 			<div class='pc-d-item'>
+				 				<span>货号：{$list['goods_sn']}</span>
+				 			</div>
+				 		</div>
+				 	</div>
+				 	<div class='pc-footer'>
+				 		<div class='pf-frame'>
+				 			<!--<div class='pf-f-pic'>-->
+				 				<!--<img src="__STATIC__/jzqg/img/search/search-item.png" alt="" class='pfp-icon' />-->
+				 			<!--</div>-->
+				 			<div class='pf-f-text'>
+				 				<div class='pft-site'>店铺：{$list['store_name']}</div>
+
+				 			</div>
+				 			<!--<div class='pf-f-icon'>-->
+				 				<!--<img src="__STATIC__/jzqg/img/arrow-right.png" alt="" class='pfi-right' />-->
+				 			<!--</div>-->
+				 		</div>
+				 	</div>
+				 </div>
+				 <!--产品属性-->
+				 <div class="p-property">
+				 	<ul class="pp-ul">
+				 	   <if condition="$list['other_content']['p_name']">
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				品名
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list['other_content']['p_name']}
+				 			</div>
+				 		</li>
+				 	   </if>
+				 	   <if condition="$list['other_content']['price']">
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				价格
+				 			</div>
+				 			<div class="pul-right">
+								{$list['other_content']['price']}
+				 			</div>
+				 		</li>
+				 	   </if>
+				 	   <if condition="$list['other_content']['color']">
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				颜色
+				 			</div>
+				 			<div class="pul-right">
+								{$list['other_content']['color']}
+				 			</div>
+				 		</li>
+				 	   </if>
+				 	   <if condition="$list['other_content']['material']">
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				鞋面材质
+				 			</div>
+				 			<div class="pul-right">
+								{$list['other_content']['material']}
+				 			</div>
+				 		</li>
+				 	   </if>
+				 	   <if condition="$list['other_content']['neri']">
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				内里
+				 			</div>
+				 			<div class="pul-right">
+								{$list['other_content']['neri']}
+				 			</div>
+				 		</li>
+				 	   </if>
+				 	   <if condition="$list['other_content']['insole']">
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				鞋垫
+				 			</div>
+				 			<div class="pul-right">
+								{$list['other_content']['insole']}
+				 			</div>
+				 		</li>
+				 	   </if>
+				 	   <if condition="$list['other_content']['base_material']">
+						<li class="pp-u-li">
+							<div class="pul-left">
+								底材
+							</div>
+							<div class="pul-right">
+								{$list['other_content']['base_material']}
+							</div>
+						</li>
+				 	   </if>
+				 		
+				 		
+				 	</ul>
+				 </div>
+				 <!--关于产品热门图片-->
+				 <div class='p-pics' id='hotImg'>
+				   <foreach name="list[moreimg]" item="img" >
+					    <div class='pp-item' onclick="hotImage('{$img}')">
+					 		<img src="{$img}" alt="" class='pp-i-img p-i-style' onerror="imgerr(this)" />
+					 	</div>
+				   </foreach>
+				 	
+				 </div>
+				 <!--购买、订单、收藏-->
+				 <div class='p-submit'>
+				 	<div class='ps-frame'>
+				 	  <div class='ps-f-left'>
+				 		<a class='pfl-icon' href="{:U('Mobile/Index/index')}" onclick="layer&&layer.load(1);">
+				 			<img src="__STATIC__/jzqg/img/home.png" alt="" class='pi-icon' />
+				 			
+				 			<span>首页</span>
+				 		</a>
+				 		
+				 			
+				 		<div class="pfl-icon callect" @click="callectfn({$list['goods_id']})" :style="{display:(callectdata?'flex':'none')}">
+				 			<img v-bind:src="callectdata[callect].img" alt="" class="pi-icon" />
+				 			
+				 			<span class="opa">{{callectdata[callect].text}}</span>
+				 		</div>
+				 	  </div>
+				 	  <button class='ps-f-btn order' @click="moreBuy({$list['goods_id']})">经销商下单</button>
+				 	  <!-- <button class='ps-f-btn order' @click="closePlug()">订单</button> -->
+				 	  <button class='ps-f-btn buy' @click="getBuy({$list['goods_id']},0)">购买</button>
+				 	  
+				 	</div>
+				 </div>
+			</div>
+		    <transition  >
+				<form class="p-plug" v-if="show" id="productForm" :action="this.isvip?'{:U('Mobile/Order/vip_order')}':'{:U('Mobile/Order/index')}'" method="POST">
+					<!--遮布-->
+					<div class="plug-tilt" @click="closePlug()" :style="{display:(show?'block':'none')}"></div>
+						
+
+					<div class="pp-main" :style="{zIndex:(show?999:-1)}">
+						  <div class="pp-m-header">
+							<img :src="goods.original_img" alt="" class="pmh-pic" onerror="imgerr(this)" />
+							<div class="pmh-price">￥{{goods.shop_price}}</div>
+							<img src="__STATIC__/jzqg/img/close-product.png" alt="" class="pmh-right" @click="closePlug()" />
+						  </div>
+						  <div class="pp-m-center">
+						  	<div class="pmc-nature">
+
+						  		<div class="p-n-ul">
+						  			<div class="pnu-name">{{spec[1].name}}</div>
+						  			<ul class="pnu-list">
+						  				<template v-for="(item,index) in spec[1].spec">
+						  				  <li class="pl-li">
+						  					<input type="radio" name="c_id" class="pl-checkbox" :value="item.id" :data-id="item.id" required/>
+						  					<div class="pl-status">
+						  						{{item.item}}
+						  					</div>
+						  				 </li>
+						  				</template>
+						  			</ul>
+						  		</div>
+						  		<div class="p-n-ul">
+						  			<div class="pnu-name">{{spec[2].name}}</div>
+						  			<ul class="pnu-list">
+						  				<template v-for="(item,index) in spec[2].spec">
+						  				  <li class="pl-li">
+						  					<input type="radio" name="y_id" class="pl-checkbox" :value="item.id" :data-id="item.id" required/>
+						  					<div class="pl-status">
+						  						{{item.item}}
+						  					</div>
+						  				 </li>
+						  				</template>
+						  			</ul>
+						  		</div>
+						  	  <div class="p-n-ul">
+						  			<div class="choose-count">
+						  				<div class="pnu-name">
+						  					选择数量
+						  				</div>
+						  				<div class="cc-control">
+						  					<div class="cc-prev" @click="ccFn(-1)" >-</div>
+						  					<input type="number" min="1" v-model="chooseCount" class="cc-val" name="num" required />
+						  					<div class="cc-next" @click="ccFn(1)">+</div>
+						  				</div>
+						  			</div>
+						  	  </div>
+						  	</div>
+						  	<div class="pmc-submit">
+						  		<div class="ps-btn layui-btn layui-btn-normal" @click="navSubmit()" />下一步</div>
+						  	</div>
+						  	
+						  </div>
+					</div>
+				</form>
+
+					  
+		    </transition>
+		</div>
+		<include file="Public/wx_api" />
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+		// 流加载
+		layui.use(["flow","util"],function(){
+		    	var util=layui.util;
+
+		    	//工具流
+		    	util.fixbar({
+		    		bar1:false,
+		    		css:{
+		    			bottom:100,
+		    			right:10
+		    		}
+		    	});
+
+		  })
+			window.onload=function(){
+
+		        //轮播逻辑
+		        var swiper=new Swiper('.swiper-container',{
+		          pagination:{
+		            el:".swiper-pagination",
+		            dynamicBullets:true
+		          },
+		          autoplay:{
+		            delay:4000,
+		            diableOnInteraction:true
+		          }
+		        });
+		        
+		    }
+		    function videofn(){
+				var video=document.getElementById('videosrc'),pi=$('#playIcon');
+				if(pi.is(':visible')){
+		          	pi.hide();
+		          	video.play();
+				}else{
+					pi.show();
+					video.pause();
+				}
+		    }
+			//图片预览
+			function hotImage(src){
+				layer&&layer.load(0,{time:2000});
+				var imgarr=[];
+				var imgtar=$("#hotImg .pp-i-img");
+				imgtar.each(function(i,v){
+					imgarr.push($(v).attr("src"));
+					console.log(v);
+				});
+				console.log(imgarr);
+				wx.previewImage({
+					current: src, // 当前显示图片的http链接
+					urls: imgarr // 需要预览的图片http链接列表
+				})
+			}
+			//图片预览
+			function prevImage(src){
+				console.log(src,"图片");
+				var imgarr=[];
+				var imgtar=$("#homeBanner .hbi-img");
+				imgtar.each(function(i,v){
+					imgarr.push($(v).attr("src"));
+					console.log(v);
+				});
+				console.log(imgarr);
+				wx.previewImage({
+					current: src, // 当前显示图片的http链接
+					urls: imgarr // 需要预览的图片http链接列表
+				})
+			}
+		    function ok(jointObj){
+		    	var judgeture=true;
+		    	var keyarr = [
+							"c_id",
+							"y_id",
+							"chooseCount"
+						],maxi=0;
+	            
+			    for(var vi=0;vi<=maxi;vi++){
+			      
+			      switch(keyarr[vi]){
+			        // 真实姓名
+			        case "y_id":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"请选择颜色",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        
+			        // 颜色
+			        case "c_id":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"请选择尺寸",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 商家名称
+			        case "chooseCount":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"请选择数量",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        
+			        default:if(maxi<keyarr.length){
+			        	++maxi;
+
+			        }
+			      }
+			    }
+			    
+			    if(judgeture){
+			    	alertobj={val:"符合",show:false};
+			    }
+			    return alertobj;
+		    }
+		    //图片或者视频不存在
+		    function noneerr(ind){
+		    	$(ind).remove();
+		    }
+			//图片不存在
+			function imgerr(ind){
+
+				ind&&(()=>{
+					var src="__STATIC__/jzqg/img/no-img.png";
+					ind.setAttribute("src",src);
+				})();
+
+			};
+			var app=new Vue({
+				el:"#app",
+				data:{
+					isvip:false,
+					show:false,
+					chooseCount:1,
+					callect: "{$list['collect']}",
+					callectdata:[
+						{img:"__STATIC__/jzqg/img/callect.png",text:"收藏"},
+						{img:"__STATIC__/jzqg/img/callect-true.png",text:"已收藏"}
+					],
+					spec:{},
+					goods:{}
+				},
+				methods:{
+					getBuy:function(gid,bool){
+						layer.load(1);
+						console.log(gid);
+						$.ajax({
+							url:"{:U('/Mobile/Goods/buy_spec')}",
+							type:"POST",
+							dataType:"json",
+							data:{
+								goods_id:gid
+							},
+							success:(res)=>{
+								layer.load(1,{time:1})
+								console.log(res,"规格");
+								if(res.code){
+									if(res.data.spec){
+
+										this.chooseCount=1;
+										this.spec=res.data.spec||{};
+										this.goods=res.data.goods||{};
+										console.log(this.spec);
+										this.show=!this.show;
+										this.isvip=bool==1?true:false;
+									}else{
+										layer.confirm("此商品无任何规格可选，是否返回上一页",{shadeClose:ture,title:"玖泽提醒"},function(ind){
+											window.history.go(-1);
+											layer.close(ind);
+										})
+									}
+								}
+							},
+							error:function(){
+								layer.msg("购买失败",{icon:2});
+								layer.load(1,{time:1})
+							}
+						});
+					},
+					moreBuy:function(gid){
+						var gidarr=[gid];
+						layer.load();
+						$.ajax({
+							url:"{:U('/Mobile/Order/butor_order')}",
+							type:"POST",
+							dataType:"json",
+							data:{
+								goods_id:JSON.stringify(gidarr)
+							},
+							success:(res)=>{
+								layer.load(0,{time:1});
+								if(res.code){
+									console.log(res);
+									
+										var data=res.data;
+										if(data){
+											var judge=0;
+											for(var i=0;i<data.length;i++){
+												if(data[i].spec){
+													judge++;
+												}
+											}
+											console.log(judge,"judge");
+											if(judge){
+												console.log(data,"huo");
+												window.sessionStorage.setItem("vipobj",JSON.stringify(data));
+												window.sessionStorage.setItem("store_id",JSON.stringify(gid));
+												window.location.assign('{:U('Mobile/Order/vip_order')}');
+											}else{
+												layer.alert("此商品的规格组数量为零，无法批发下单",{title:"玖泽提醒",shadeClose:true},function(ind){
+													
+													layer.close(ind);
+												})
+											}
+										}
+									
+								}
+								
+							},
+							error:function(){
+								layer.load(0,{time:1});
+
+								layer.msg("下单失败",{icon:2});
+							}
+						});
+					},
+					//跳转到提交订单的页面
+					navSubmit:function(){
+						var that=this;
+						var dataobj=$("#productForm").serializeArray();
+						console.log(dataobj,"你好");
+
+						var resultarr={}
+
+						dataobj.map((a)=>{resultarr[a.name]=a.value;});
+
+						var judgearr={
+							"y_id":{val:resultarr["y_id"]},
+							"c_id":{val:resultarr["c_id"]},
+							"goods_id":{val:this.goods["goods_id"]},
+							"chooseCount":{val:this.chooseCount}
+						}
+						var result=ok(judgearr);
+						
+						if(result.show){
+							layer.msg(result.val,{icon:2});
+							return false;
+						}
+
+						// 清除session数据
+						window.sessionStorage.clear("order_city");
+
+						
+
+						
+						$.ajax({
+							type:"POST",
+							url:"{:U('Mobile/Order/p_order')}",
+							data:{
+								"y_id":resultarr["y_id"],
+								"c_id":resultarr["c_id"],
+								"goods_id":this.goods["goods_id"],
+								"num":this.chooseCount
+							},
+							dataType:"json",
+							success:function(res){
+
+								
+								if(res.code===1){
+									var data=res.data;
+									console.log(data,"你好");
+									if(data.spec){
+
+
+										//
+										data['num']=that.chooseCount;
+										//订单类型
+										data['order_type']=0;
+										
+										console.log(data);
+										window.sessionStorage.setItem("orderobj",JSON.stringify(data));
+										window.location.assign('{:U('Mobile/Order/index')}');
+									}else{
+										layer.msg("此种规格搭配不售",{icon:0});
+									}
+									
+									
+
+								}
+							},
+							error:function(res){
+
+							}
+						})
+
+							
+						
+
+					},
+					//长按的方法
+					longtab:function(){
+						console.log("站恩怨");
+					},
+					//收藏的方法
+					callectfn:function(gid){
+						var that=this;
+						console.log(gid,"你好");
+						console.log(that.callect);
+						var typeS;
+						if(that.callect=='1'){typeS='0';}else if(that.callect=='0'){typeS='1';}
+					     
+						layer.load(0);
+						$.ajax({
+							type:"POST",
+							url:"{:U('/Mobile/Goods/goods_collect')}",
+							data:{
+								"goods_id":gid,
+								"type":typeS
+							},
+							dataType:"json",
+							success:function(res){
+								layer.load(0,{time:1});
+								if(res.code===1){
+									if(that.callect==0){
+										that.callect=1;
+									}else if(that.callect==1){
+										that.callect=0;
+									}
+									layer.msg(res.msg);
+								}else if(res.code===2){
+									if(that.callect==0){
+										that.callect=1;
+									}else if(that.callect==1){
+										that.callect=0;
+									}
+									layer.msg(res.msg);
+								}
+								else if(res.code===0){
+									layer.msg(res.msg,{icon:2})
+								}
+							},
+							error:function(err){
+								console.log(err,"错误");
+								layer.load(0,{time:1});
+								layer.msg("收藏请求失败",{icon:2});
+							}
+						})
+						
+					},
+					//选择数量加减方法
+					ccFn:function(count){
+						console.log(count);
+						
+						var countVal=parseInt(this.chooseCount)||1;
+						countVal+=count||1;
+						console.log(countVal);
+						if(countVal<=1){
+							this.chooseCount=1;
+						}else{
+							this.chooseCount=countVal;
+						}
+					},
+					//关闭弹窗的方法
+					closePlug:function(){
+						//清空表单数据
+						var formN=document.getElementById("productForm");
+						formN&&formN.reset();
+						
+						this.show=!this.show;
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

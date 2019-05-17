@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>商家主页</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+
+		<!-- jquery -->
+		<script src="__STATIC__/js/jquery.js"></script>
+
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+		<style>
+			#home{
+				padding-bottom:3rem;
+			}
+			.s-c-data{
+				margin-bottom:0.2rem;
+			}
+			/*tabs切换*/
+			.stm-header{
+				display:flex;
+				align-items:center;
+				justify-content:space-around;
+				background-color:#fff;
+				margin-bottom:0.04rem;
+			}
+			.sh-item{
+				height:1rem;
+				line-height:1rem;
+				text-align:center;
+				position:relative;
+				border:0.04rem solid transparent;
+			}
+			.sh-item>span{
+				font-family: PingFang-SC-Medium;
+				font-size: 0.33rem;
+				font-weight: normal;
+				font-stretch: normal;
+				letter-spacing: 0rem;
+			}
+			.sh-item.active{
+				color:#ff4444;
+				border-bottom-color:#ff4444;
+			}
+			
+			.sc-item{
+				display:flex;
+				background-color:#fff;
+				
+				padding:0.4rem 0.2rem;
+			}
+			.si-left{
+				width:2.1rem;
+				height:2.1rem;
+				display:flex;
+				align-items:center;
+				justify-content: center;
+				text-align:center;
+			}
+			.shop-img{
+				width:2.1rem;
+				height:2.1rem;
+				background-color: #ffffff;
+				border-radius: 0.07rem;
+			}
+			.si-l-img{
+				width:1.25rem;
+				height:1.25rem;
+				border-radius:100%;
+			}
+			.si-right{
+				flex:1;
+				display:flex;
+				flex-direction: column;
+				justify-content: space-between;
+			}
+			.si-r-name {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.36rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #000000;
+			}
+			.sra-icon {
+				width: 0.31rem;
+				height: 0.35rem;
+				margin-top:0.04rem;
+			}
+			.sra-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.31rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #999999;
+			}
+			
+			/*切换到商品的样式*/
+			.shop-title{
+				overflow:hidden;
+				text-overflow:ellipsis;
+				white-space:nowrap;
+				width:7rem;
+			}
+			.sn-pic {
+				width: 0.49rem;
+				height: 0.49rem;
+				border-radius:50%;
+				vertical-align: middle;
+			}
+			.sn-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.28rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #7d7d7d;
+			}
+			.shop-bottom{
+				display:flex;
+				align-items:center;
+			}
+			.s-l-money{
+				font-family: PingFang-SC-Bold;
+				font-size: 0.44rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.53rem;
+				letter-spacing: 0rem;
+				color: #fe5455;
+			}
+			.sb-right{
+				flex:1;
+				text-align:right;
+			}
+			.s-l-buy{
+				display:inline-block;
+				width: 0.81rem;
+				height: 0.44rem;
+				line-height:0.44rem;
+				text-align:center;
+				border-radius: 0.07rem;
+				border: solid 0.02rem #cc1623;
+				color:#FE5455;
+				font-size:0.3rem;
+				
+			}
+			
+			/*商品*/
+			.si-end{
+				display:flex;
+				align-items:center;
+				padding:0.1rem 0.3rem;
+				background-color:#fff;
+			}
+			.s-e-right{
+				flex:1;
+				text-align:right;
+				display:flex;
+				justify-content: flex-end;
+			}
+			.ser-btn{
+				height:0.7rem;
+				line-height:0.7rem;
+				font-size:0.3rem;
+				text-align:center;
+				padding:0 0.5rem;
+				border:0.01rem solid;
+				margin-left:0.3rem;
+				border-radius:5px;
+			}
+			.ser-btn:active{
+				opacity:0.7;
+			}
+			.s-e-status{
+				color:#000;
+				font-size:0.3rem;
+			}
+			.edit-btn{
+				border-color:#FFA866;
+				color:#FFA866;
+				background-color:#fff;
+			}
+			.down .sold-btn{
+				display:none;
+			}
+			.up .up-btn{
+				display:none;
+			}
+			.sold-btn{
+				border-color:#FFA866;
+				background-color:#FFA866;
+				color:#fff;
+			}
+			.up-btn{
+				border-color:#FF2E2E;
+				background-color:#FF2E2E;
+				color:#fff;
+			}
+			.status-item{
+				margin-bottom:rgba(236,238,238,1);
+			}
+			
+			
+			
+			
+			/*底部导航*/
+			.m-mt-footer{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				width:100%;
+				
+			}
+			.m-my-tabbar{
+				display:flex;
+				height:1.2rem;
+				align-items:center;
+				justify-content:space-around;
+				background-color:#fff;
+				box-shadow:0 -0.1rem 0.1rem rgba(0,0,0,0.1);
+			}
+			.m-mt-item{
+				text-align: center;
+				transition:all .2s;
+				opacity:0.5;
+			}
+			.m-mt-item.active{
+				opacity:1;
+			}
+			.m-mi-icon{
+				width:0.5rem;
+				height:0.5rem;
+				
+			}
+			.m-mi-text{
+				font-size:0.3rem;
+				color:#000;
+			}
+			
+			/*我的*/
+			.my-header{
+				padding:1rem;
+				display:flex;
+				align-items:center;
+				background-image:linear-gradient(45deg,#FF4444 20%,#FF4D00 100%);
+			}
+			.mh-pic>img,.mh-pic{
+				width:1.5rem;
+				height:1.5rem;
+				border-radius:50%;
+			}
+			.mh-right{
+				padding-left:0.2rem;
+			}
+			.mr-name{
+				font-size:0.4rem;
+				color:#fff;
+			}
+			.mr-location{
+				display:flex;
+				align-items:center;
+			}
+			.m-l-icon{
+				width:0.3rem;
+				height:0.3rem;
+			}
+			.m-l-text{
+				font-size:0.3rem;
+				color:#fff;
+			}
+			.mi-count{
+				font-size:0.5rem;
+				color:#000;
+			}
+			.mi-name{
+				font-size:0.3rem;
+				color:#000;
+			}
+			.mm-item{
+				text-align:center;
+			}
+			.my-btn{
+				padding:1rem;
+			}
+			.mb-submit{
+				width:100%;
+				height:1rem;
+				text-align:center;
+				line-height:1rem;
+				border-radius:1rem;
+				color:#fff;
+				font-size:0.35rem;
+				background-color:#B8B8B8;
+			}
+			.mm-td{
+				width:50%;
+				height:4rem;
+			}
+			.mm-table{
+				background-color:#fff;
+				width:100%;
+				border-collapse:collapse;
+				border-color:rgba(0,0,0,0.1);
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<lw-back back-v="商家主页"></lw-back>
+			<div id="home">
+				<!--商品-->
+				<div v-if="pageActive===0">
+					<!--tabs切换-->
+					<div class="s-tabs">
+						<div class="s-t-main">
+							<div class="stm-header">
+							  <template v-for="(item,index) in tabs">
+								<div v-bind:class="{'sh-item':true,'active':(index==tabsActive)}" v-on:click="tabsFn(index)" v-bind:data-index="index">
+									<span>{{item.val}}</span>
+								</div>
+							  </template>
+							</div>
+							<!--搜索框-->
+							<div class="home-search">
+								<div class="hs-frame">
+									<img src="__STATIC__/jzqg/img/search.png" alt="" class="hs-f-icon" />
+									<input placeholder="请输入关键词搜索" class="hs-f-search" />
+								</div>
+							</div>
+							<div class="stm-content">
+								<div class="s-c-data" v-if="tabsActive==0"></div>
+								
+								<div class="s-c-data" v-if="tabsActive==1||tabsActive==0">
+								  <div class="status-item">
+								  	<div class="sc-item">
+										<div class="si-left">
+											<img src="__STATIC__/jzqg/img/search/test-data.png" alt="" class="shop-img" />
+										</div>
+										<div class="si-right">
+											<div>
+												<div class="si-r-name shop-title">
+													广州皮革怆双鞋买卖两毛钱，可解决生理问题又存着好看，穿起来像麻麻
+												</div>
+											</div>
+											<div class="shop-bottom">
+												<div class="sb-left">
+													<span class="sn-span">销量：1232</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="si-end up">
+										<div class="s-e-status">已上架</div>
+										<div class="s-e-right">
+											<div class="ser-btn edit-btn">编辑</div>
+											<div class="ser-btn sold-btn">下架</div>
+											<div class="ser-btn up-btn">上架</div>
+										</div>
+									</div>
+								  </div>
+								
+								</div>
+								
+								<div class="s-c-data" v-if="tabsActive==2||tabsActive==0">
+								  <div class="status-item">
+								  	<div class="sc-item">
+										<div class="si-left">
+											<img src="__STATIC__/jzqg/img/search/test-data.png" alt="" class="shop-img" />
+										</div>
+										<div class="si-right">
+											<div>
+												<div class="si-r-name shop-title">
+													广州皮革怆双鞋买卖两毛钱，可解决生理问题又存着好看，穿起来像麻麻
+												</div>
+											</div>
+											<div class="shop-bottom">
+												<div class="sb-left">
+													<span class="sn-span">销量：1232</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="si-end down">
+										<div class="s-e-status">未上架</div>
+										<div class="s-e-right">
+											<div class="ser-btn edit-btn">编辑</div>
+											<div class="ser-btn sold-btn">下架</div>
+											<div class="ser-btn up-btn">上架</div>
+										</div>
+									</div>
+								  </div>
+								
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--我的-->
+				<div v-if="pageActive===1">
+					<div class="my-header">
+						<div class="mh-pic">
+							<img src="__STATIC__/jzqg/img/lw-user.png" alt="" />
+						</div>
+						<div class="mh-right">
+							<p class="mr-name">创优技术</p>
+							<div class="mr-location">
+								<img src="__STATIC__/jzqg/img/write-site.png" class="m-l-icon"/>
+							    <span class="m-l-text">广州市白云区嘉禾望岗嘉丰大厦</span>
+							</div>
+						</div>
+					</div>
+					<div class="my-main">
+						<table class="mm-table" border="1">
+							<tbody class="mm-tbody">
+								<tr class="mm-tr">
+									<td class="mm-td">
+										<div class="mm-item">
+											<p class="mi-count">2323</p>
+											<p class="mi-name">总销量</p>
+										</div>
+									</td>
+									<td class="mm-td">
+										<div class="mm-item">
+											<p class="mi-count">￥2323.00</p>
+											<p class="mi-name">总销售额</p>
+										</div>
+									</td>
+								</tr>
+								<tr class="mm-tr">
+									<td class="mm-td">
+										<div class="mm-item">
+											<p class="mi-count">2323</p>
+											<p class="mi-name">上架商品</p>
+										</div>
+									</td>
+									<td class="mm-td">
+										<div class="mm-item">
+											<p class="mi-count">2323.00</p>
+											<p class="mi-name">下架商品</p>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						
+					</div>
+					<div class="my-btn">
+						<div class="mb-submit">退出登录</div>
+					</div>
+				</div>
+			</div>
+			<div class="m-mt-footer">
+				<div class="m-my-tabbar">
+					<div :class="{'m-mt-item':true,'active':pageActive==0}" @click="pagefn(0)">
+						<img src="__STATIC__/jzqg/img/my-shang.png" alt="" class="m-mi-icon" />
+						<br />
+						<span class="m-mi-text">商品</span>
+					</div>
+					<div :class="{'m-mt-item':true,'active':pageActive==1}" @click="pagefn(1)">
+						<img src="__STATIC__/jzqg/img/my-people.png" alt="" class="m-mi-icon" />
+						<br />
+						<span class="m-mi-text">我的</span>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+			var app=new Vue({
+				el:"#app",
+				data:{
+					pageActive:0,
+					tabs:[
+					 {
+					 	val:"全部"
+					 },
+					 {val:"已上架"},
+					 {val:"已下架"}
+					],
+					tabsActive:0,
+				},
+				methods:{
+					/*tabs导航栏*/
+					tabsFn:function(tar){
+						this.tabsActive=tar||0;
+					},
+					/*page导航栏*/
+					pagefn:function(ind){
+						this.pageActive=ind||0;
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

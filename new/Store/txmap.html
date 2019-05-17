@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>玖泽趣购腾讯导航</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+		<style>
+			#txmap{
+				position:fixed!important;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				height:100%;
+				z-index:1;
+			}
+			#head{
+				z-index:2;
+				background: #fff;
+				position:fixed;
+				top:5px;
+				left:10px;
+				border-radius:100%;
+				box-shadow:0 0 10px rgba(0,0,0,0.1);
+			}
+			#head img{
+				width:0.7rem;
+				height:0.7rem;
+
+			}
+			.back-a{
+				display:flex;
+				align-items:center;
+				justify-content:center;
+				width:1rem;
+				height:1rem;
+				border-radius:50%;
+				background-color:#fff;
+				box-shadow:0 0 1px rgba(0,0,0,0.1);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+
+			<div id="head"><a href="javascript:history.go(-1)" class="back-a"><img src="/Public/component/left-cut.png" alt=""></a></div>
+			<iframe frameborder="0" id="txmap" :src="iframesrc"></iframe>
+		</div>
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+			var app=new Vue({
+				el:"#app",
+				data:{
+					iframesrc:"",
+					search:"1",
+					type:"1",
+					key:"F4IBZ-ZDFCP-YBYDD-LTDV3-UGTWT-ZEBVV",
+					referer:"myapp"
+
+				},
+				created:function(option){
+					var gc=window.sessionStorage.getItem("store_nav");
+					gc=JSON.parse(gc);
+
+					var src=`https://3gimg.qq.com/lightmap/components/locationPicker2/index.html?search=${this.search}&type=${this.type}&key=${this.key}&referer=${this.referer}`;
+					// var sitesrc=`https://apis.map.qq.com/tools/routeplan/eword=${gc.eword}&spointx=${gc.spointx}&spointy=${gc.spointy}&epointx=${gc.epointx}&epointy=${gc.epointx}?referer=myapp&key=${this.key}`;
+					var sitesrc=`https://apis.map.qq.com/tools/routeplan/eword=${gc.eword}&epointx=${gc.epointx}&epointy=${gc.epointx}?referer=myapp&key=${this.key}`;
+					this.iframesrc=sitesrc;
+
+					console.log(sitesrc,"李伟伟查看");
+				}
+				
+			});
+		</script>
+	</body>
+</html>

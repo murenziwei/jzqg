@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>收藏商家</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <script src="__STATIC__/jzqg/js/flexible.js"></script>
+    <script src="__STATIC__/jzqg/js/vue.js"></script>
+    <!--公共样式-->
+    <link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+
+    <script type="text/javascript" src="__STATIC__/jzqg/js/jquery.min.js" ></script>
+
+    <script type="text/javascript" src="__STATIC__/jzqg/js/layui.js" ></script>
+    <link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+    <style>
+      
+      /*tabs切换*/
+      .stm-header{
+        display:flex;
+        align-items:center;
+        justify-content:space-around;
+        background-color:#fff;
+        margin-bottom:0.04rem;
+      }
+      .sh-item{
+        height:1rem;
+        line-height:1rem;
+        text-align:center;
+        position:relative;
+        border:0.04rem solid transparent;
+      }
+      .sh-item>span{
+        font-family: PingFang-SC-Medium;
+        font-size: 0.33rem;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0rem;
+      }
+      .sh-item.active{
+        color:#ff4444;
+        border-bottom-color:#ff4444;
+      }
+      
+      .sc-item{
+        display:flex;
+        background-color:#fff;
+        margin-bottom:0.05rem;
+        padding:0.4rem 0.2rem;
+      }
+      .si-left{
+        width:2.1rem;
+        height:2.1rem;
+        display:flex;
+        align-items:center;
+        justify-content: center;
+        text-align:center;
+      }
+      .shop-img{
+        width:2.1rem;
+        height:2.1rem;
+        background-color: #ffffff;
+        border-radius: 0.07rem;
+      }
+      .si-l-img{
+        width:1.25rem;
+        height:1.25rem;
+        border-radius:100%;
+      }
+      .si-right{
+        flex:1;
+        display:flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-left:0.2rem;
+      }
+      .si-r-name {
+        font-family: PingFang-SC-Medium;
+        font-size: 0.36rem;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 0.56rem;
+        letter-spacing: 0rem;
+        color: #000000;
+      }
+      .sra-icon {
+        width: 0.31rem;
+        height: 0.35rem;
+        margin-top:0.04rem;
+      }
+      .sra-span {
+        font-family: PingFang-SC-Medium;
+        font-size: 0.31rem;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 0.56rem;
+        letter-spacing: 0rem;
+        color: #999999;
+      }
+      
+      /*切换到商品的样式*/
+      .shop-title{
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        width:7rem;
+      }
+      .sn-pic {
+        width: 0.49rem;
+        height: 0.49rem;
+        border-radius:50%;
+        vertical-align: middle;
+      }
+      .sn-span {
+        font-family: PingFang-SC-Medium;
+        font-size: 0.28rem;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 0.56rem;
+        letter-spacing: 0rem;
+        color: #7d7d7d;
+      }
+      .shop-bottom{
+        display:flex;
+        align-items:center;
+      }
+      .s-l-money{
+        font-family: PingFang-SC-Bold;
+        font-size: 0.44rem;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 0.53rem;
+        letter-spacing: 0rem;
+        color: #fe5455;
+      }
+      .sb-right{
+        flex:1;
+        text-align:right;
+      }
+      .s-l-buy{
+        display:inline-block;
+        width: 0.81rem;
+        height: 0.44rem;
+        line-height:0.44rem;
+        text-align:center;
+        border-radius: 0.07rem;
+        border: solid 0.02rem #cc1623;
+        color:#FE5455;
+        font-size:0.3rem;
+        
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <lw-back back-v="收藏商家"></lw-back>
+        
+        <div class="stm-content">
+          <div class="s-c-data" id="maindata"></div>
+          
+          
+        </div>
+      </div>
+    <!--必须放在Vue实例化前，否则无效-->
+    <script src="__STATIC__/jzqg/js/component.js"></script>
+    <script>
+
+      //图片不存在
+      function imgerr(ind){
+
+        ind&&(()=>{
+          var src="__STATIC__/jzqg/img/no-img.png";
+          ind.setAttribute("src",src);
+        })();
+
+      };
+      // 流加载
+      layui.use(["flow","layer","util"],function(){
+        var flow=layui.flow;
+        var layer=layui.layer;
+        //工具
+        var util=layui.util;
+
+        //固定块
+        util.fixbar({
+          bar1:false,
+          css:{
+            right:10,bottom:100
+          },
+          click:function(type){
+
+          }
+        })
+        //信息流
+        flow.load({
+          elem:"#maindata",
+          done:function(page,next){
+            console.log(page);
+            var lis = [];
+              //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+              $.ajax({
+                type:"POST",
+                url:"{:U('/Mobile/User/get_store_collect')}",
+                dataType:"json",
+                data:{
+                  page:page
+                },
+                success:function(res){
+                  console.log(res,"请求成功");
+                  if(res.code){
+                   var data=res.data;
+                   if(data.length){
+                    layui.each(data,function(index, item){
+                      
+                      var href="{:U('mobile/store/homemerchan',array('store_id'=>'store_val'))}";
+                      href=href.replace('store_val',item.store_id);
+                      var str=`<div class="sc-item" onclick="layer&&layer.load(1);window.location.href='${href}'">
+                            <div class="si-left">
+                              <img src="${item.store_logo}" alt="" class="shop-img" onerror="imgerr(this)" />
+                            </div>
+                            <div class="si-right">
+                              <div>
+                                <div class="shop-name">
+                                  <span class="sn-span">${item.store_name}</span>
+                                  <p class="sn-span">${item.add_time}</p>
+                                </div>
+                              </div>
+                              <div class="shop-bottom">
+                                <div class="sb-left">
+                                  <i class="layui-icon layui-icon-location" /><span>${item.store_address!='null'?(item.store_address||'未设置地址'):'未设置地址'}</span>
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>
+                      `;
+                      lis.push(str);
+                      });
+                      //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+                    //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+                    next(lis.join(''), true);
+                   }else{
+                    
+                    next(lis.join(''),false);
+                   }  
+                  }else{
+                    next(lis.join(''),false);
+                  }
+                },
+                error:function(){
+                  console.error("请求失败");
+                }
+
+              })
+          }
+        });
+
+      })
+      var app=new Vue({
+        el:"#app",
+        data:{
+          
+        },
+        methods:{
+          
+        }
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>选择地址</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+		<style>
+			.cd-li{
+				display:flex;
+				align-items:center;
+				margin-bottom:0.05rem;
+				padding:0.5rem;
+				
+				background-color:#fff;
+			}
+			.cl-r-icon{
+				width:0.5rem;
+				height:0.5rem;
+			}
+			.crt-topic{
+				font-size:0.42rem;
+				color:#000;
+			}
+			.cl-r-text{
+				padding:0 0.5rem;
+			}
+			.crt-address{
+				font-size:0.33rem;
+				color:#6a6a6a;
+			}
+			.cl-right{
+				flex:1;
+				align-items:center;
+				display:flex;
+			}
+			.cl-choose{
+				font-size: 0.39rem;
+				color: #ff4444;
+			}
+			.choose-add{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				width:100%;
+				height: 1.25rem;
+				background-color: #ff4444;
+				border:none;
+				outline:none;
+				font-size:0.42rem;
+				color:#fff;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<lw-back back-v="选择地址"></lw-back>
+			<volist name="list" id="liwei">
+			   <div >{$liwei.name}</div>
+			</volist>
+			<form action="#" id="chooseAddress">
+				<div class="choose-data">
+					<div class="cd-li">
+						<div class="cl-right">
+							<img src="__STATIC__/jzqg/img/choose-location.png" alt="" class="cl-r-icon" />
+							<div class="cl-r-text">
+								<div class="crt-topic">
+									<span class="crt-t-name">李伟</span>
+									<span class="crt-t-phone">13825000114</span>
+								</div>
+								<div class="crt-address">
+									广州市天河区天河达到1953号
+								</div>
+							</div>
+						</div>
+						<a href="#" class="cl-choose">选择</a>
+					</div>
+					<div class="cd-li">
+						<div class="cl-right">
+							<img src="__STATIC__/jzqg/img/choose-location.png" alt="" class="cl-r-icon" />
+							<div class="cl-r-text">
+								<div class="crt-topic">
+									<span class="crt-t-name">李伟</span>
+									<span class="crt-t-phone">13825000114</span>
+								</div>
+								<div class="crt-address">
+									广州市天河区天河达到1953号
+								</div>
+							</div>
+						</div>
+						<a href="#" class="cl-choose">选择</a>
+					</div>
+				</div>
+			</form>
+			<button class="choose-add" onclick="window.location.assign('{:U('Mobile/Channel/chooseaddress')}')">
+				新增地址
+			</button>
+		</div>
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+			var app=new Vue({
+				el:"#app"
+			});
+		</script>
+	</body>
+</html>

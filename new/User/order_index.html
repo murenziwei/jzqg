@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>订单</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<script src="__STATIC__/jzqg/js/jquery.min.js"></script>
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+		<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+		<!-- layer.js -->
+		<script type="text/javascript" src="__STATIC__/jzqg/js/layui.js" ></script>
+		<style>
+			
+			.sn-text{
+				color:#999;
+				font-family: PingFang-SC-Medium;
+				font-size: 0.3rem;
+				font-weight: normal;
+				font-stretch: normal;
+				letter-spacing: 0rem;
+			}
+			/*tabs切换*/
+			.stm-header{
+				display:flex;
+				align-items:center;
+				justify-content:space-around;
+				background-color:#fff;
+				margin-bottom:0.04rem;
+			}
+			.sh-item{
+				height:1rem;
+				line-height:1rem;
+				text-align:center;
+				position:relative;
+				border:0.04rem solid transparent;
+			}
+			.sh-item>span{
+				font-family: PingFang-SC-Medium;
+				font-size: 0.33rem;
+				font-weight: normal;
+				font-stretch: normal;
+				letter-spacing: 0rem;
+			}
+			.sh-item.active{
+				color:#ff4444;
+				border-bottom-color:#ff4444;
+			}
+			
+			.sc-item{
+				display:flex;
+				background-color:#fff;
+				
+				padding:0.4rem 0.2rem;
+			}
+			.order-item{
+				border-bottom:solid 0.2rem rgba(236,238,238,1);
+			}
+			.si-left{
+				width:2.1rem;
+				height:2.1rem;
+				display:flex;
+				align-items:center;
+				justify-content: center;
+				text-align:center;
+			}
+			.shop-img{
+				width:2.1rem;
+				height:2.1rem;
+				background-color: #ffffff;
+				border-radius: 0.07rem;
+				padding-right:0.1rem;
+			}
+			.si-l-img{
+				width:1.25rem;
+				height:1.25rem;
+				border-radius:100%;
+			}
+			.si-right{
+				flex:1;
+				display:flex;
+				flex-direction: column;
+				justify-content: space-between;
+			}
+			.si-r-name {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.36rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #000000;
+			}
+			.sra-icon {
+				width: 0.31rem;
+				height: 0.35rem;
+				margin-top:0.04rem;
+			}
+			.sra-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.31rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #999999;
+			}
+			
+			/*切换到商品的样式*/
+			.shop-title{
+				overflow:hidden;
+				text-overflow:ellipsis;
+				white-space:nowrap;
+				width:7rem;
+			}
+			.sn-pic {
+				width: 0.49rem;
+				height: 0.49rem;
+				border-radius:50%;
+				vertical-align: middle;
+			}
+			.sn-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.28rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #000;
+			}
+			.shop-bottom{
+				display:flex;
+				align-items:center;
+			}
+			.s-l-money{
+				font-family: PingFang-SC-Bold;
+				font-size: 0.44rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.53rem;
+				letter-spacing: 0rem;
+				color: #fe5455;
+			}
+			.sb-right{
+				flex:1;
+				text-align:right;
+			}
+			.s-l-buy{
+				display:inline-block;
+				width: 0.81rem;
+				height: 0.44rem;
+				line-height:0.44rem;
+				text-align:center;
+				border-radius: 0.07rem;
+				border: solid 0.02rem #cc1623;
+				color:#FE5455;
+				font-size:0.3rem;
+				
+			}
+			
+			.order-num{
+				font-size:0.3rem;
+			}
+			.ot-icon,.order-topic{
+				display:flex;
+				align-items: center;
+				background-color:#fff;
+				padding:0.1rem 0.3rem;
+			}
+			.ot-icon{
+				flex:1;
+				justify-content: flex-end;
+			}
+			.oi-cut{
+				width:0.4rem;
+				height:0.4rem;
+			}
+			
+			/*普通用户待付款*/
+			.pay-footer{
+				text-align:right;
+				padding:0.3rem;
+				background-color: #fff;
+			}
+			.confirm-order,.cancel-order{
+				border:0.01rem solid #cc1623;
+				
+				font-size:0.3rem;
+				height:0.8rem;
+				padding:0 0.3rem;
+				text-align:center;
+				line-height:0.8rem;
+				margin-left:0.2rem;
+				display:inline-block;
+			}
+			.confirm-order:active,.cancel-order:active{
+				opacity:0.7;
+			}
+			.cancel-order{
+				color:#CC1623;
+				background-color:#fff;
+			}
+			.confirm-order{
+				color:#fff;
+				background:#FF0000;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<div class="nav-back"><a onclick="layer&&layer.load(1);" href="{:U('Mobile/User/index')}" class="nb-link"><img src="/Public/component/my-people.png" class="nl-icon"></a> <span class="nb-text">订单列表</span></div>
+			
+			<!--用户tabs切换-->
+			<div class="s-tabs">
+				<div class="s-t-main">
+					<div class="stm-header">
+					 
+						<a onclick="layer&&layer.load(1);" v-bind:class="{'sh-item':true,'active':(0==tabsActive)}"  href="{:U('Mobile/User/order_index',array('type'=>'0'))}">
+							<span>全部</span>
+						</a>
+						<a onclick="layer&&layer.load(1);" v-bind:class="{'sh-item':true,'active':(1==tabsActive)}" href="{:U('Mobile/User/order_index',array('type'=>'1'))}">
+							<span>待付款</span>
+						</a>
+						<a onclick="layer&&layer.load(1);" v-bind:class="{'sh-item':true,'active':(2==tabsActive)}" href="{:U('Mobile/User/order_index',array('type'=>'2'))}">
+							<span>待发货</span>
+						</a>
+						<a onclick="layer&&layer.load(1);" v-bind:class="{'sh-item':true,'active':(3==tabsActive)}" href="{:U('Mobile/User/order_index',array('type'=>'3'))}">
+							<span>待收货</span>
+						</a>
+						<a onclick="layer&&layer.load(1);" v-bind:class="{'sh-item':true,'active':(4==tabsActive)}" href="{:U('Mobile/User/order_index',array('type'=>'4'))}">
+							<span>已完成</span>
+						</a>
+					</div>
+					<div class="stm-content" id="main">
+								    
+						<div class="s-c-data" id="all">
+						   <template v-for="(item,index) in tabarr">
+						      <template v-if="item.order_type==1">
+						        <!-- 经销商订单 -->
+								<div class="order-item" @click="vipFn(item.order_id)">
+									<div class="order-topic">
+										<div class="shop-name">
+											<img :src="item.store_logo" alt="" class="sn-pic" onerror="imgerr(this,'user')" />
+											<span class="sn-span">{{item.store_name}}</span>
+										</div>
+										<div class="ot-icon">
+											<span class="sn-span">
+												{{tabsActive==0?(alltabs[item.order_status]):(tabsActive==2?'备料中':tabs[tabsActive].val)}}
+											</span>
+										</div>
+									</div>
+									<div class="order-topic">
+										<div class="sn-text">
+											订单号：{{item.order_sn}}
+										</div>
+									</div>
+									<template v-for="(vipval,vipind) in item.goods">
+										<div>
+											<div class="sc-item" :data-id="vipval.goods_id">
+												<div class="si-left">
+													<img :src="vipval.original_img" alt="" class="shop-img" onerror="imgerr(this)" />
+												</div>
+												<div class="si-right">
+													<div>
+														<div class="si-r-name shop-title">
+															{{vipval.goods_name}}
+														</div>
+													</div>
+													<div>
+														<div class="sn-text">
+															{{vipval.spec_key_name}}
+														</div>
+													</div>
+													<div class="shop-bottom">
+														<div class="sb-left">
+															<span class="order-num">{{vipval.goods_num}}</span>
+														</div>
+														<div class="sb-right">
+															<span class="s-l-money">￥{{vipval.goods_price}}</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</template>
+
+									<div class="pay-footer">
+										<!-- <div class="cancel-order" v-if="item.order_status==1" @click.stop="">取消订单</div> -->
+									</div>	
+								</div>
+						      </template>
+						      <template v-else-if="item.order_type==0">
+						        <!-- 普通订单 -->
+								<div class="order-item" @click="commonFn(item.order_id)">
+									<div class="order-topic">
+										<div class="shop-name">
+											<img :src="item.store_logo" alt="" class="sn-pic" />
+											<span class="sn-span">{{item.store_name}}</span>
+										</div>
+										<div class="ot-icon">
+											<span class="sn-span">
+												{{tabsActive==0?(alltabs[item.order_status]):tabs[tabsActive].val}}
+											</span>
+										</div>
+									</div>
+									<div class="order-topic">
+										<div class="sn-text">
+											订单号：{{item.order_sn}}
+										</div>
+									</div>
+
+									
+
+										<template v-for="(vipval,vipind) in item.goods">
+											<div>
+												<div class="sc-item" :data-id="vipval.goods_id">
+													<div class="si-left">
+														<img :src="vipval.original_img" alt="" class="shop-img" onerror="imgerr(this)"/>
+													</div>
+													<div class="si-right">
+														<div>
+															<div class="si-r-name shop-title">
+																{{vipval.goods_name}}
+															</div>
+														</div>
+														<div>
+															<div class="sn-text">
+																{{vipval.spec_key_name}}
+															</div>
+														</div>
+														<div class="shop-bottom">
+															<div class="sb-left">
+																<span class="order-num">{{vipval.goods_num}}</span>
+															</div>
+															<div class="sb-right">
+																<span class="s-l-money">￥{{vipval.goods_price}}</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</template>
+									<div class="pay-footer" :data-id="item.shipping_status">
+										<div class="confirm-order" v-if="item.shipping_status==1&&item.order_status==1" @click.stop="confirm_order(item.order_id)" :data-id="item.order_id">确认收货</div>
+										<!-- <div class="cancel-order" v-if="item.order_status==1" @click.stop="no_order(item.order_id)">取消订单</div> -->
+										<!-- <div class="confirm-order" v-if="item.order_status==1" @click.stop="">确认订单</div> -->
+									</div>	
+								</div>
+								
+						      </template>
+						   </template>
+						   <div></div>
+						
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			
+			
+		</div>
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+		    //图片不存在
+		    function imgerr(ind,user){
+
+		        ind&&(()=>{
+		          var src="__STATIC__/jzqg/img/";
+		          if(user){
+		          	src="__STATIC__/images/1440439367001464442.png";
+		          }else{
+		          	src+="no-img.png";
+		          }
+		          ind.setAttribute("src",src);
+		        })();
+
+		    };
+		    layui.use(["flow","layer","util"],function(res){
+				console.log(res,"你好");
+				var flow=layui.flow;
+				var layer=layui.layer;
+				//工具
+				var util=layui.util;
+
+				
+
+				//固定块
+				util.fixbar({
+					bar1:false,
+					css:{
+						right:10,bottom:200
+					},
+					click:function(type){
+
+					}
+				})
+				// 信息流加载
+				//全部
+		    	flow.load({
+		    		elem:"#all",
+		    		done:function(page,next){
+		    			console.log(page);
+		    			var lis = [];
+				        //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+				        $.ajax({
+				        	type:"POST",
+				        	url:"{:U('/Mobile/User/new_order_list')}",
+				        	dataType:"json",
+				        	data:{
+				        		type:"{$type}",
+				        		page:page
+				        	},
+				        	success:function(res){
+				        		console.log(res,"全部请求成功");
+				        		if(res.code){
+				        		 var data=res.data;
+				        		 console.log(data,"data");
+				        		 if(data.length){
+				        		 	layui.each(data,function(index, item){
+							        	app.tabarr.push(item);
+							          // lis.push(str);
+						            });
+						            //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+							        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+							        next(lis.join(''), true);
+				        		 }else{
+				        		 	
+				        		 	next(lis.join(''),false);
+				        		 }	
+				        		}else{
+				        			next(lis.join(''),false);
+				        		}
+				        	},
+				        	error:function(){
+				        		console.error("请求失败");
+				        	}
+
+				        })
+		    		}
+		    	});
+		    	
+
+			})
+			var app=new Vue({
+				el:"#app",
+				data:{
+					tabs:[
+					 {
+					 	val:"全部"
+					 },
+					 {val:"待付款"},
+					 {val:"待发货"},
+					 {val:"待收货"},
+					 {val:"已完成"}
+					],
+					alltabs:["待确认","已确认","已收货","已取货","已完成","已作废"],
+					tabsActive:"{$type}",
+					tabarr:[]
+				},
+				methods:{
+
+					confirm_order:function(oid){
+						   //alert('暂未开放退款功能，需要退款请联系客服人员');
+						   layer.confirm("是否确定确认收货？",{title:"玖泽提醒"},function(ind){
+						   	layer.close(ind);
+						   	layer.load(0);
+				            $.ajax({
+				              url:"{:U('/Mobile/user/over_order')}",
+				              type:'POST',
+				              data:{order_id:oid},
+				              dataType:'json',
+				              success:function(res){
+				              	layer.load(0,{time:1});
+				              	
+				              	if(res){
+									layer.msg(res.msg);
+					              	if(res.code==1||res.code==200){
+					              		var second=3;
+					              		var setI=setInterval(function(){
+					              			layer.msg((second--)+"秒后跳转");
+					              			if(second<0){
+					              				clearInterval(setI);
+					              				location.href="{:U('Mobile/User/order_index',array(type=>4))}";
+					              			}
+					              		},1000);
+					              		
+					              	}
+					              }else{
+					              	layer.msg("取消订单失败");
+					              }
+				              },
+				              error:function(){
+				              	layer.load(0,{time:1});
+				              }
+						    });
+						   	
+						   })
+					},
+					/*tabs导航栏*/
+					vipFn:function(tar){
+						
+						layer&&layer.load(1);
+        		 		var href="{:U('Mobile/User/butor_detail',array('order_id'=>'type_val'))}";
+
+        		 	    href=href.replace('type_val',tar);
+
+        		 	    window.location.href=href;
+					},
+					commonFn:function(tar){
+						if(String(tar)){
+							layer&&layer.load(1);
+							var href="{:U('Mobile/User/member_detail',array('order_id'=>'type_val'))}";
+
+	        		 	    href=href.replace('type_val',tar||0);
+
+	        		 	    window.location.href=href;
+						}
+						
+        		 		
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

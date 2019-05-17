@@ -1,0 +1,349 @@
+<include file="Public/header"/>
+<include file="Public/wx_api"/>
+<style>
+    #app{
+    	background-color:rgba(236,238,238,1);
+    }
+	#my{
+		padding-bottom:2rem;
+
+
+	}
+	/*用户图片*/
+	.my-header{
+		/*display:flex;
+		flex-direction: column;
+		align-items:center;*/
+		background-image:linear-gradient(45deg,#FF4444 20%,#FF4D00 100%);
+		margin-bottom:0.1rem;
+	}
+	.my-user{
+		text-align:center;
+		padding:0.5rem 0;
+	}
+	.user-img{
+		width:1.5rem;
+		height:1.5rem;
+		border-radius:50%;
+	}
+	.user-name{
+		font-size:0.4rem;
+		color:#fff;
+	}
+	.grade{
+		color:#fff;
+		padding:0.05rem 0.1rem;
+		background-color:rgba(255,255,255,0.2);
+		border:.01rem solid rgba(255,255,255,0.2);
+		font-size:0.3rem;
+		display:inline-block;
+		margin:0.09rem 0;
+	}
+	.user-proper{
+		display:flex;
+		align-items:center;
+		justify-content: space-around;
+		color:#fff;
+		width:80%;
+		margin:0 auto;
+		height:1rem;
+		border-top:.01rem solid rgba(255,255,255,0.5);
+	}
+	.ui-count{
+		font-size:0.4rem;
+	}
+	.ui-text{
+		font-size:0.3rem;
+		padding-left: 0.1rem;
+	}
+	.up-item{
+		color:#ffffff !important;
+	}
+	
+	/*我的订单*/
+	.my-order{
+		margin-bottom:0.1rem;
+		background-color:#fff;
+	}
+	.mo-top{
+		display:flex;
+		align-items:center;
+		height:1.5rem;
+		padding:0 0.3rem;
+		border-bottom:.01rem solid rgba(236,238,238,1);
+	}
+	.m-t-icon{
+		flex:1;
+	    text-align:right;
+	    display:flex;
+	    align-items:center;
+	    justify-content: flex-end;
+	}
+	.m-t-text{
+		font-size:0.4rem;
+		color:#000;
+	}
+	.mti-span{
+		color:#999;
+		font-size:0.35rem;
+	}
+	.mti-img{
+		width:0.5rem;
+		height:0.5rem;
+		margin-left:0.1rem;
+	}
+	.mo-bottom{
+		display:flex;
+		flex-wrap:wrap;
+		padding:0.3rem 0;
+	}
+	.mb-item{
+		width:24%;
+		text-align:center;
+	}
+	.mb-item:active{
+		opacity:0.7;
+	}
+	.mi-icon{
+		width:0.7rem;
+		height:0.7rem;
+	}
+	.mi-text{
+		font-size:0.35rem;
+		color:#000;
+		padding:0.3rem 0;
+	}
+	
+	/*广告图片*/
+	.my-cd>img{
+		width:100%;
+		height:3rem;
+	}
+	.my-cd{
+		margin-bottom:0.1rem;
+	}
+	
+	/*导航列表*/
+	.ml-ul{
+		padding:0;
+		margin:0;
+		margin-bottom:0.1rem;
+	}
+	.ml-li{
+		display:flex;
+		align-items:center;
+		padding:0 0.3rem;
+		height:1.4rem;
+		background-color:#fff;
+		border-bottom:.01rem solid rgba(236,238,238,1);
+	}
+	.ml-li:active{
+		opacity:0.7;
+	}
+	.ml-right,.ml-left{
+		display:flex;
+		align-items:center;
+	}
+	.ml-right{
+		flex:1;
+		justify-content: flex-end;
+	}
+	.ml-img{
+		width:0.4rem;
+		height:0.4rem;
+		margin-right:0.1rem;
+	}
+	.ml-text{
+		font-size:0.4rem;
+		color:#000000;
+	}
+	.mr-icon{
+		width:0.5rem;
+		height:0.5rem;
+	}
+
+	/*广告图片*/
+	.cc-img{
+		display:block;
+	}
+	.cc-img>img{
+		width:100%;
+		height:4.6rem;
+	}
+	.classify-cd{
+		height:4.6rem;
+		overflow:hidden;
+	}
+
+	
+  /*最底部的文字*/
+  .info-text{
+    font-size:0.4rem;
+    color:#000;
+    text-decoration:none;
+
+  }
+
+  .info-item{
+    text-align:center;
+    margin-top:1rem;
+    width:100%;
+  }
+</style>
+<body>
+	<div id="app">
+		
+		<div class="my" id="my">
+			<div class="my-header">
+				<div class="my-user">
+					<img onclick="prevI('{$user[head_pic]}')" src="{$user['head_pic']|default="+__STATIC__/images/user68.jpg"}"  class="user-img" />
+
+					
+					<p class="user-name">{$user['nickname']}</p>
+					<div class="grade">
+						{$level_name}
+					</div>
+				</div>
+				<div class="user-proper">
+					<a onclick="layer&&layer.load(1);" href="{:U('Mobile/User/goods_collect')}" class="up-item">
+						<span class="ui-count">{$goods_collect_count}</span><span class="ui-text">收藏商品</span>
+					</a>
+					<a onclick="layer&&layer.load(1);" href="{:U('Mobile/User/store_collect')}" class="up-item">
+						<span class="ui-count">{$store_collect_count}</span><span class="ui-text">收藏商家</span>
+					</a>
+				</div>
+			</div>
+			<div class="my-order">
+				<a onclick="layer&&layer.load(1);" class="mo-top" href="{:U('Mobile/User/order_index')}">
+					<div class="m-t-text">我的订单</div>
+					<div class="m-t-icon">
+						<span class="mti-span">查看全部订单</span>
+						<i class="layui-icon layui-icon-right mti-span"></i>
+						<!-- <img class="mti-img" src="__STATIC__/jzqg/img/arrow-right.png" alt="" /> -->
+					</div>
+				</a>
+				<div class="mo-bottom">
+					<div class="mb-item" onclick="layer&&layer.load(1);window.location.assign('{:U('Mobile/User/order_index',array(type=>1))}');">
+						<img src="__STATIC__/jzqg/img/obligation.png" alt="" class="mi-icon" />
+						<br />
+						<span class="mi-text">待付款</span>
+					</div>
+					<div class="mb-item" onclick="layer&&layer.load(1);window.location.assign('{:U('Mobile/User/order_index',array(type=>2))}');">
+						<img src="__STATIC__/jzqg/img/send_goods.png" alt="" class="mi-icon" />
+						<br />
+						<span class="mi-text">待发货</span>
+					</div>
+					<div class="mb-item" onclick="layer&&layer.load(1);window.location.assign('{:U('Mobile/User/order_index',array(type=>3))}');">
+						<img src="__STATIC__/jzqg/img/agency_fund.png" alt="" class="mi-icon" />
+						<br />
+						<span class="mi-text">待收货</span>
+					</div>
+					<div class="mb-item" onclick="layer&&layer.load(1);window.location.assign('{:U('Mobile/User/order_index',array(type=>4))}');">
+						<img src="__STATIC__/jzqg/img/Generation_refund.png" alt="" class="mi-icon" />
+						<br />
+						<span class="mi-text">已完成</span>
+					</div>
+				</div>
+			</div>
+
+			<!--广告图片-->
+			<div class="classify-cd new-banner">
+               <div class="swiper-wrapper">
+                <volist name="user_list" id="vo">
+
+					<a class="cc-img swiper-slide" href="{$vo.ad_link}">
+						<img src="{$vo.ad_code}" alt="" class='ci-tar' onerror="imgerr(this)" >
+				    </a>
+                </volist>
+               </div>
+			</div>
+
+			<div class="my-list">
+				<div class="ml-ul">
+					<a onclick="layer&&layer.load(1);" href="{:U('Mobile/User/address_list')}" class="ml-li">
+						<div class="ml-left">
+							<img class="ml-img" src="__STATIC__/jzqg/img/my_location.png" alt="" />
+							<span class="ml-text">收货地址</span>
+						</div>
+						<div class="ml-right">
+							<img class="mr-icon" src="__STATIC__/jzqg/img/arrow-right.png" alt="" />
+						</div>
+					</a>
+					<a onclick="layer&&layer.load(1);" href="{:U('Mobile/User/help')}" class="ml-li">
+						<div class="ml-left">
+							<img class="ml-img" src="__STATIC__/jzqg/img/my-help.png" alt="" />
+							<span class="ml-text">帮助中心</span>
+						</div>
+						<div class="ml-right">
+							<img class="mr-icon" src="__STATIC__/jzqg/img/arrow-right.png" alt="" />
+						</div>
+					</a>
+					<a onclick="layer&&layer.load(1);" class="ml-li" href="{:U('Mobile/Store/store_msg')}">
+						<div class="ml-left">
+							<img class="ml-img" src="__STATIC__/jzqg/img/Business_center.png" alt="" />
+							<span class="ml-text">商家中心</span>
+						</div>
+						<div class="ml-right">
+							<img class="mr-icon" src="__STATIC__/jzqg/img/arrow-right.png" alt="" />
+						</div>
+					</a>
+					<a onclick="layer&&layer.load(1);" class="ml-li"  href="{:U('Mobile/User/butor_put')}">
+						<div class="ml-left">
+							<img class="ml-img" src="__STATIC__/jzqg/img/my_apply.png" alt="" />
+							<span class="ml-text">经销商中心</span>
+						</div>
+						<div class="ml-right">
+							<img class="mr-icon" src="__STATIC__/jzqg/img/arrow-right.png" alt="" />
+						</div>
+					</a>
+				</div>
+			</div>
+
+          <div class="info-item">
+            <p class="info-text">
+              微玖仟提供技术支持
+            </p>
+            <p class="info-text">wei9000.com</p>
+          </div>
+		</div>
+		<!-- 底部导航 -->
+ 		<lw-tabbar page-active="3" />
+	</div>
+
+	<!--必须放在Vue实例化前，否则无效-->
+	<script src="__STATIC__/jzqg/js/component.js"></script>
+	<script>
+
+	    //图片不存在
+	    function imgerr(ind,user){
+
+	        ind&&(()=>{
+	          var src="__STATIC__/jzqg/img/";
+	          if(user){
+	          	src="__STATIC__/images/1440439367001464442.png";
+	          }else{
+	          	src+="no-img.png";
+	          }
+	          ind.setAttribute("src",src);
+	        })();
+
+	    };
+	    window.onload=function(){
+
+	        //轮播逻辑
+	        var newswiper = new Swiper('.new-banner', {
+	          loop:true,
+	          autoplay:{
+	            delay:3000,
+	            diableOnInteraction:true
+	          }
+	        });
+	    }
+		var app=new Vue({
+			el:"#app"
+		});
+	</script>
+</body>
+
+
+</html>

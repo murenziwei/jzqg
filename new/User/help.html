@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>帮助中心</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<script src="__STATIC__/jzqg/js/jquery.min.js"></script>
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+		<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+		<!-- layer.js -->
+		<script type="text/javascript" src="__STATIC__/jzqg/js/layui.js" ></script>
+		
+		<style>
+			.help-li{
+
+				background-color:#fff;
+				padding:0.3rem;
+				border-bottom:0.2rem solid rgba(236,238,238,1);
+				display:block;
+			}
+			.help-li:active{
+				opacity:0.7;
+			}
+			.help-li:last-child{
+				border-bottom:0;
+			}
+			.item-title{
+				overflow:hidden;
+				text-overflow: ellipsis;
+				white-space:nowrap;
+				font-size:0.4rem;
+				color:#000;
+			}
+			.item-content{
+				font-size:0.3rem;
+				color:#999;
+				
+			}
+			.item-time{
+				font-size:0.25rem;
+				color:#999;
+				text-align:right;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<lw-back back-v="帮助中心"></lw-back>
+			<div id="helpcenter">
+			    <!-- <volist name="list" id="vo">
+			       <a onclick="layer&&layer.load(1);" href="{:U('Mobile/User/help_detail',array('article_id'=>$vo[article_id]))}" class="help-li">
+						<p class="item-title">
+							{$vo.title}
+						</p>
+						<p class="item-content">
+							{$vo.description}
+						</p>
+						<p class="item-time">
+							{$vo.add_time}
+						</p>
+					</a>
+			    </volist> -->
+			</div>
+		</div>
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+			layui.use(["flow","layer","util"],function(res){
+				
+				var flow=layui.flow;
+				var layer=layui.layer;
+				//工具
+				var util=layui.util;
+
+				
+
+				//固定块
+				util.fixbar({
+					bar1:false,
+					css:{
+						right:10,bottom:200
+					},
+					click:function(type){
+
+					}
+				})
+				// 信息流加载
+				
+		    	flow.load({
+		    		elem:"#helpcenter",
+		    		done:function(page,next){
+		    			console.log(page);
+		    			var lis = [];
+				        //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+				        $.ajax({
+				        	type:"GET",
+				        	url:"{:U('/Mobile/user/helps')}",
+				        	dataType:"json",
+				        	data:{
+				        		page:page
+				        	},
+				        	success:function(res){
+				        		console.log(res,"请求成功");
+				        		if(res.code){
+				        		 var data=res.data;
+				        		 console.log(data,"data");
+				        		 if(data.length){
+				        		 	layui.each(data,function(index, item){
+				        		 		var href="{:U('Mobile/User/help_detail',array('article_id'=>'a_id'))}";
+				        		 		href=href.replace('a_id',item.article_id);
+
+							        	var str=`
+										<a class="help-li" href="${href}" onclick="layer&&layer.load(1);">
+											<p class="item-title">
+												${item.title}
+											</p>
+											<p class="item-content">
+											    ${item.description}
+											</p>
+											<p class="item-time">
+												${item.add_time}
+											</p>
+										</a>
+							        	`;
+							          lis.push(str);
+						            });
+						            //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+							        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+							        next(lis.join(''), true);
+				        		 }else{
+				        		 	
+				        		 	next(lis.join(''),false);
+				        		 }	
+				        		}else{
+				        			next(lis.join(''),false);
+				        		}
+				        	},
+				        	error:function(){
+				        		console.error("请求失败");
+				        	}
+
+				        })
+		    		}
+		    	});
+
+			})
+			var app=new Vue({
+				el:"#app"
+			});
+		</script>
+	</body>
+</html>

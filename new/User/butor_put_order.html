@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>发布</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+        <script src="__STATIC__/js/jquery.js"></script>
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+
+		<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+		<!-- layer.js -->
+		<script type="text/javascript" src="__STATIC__/jzqg/js/layer.js" ></script>
+
+		<style>
+			
+			.cd-li{
+				display:flex;
+				align-items:center;
+				margin-bottom:0.05rem;
+				padding:0.5rem;
+				
+				background-color:#fff;
+			}
+			.cd-li:active{
+				opacity:0.8;
+			}
+			.cl-r-icon{
+				width:0.5rem;
+				height:0.5rem;
+			}
+			.crt-topic{
+				font-size:0.42rem;
+				color:#000;
+			}
+			.cl-r-text{
+				padding:0 0.5rem;
+			}
+			.crt-address{
+				font-size:0.33rem;
+				color:#6a6a6a;
+			}
+			.cl-right{
+				flex:1;
+				align-items:center;
+				display:flex;
+			}
+			.issue-arrow{
+				width:0.7rem;
+				height:0.7rem;
+			}
+			
+			.choose-add{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				width:100%;
+				height: 1.25rem;
+				background-color: #ff4444;
+				border:none;
+				outline:none;
+				font-size:0.42rem;
+				color:#fff;
+			}
+			
+			.a-row{
+				
+				display:flex;
+				align-items:center;
+				min-height:1rem;
+				background-color:#fff;
+			}
+			.a-col-3{
+				width:30%;
+			}
+			.a-col-9{
+				width:69%;
+			}
+			.a-text-input{
+				width:100%;
+				padding-right:0.7rem;
+				box-sizing:border-box;
+				font-size:0.39rem;
+			}
+			.a-text-input:active,.a-text-input:focus,.a-text-input{
+				background:transparent;
+				border:none;
+				outline:none;
+			}
+			.a-text-name{
+				text-indent:0.7rem;
+				font-size:0.39rem;
+				color:#000;
+			}
+			.a-select{
+				display:flex;
+				padding-right:0.7rem;
+			}
+			.a-select:active{
+				opacity:0.6;
+			}
+			.as-title {
+				font-size: 0.39rem;
+				color: #000000;
+			}
+			.as-icon{
+				text-align:right;
+				flex:1;
+			}
+			.as-icon::after{
+				content:"";
+				display:inline-block;
+				border:0.2rem solid rgb(96,96,96);
+				border-bottom:0;
+				margin-left:0.5rem;
+				border-left-color:transparent;
+				border-right-color:transparent;
+			}
+			.issue-row{
+				background-color:#fff;
+			}
+			.issue-row>.a-text-name{
+				line-height:1rem;
+			}
+			.issue-ul{
+				padding-bottom:2rem;
+				background-color:#fff;
+			}
+			
+			
+			.a-submit{
+				padding:1rem 0.5rem;
+				width:100%;
+				box-sizing: border-box;
+			}
+			.a-s-btn{
+				width:100%;
+				height:1rem;
+				text-align:center;
+				border-radius:1rem;
+				background-color: #ff4444;
+				border:none;
+				font-size:0.42rem;
+				color:#fff;
+				outline:none;
+			}
+			.ac-f-text{
+				font-size: 0.33rem;
+				font-weight: normal;
+				font-stretch: normal;
+				letter-spacing: 0rem;
+				color: #000000;
+				padding:0 0.1rem;
+			}
+			
+			/*图片样式*/
+			.iul-img{
+				width:100%;
+				height:100%;
+			}
+			.idcard-ul{
+				display:flex;
+				padding:0 0.7rem;
+				flex-wrap:wrap;
+			}
+			.iu-item,.iu-img{
+				width:3rem;
+				height:3rem;
+				border:0.01rem solid rgba(0,0,0,0.2);
+				display:inline-flex;
+				align-items:center;
+				position:relative;
+				justify-content:center;
+				
+				margin:20px 20px 20px 0;
+			}
+			.iu-img{
+				opacity:0.5;
+			}
+			.add-img{
+				font-size:1.5rem;
+				color:rgba(0,0,0,0.2);
+			}
+			.upload{
+				position:absolute;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				height:100%;
+				margin:0;
+				padding:0;
+				z-index:999;
+				opacity:0;
+			}
+			.iul-cancel{
+				width:0.5rem;
+				height:0.5rem;
+				position:absolute;
+				right:-0.25rem;
+				top:-0.25rem;
+				z-index:2;
+			}
+			.iul-cancel:active{
+				opacity:0.8;
+			}
+
+			/*背景色*/
+			#issue{
+				background:rgba(236,238,238,1);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			
+			<lw-back back-v="发布"></lw-back>
+			<form action="{:U('/Mobile/User/butor_order')}" id="issue" method="POST" enctype="multipart/form-data">
+				<div class="choose-data">
+                    <a href="{:U('User/address_list',array('source'=>'butor'))}" @click="savedata()">
+                        <div class="cd-li">
+                            <div class="cl-right">
+                                <img src="__STATIC__/jzqg/img/choose-location.png" alt="" class="cl-r-icon" />
+                                <div class="cl-r-text">
+                                    <div class="crt-topic">
+                                        <span class="crt-t-name">{$address.consignee}</span>
+                                        <span class="crt-t-phone">{$address.mobile}</span>
+                                    </div>
+                                    <div class="crt-address">
+                                        {$address.address}
+                                    </div>
+                                    <input type="hidden" value="{$address.address_id}" name="address_id" />
+                                </div>
+                            </div>
+                            <img src="__STATIC__/jzqg/img/arrow-right.png" alt="" class="issue-arrow" />
+                        </div>
+                    </a>
+				</div>
+				
+				<div class="a-ul issue-ul">
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">货号</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入货号" class="a-text-input" name="order_sn" 
+						   v-model="order_sn" />
+						</div>
+					</div>
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">数量（对）</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入数量" class="a-text-input" name="num" v-model="num" />
+						</div>
+					</div>
+					
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">诚意金</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入诚意金" class="a-text-input" name="money" v-model="money" />
+						</div>
+					</div>
+					<div class="issue-row">
+						<div class="a-text-name">图片</div>
+						<ul class="idcard-ul">
+						      <li v-if="imgs.length>0" v-for='(item ,index ) in imgs' class="iu-item">
+						          <img :src="item" class="iul-img">
+						          <img src="__STATIC__/jzqg/img/cancel-red.png" alt="" class="iul-cancel" @click="del_img(index)" />
+						      </li>
+						      <li style="position:relative" class="iu-img">
+						          <span class="add-img">+</span>
+                                  <input class="upload" @change='more_img($event)' id="uploadImage"  type="file" accept="image/*" multiple="">
+						      </li>
+						</ul>
+
+					</div>
+				</div>
+
+                <div class="a-submit">
+                    <input class="a-s-btn" type="button" value="立即支付" @click="submitFn()" />
+                </div>
+			</form>
+		</div>
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script type="text/javascript">
+
+            //调用微信JS api 支付
+
+            function jsApiCall(params)
+
+            {
+                WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest',JSON.parse(params.params),
+                    function(res){
+                        //WeixinJSBridge.log(res.err_msg);
+                        if(res.err_msg == "get_brand_wcpay_request:ok") {
+                            location.href=params.go_url;
+                        }else{
+                            location.href=params.back_url;
+                        }
+                    }
+
+                );
+            }
+            function callpay(params)
+            {
+                if (typeof WeixinJSBridge == "undefined"){
+                    if( document.addEventListener ){
+                        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                    }else if (document.attachEvent){
+                        document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                    }
+                }else{
+                    jsApiCall(params);
+                }
+            }
+		</script>
+
+		<script>
+		    function ok(jointObj){
+		    	var judgeture=true;
+		    	var keyarr = ["name", "mobile", "address", "order_sn", "num", "money","imgs"],maxi=0;
+
+			    for(var vi=0;vi<=maxi;vi++){
+
+			      switch(keyarr[vi]){
+			        // 真实姓名
+			        case "name":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"联系人姓名不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 手机号
+			        case "mobile":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var tel=Number(jointObj[keyarr[vi]].val);
+			          if(/^1\d{10}$/.test(tel)){
+			          	++maxi;
+			          }else{
+			          	alertobj={val:"手机号首位必须为1，而且是11位数字",show:true};
+			            judgeture = false;
+			            return;
+			          }
+			          })():(()=>{
+			            alertobj={val:"手机号不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 地址
+			        case "address":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"地址不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 货号
+			        case "order_sn":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"货号不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 数量
+			        case "num":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var num=Number(jointObj[keyarr[vi]].val);
+			          if(num){
+			          	
+			          	++maxi;
+			          	
+			          }else{
+			          	alertobj={val:"数量格式不对",show:true};
+			            judgeture = false;
+			            return;
+			          }
+			          })():(()=>{
+			            alertobj={val:"数量不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 诚意金
+			        case "money":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var money=Number(jointObj[keyarr[vi]].val);
+			          if(money){
+			          	var num=Number(jointObj['num'].val);
+			          	if(money>=(num*2)){
+			          		++maxi;
+			          	}else{
+			          		alertobj={val:"诚意金最少是数量的两倍",show:true};
+				            judgeture = false;
+				            return;
+			          	}
+			          	
+			          }else{
+			          	alertobj={val:"输入合格诚意金",show:true};
+			            judgeture = false;
+			            return;
+			          }
+			          })():(()=>{
+			            alertobj={val:"诚意金不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 图片
+			        case "imgs":jointObj[keyarr[vi]]?
+			        (()=>{
+			        	if(jointObj[keyarr[vi]].val.length){
+			          		++maxi;
+			        	}else{
+			        		alertobj={val:"图片不能为空",show:true};
+				            judgeture = false;
+				            return;
+			        	}
+			          })():(()=>{
+			            alertobj={val:"图片不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        default:if(maxi<keyarr.length){
+			        	++maxi;
+
+			        }
+			      }
+			    }
+
+			    if(judgeture){
+			    	alertobj={val:"符合",show:false};
+			    }
+			    return alertobj;
+		    }
+			var app=new Vue({
+				el:"#app",
+				data:{
+					imgs:[],
+					order_sn:"",
+					num:"",
+					money:""
+				},
+				created:function(){
+					var getData=window.sessionStorage.getItem("dataarr");
+					if(getData){
+						var that=this;
+						// json转化js
+						var gd=JSON.parse(getData);
+						for(var i in gd){
+							that[gd[i].name]=gd[i].value;
+						}
+					}
+				},
+				methods:{
+					//存储数据
+					savedata(){
+						layer&&layer.load();
+						var dataarr=$("#issue").serializeArray();
+						dataarr.push({
+							name:"imgs",
+							value:this.imgs
+						});
+						// session存储数据
+						window.sessionStorage.setItem("dataarr",JSON.stringify(dataarr));
+					},
+					submitFn(){
+						/*前端判断开始*/
+		            	var dataarr=$("#issue").serializeArray();
+		            	var jointObj={};
+						dataarr.map((a)=>{jointObj[a.name]={val:a.value}});
+						// 收货人名
+		                jointObj['name']={val:"{$address.consignee}"};
+
+		                // 收货人手机号码
+		                jointObj['mobile']={val:"{$address.mobile}"};
+
+		                // 收货人地址
+		                jointObj['address']={val:"{$address.address}"};
+
+		                //图片
+		                jointObj['imgs']={val:this.imgs};
+		               console.log(jointObj);
+						var result=ok(jointObj);
+						console.log(result,"返回");
+
+						if(result.show){
+							layer.msg(result.val,{icon:2});
+							return false;
+						}
+						/*前端判断结束*/
+		                var formdata = new FormData();
+		                for(var i in dataarr){
+		                	formdata.append(dataarr[i].name,dataarr[i].value);
+		                }
+		                // 收货人名
+		                formdata.append('name',"{$address.consignee}");
+
+		                // 收货人手机号码
+		                formdata.append('mobile',"{$address.mobile}");
+
+		                // 收货人地址
+		                formdata.append('address',"{$address.address}");
+
+		                formdata.append('img',this.imgs);
+		                layer.load(0);
+		                $.ajax({
+		                    url:"{:U('/Mobile/User/butor_order')}",
+		                    type:'POST',
+		                    data:formdata,
+		                    processData:false,
+		                    contentType:false,
+		                    dataType:"json",
+		                    success:function(res){
+		                    	layer.load(0,{time:1});
+		                    	console.log(res,"再见你一面");
+		                        if(res.code == 200){
+		                        	var data=res.data;
+		                        	data.go_url="{:U('Mobile/User/butor_index')}";
+		                        	data.back_url="{:U('Mobile/User/butor_index')}";
+                                    callpay(data);
+								}
+								if(res.code == 0){
+									layer.alert(res.msg);
+								}
+
+
+//		                    	layer.confirm(res.msg,function(index){
+//		                    		window.location.assign("{:U('Mobile/User/butor_index')}")
+//		                    		layer.close(index);
+//		                    	})
+		                    	//清除名为dataarr的session数据
+		                    	window.sessionStorage.clear("dataarr");
+		                    },
+		                    error:function(){
+		                    	layer.alert("请求错误");
+		                    	layer.load(0,{time:1});
+		                    }
+		                });
+		                return false;
+		            },
+		            ajax_img:function(fileVal){
+		            	var that=this;
+		            	layer.load(1);
+		            	var form=new FormData();
+						form.append("img",fileVal);
+
+						$.ajax({
+							contentType:"multipart/form-data",
+							type:"POST",
+							url:"{:U('/Mobile/Goods/upload_img')}",
+							data:form,
+							processData : false, //必须false才会自动加上正确的Content-Type
+					        dataType: 'json',
+					        contentType : false ,//必须false才会避开jQuery对 formdata 的默认处理 
+							success:function(res){
+								layer.load(1,{time:1});
+								if(res.code){
+									that.imgs.push(res.data.img.urlpath);
+								}else{
+									layer.alert(res.data);
+								}
+
+							},
+							error:function(err){
+								layer.load(1,{time:1});
+								layer.alert("请求错误");
+							}
+						});
+		            },
+					more_img(event){
+						var that=this;
+						
+						var files=event.target.files;
+						console.log(files,"files");
+						// alert('类型：'+files[0].type+'\n'+'名字：'+files[0].name+'\n'+files[0].webkitRelativePath);
+
+						if(files.length){
+							for(let i=0;i<files.length;i++){
+								that.ajax_img(files[i]);
+							}
+							
+						}
+
+					},
+					add_img(event){
+						console.log(event);
+						var files=event.target.files;
+						var imgarrs=[];
+						for(var i=0;i<files.length;i++){
+
+							var imgData=files[i];
+
+				            if(imgData.name){
+				               imgarrs.push(window.URL.createObjectURL(imgData));
+				            }
+						}
+						this.imgs=imgarrs;
+				   },
+				   del_img(count){
+				   	   this.imgs.splice(count,1);
+				   }
+				}
+			});
+		</script>
+	</body>
+</html>

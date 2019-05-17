@@ -1,0 +1,638 @@
+<!DOCTYPE html >
+
+<html>
+
+<head>
+
+<meta name="Generator" content="TPSHOP v1.2.8" />
+
+<meta charset="UTF-8">
+
+<meta name="Keywords" content="{$store.seo_keywords}" />
+
+<meta name="Description" content="{$store.seo_description}" />
+
+<meta name="viewport" content="width=device-width">
+
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+<title> 商家{$store.store_name} </title>
+
+<link rel="shortcut icon" href="favicon.ico" />
+
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+
+<link rel="alternate" type="application/rss+xml" title="{$store.store_name}" href="" />
+
+<script src="__STATIC__/jzqg/js/flexible.js"></script>
+<script src="__STATIC__/jzqg/js/vue.js"></script>
+<!--必须放在Vue实例化前，否则无效-->
+<script src="__STATIC__/jzqg/js/component.js"></script>
+<!-- axios可用ajax -->
+<script src="__STATIC__/jzqg/js/axios.min.js"></script>
+<!--公共样式-->
+<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+
+<script type="text/javascript" src="__STATIC__/jzqg/js/jquery.min.js" ></script>
+<script type="text/javascript" src="__STATIC__/jzqg/js/layer.js" ></script>
+
+<script type="text/javascript" src="__STATIC__/jzqg/js/layui.js" ></script>
+
+<!-- 微信api -->
+<script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+    <style>
+            #app{background: rgba(236,238,238,1);}
+    		/*搜索框*/
+			.s-search{
+				padding:0.25rem;
+				width:100%;
+				box-sizing:border-box;
+			}
+			.ss-frame{
+				border-radius:20px;
+				overflow:hidden;
+				width:100%;
+				background-color:#fff;
+				display:flex;
+				align-items:center;
+				position:relative;
+				height:0.8rem;
+				line-height:0.8rem;
+			}
+			.ss-f-icon{
+				height:0.4rem;
+				width:0.4rem;
+				margin-left:0.25rem;
+				position:absolute;
+				z-index:2;
+			}
+			.ss-f-icon:active{
+				opacity:0.5;
+			}
+			.ss-f-search{
+				width:100%;
+				height:0.8rem;
+				
+				font-size:0.3rem;
+				padding-left:0.7rem;
+				padding-right:0.35rem;
+				border:none;
+				outline:none;
+			}
+			.ss-f-search::-webkit-input-placeholder{
+				color:#bfbfbf;
+			}
+			.ss-f-search:focus{
+				border:none;
+				outline:none;
+			}
+			
+			.si-r-address{
+				display:flex;
+				align-items:center;
+			}
+			.si-r-address .layui-icon{
+				color:#fff;
+				font-size:0.3rem;
+			}
+			.sra-icon {
+				width: 0.31rem;
+				height: 0.35rem;
+				padding:0 0.1rem;
+			}
+			.sra-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.31rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #fff;
+				
+				text-overflow: ellipsis;
+				overflow:hidden;
+				white-space:nowrap;
+			}
+			.m-header{
+				display:flex;
+				align-items:center;
+				padding:0 0.3rem;
+				z-index:99;
+			}
+			.m-location{
+				/*width:50%;*/
+				box-sizing: border-box;
+				position: fixed;
+				top: 0;
+				left: 0;
+				background-color: #4c6aff;
+				height: 0.6rem;
+				display: flex;
+				line-height: 0.6rem;
+				padding: 0 0.3rem;
+				border-bottom-right-radius: 33px;
+				display:none;
+				z-index:2;
+			}
+			
+			/*商家商品*/
+			.mu-li{
+				display:flex;
+				width:100%;
+				/*height:3rem;*/
+				padding:0.3rem;
+				box-sizing: border-box;
+				background-color:#fff;
+				border-bottom:0.05rem solid rgba(236,238,238,1);
+			}
+			.ml-right{
+				padding-left:0.3rem;
+				flex:1;
+				display:flex;
+				flex-direction: column;
+				justify-content: space-between;
+			}
+			.ml-img{
+				width:3rem;
+				height:3rem;
+			}
+			.mt-site{
+				font-size:0.4rem;
+				color:#000;
+			}
+			.active .mt-named{
+				padding:0.05rem 0.2rem;
+				background-color:#FE5455;
+				color:#fff;
+				font-size:0.25rem;
+				border-radius:1rem;
+			}
+			.active .mt-named::after{
+				content:"热门商店"
+			}
+			.mc-location{
+				opacity:0.6;
+				display:flex;
+				align-items:center;
+			}
+			.ml-icon{
+				width:0.4rem;
+				height:0.4rem;
+				vertical-align: middle;
+			}
+			.ml-text{
+				font-size:0.3rem;
+				color:#000;
+			}
+			.mni-img{
+				width:1rem;
+				height:1rem;
+			}
+			.mr-center{
+				display:flex;
+				align-items:center;
+				justify-content: space-between;
+			}
+			.mr-bottom{
+				text-align:right;
+				font-size:0.3rem;
+				color:#999;
+			}
+			.mb-icon{
+				width:0.3rem;
+				height:0.3rem;
+			}
+			.mb-distance{
+				color:#000;
+			}
+
+
+			/*发布内容为空*/
+			.mc-ul:empty+.data-empty{
+				display:block;
+			}
+			.data-empty{
+				padding:.8rem 0;
+				text-align:center;
+				width:100%;
+				display:none;
+			}
+			.de-img{
+				width:4rem;
+				height:4rem;
+				margin-bottom:1rem;
+				border-radius:100%;
+			}
+			.de-text{
+				font-size:0.5rem;
+				color:#000;
+			}
+			.de-info{
+				font-size:0.3rem;
+				color:#999;
+			}
+
+
+
+		  /*最底部的文字*/
+		  .info-text{
+		    font-size:0.4rem;
+		    color:#000;
+		    text-decoration:none;
+
+		  }
+
+		  .info-item{
+		    text-align:center;
+		    width:100%;
+		    margin-top:1rem;
+		  }
+    </style>
+</head>
+<body>
+    <div id="app">
+    	<div class="merchant">
+    		<div class="m-header">
+    			<div class="m-location mh-item" :style="{display:(city?'inline':'none')}">
+		    		<div class="si-r-address" @click="vueOpen()">
+		    			<!-- <img src="__STATIC__/jzqg/img/position.png" alt="" class="sra-icon">  -->
+		    			<i class="layui-icon layui-icon-location"></i>
+		    			<span class="sra-span">
+							{{city.formatted_address}}
+						</span>
+		    	    </div>
+    			</div>
+	    	    <!--搜索框-->
+	    	    <!-- <div class="m-search mh-item">
+					<div class="s-search">
+						<div class="ss-frame">
+							<img src="__STATIC__/jzqg/img/search.png" alt="" class="ss-f-icon" />
+							<input placeholder="实例文字" class="ss-f-search" />
+						</div>
+					</div>
+	    	    </div> -->
+    		</div>
+    		<div class="m-content">
+    			<ul class="mc-ul" id="maindata"></ul>
+
+				  <!-- <div class="data-empty">
+				  	  <img src="__STATIC__/images/null_data.jpg" alt="" class="de-img" />
+				  	  <p>
+				  	  <b class="de-info">请你在微信上浏览</b>
+				  	  </p>
+				  	  
+				  </div> -->
+
+		          <div class="info-item">
+		            <p class="info-text">
+		              微玖仟提供技术支持
+		            </p>
+		            <p class="info-text">wei9000.com</p>
+		          </div>
+    		</div>
+
+    	</div>
+    	<div style="height:60px;"></div>
+        <lw-tabbar page-active="1"></lw-tabbar>
+        <div id="allmap"></div>
+        <div id="txmap"></div>
+    </div>
+
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.3&ak=mw1vcDT5kqdgcvwAtfcMevBkt5YhXdL2"></script>
+    <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=F4IBZ-ZDFCP-YBYDD-LTDV3-UGTWT-ZEBVV"></script>
+	<script>
+	    // 微信配置
+
+		wx.config({
+
+		    debug: false, 
+
+		    appId: "{$signPackage['appId']}", 
+
+		    timestamp: '{$signPackage["timestamp"]}', 
+
+		    nonceStr: '{$signPackage["nonceStr"]}', 
+
+		    signature: '{$signPackage["signature"]}',
+
+		    jsApiList: ['getLocation','openLocation'] // 功能列表，我们要使用JS-SDK的什么功能
+
+		});
+
+
+
+		// config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在 页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready 函数中。
+
+		
+		wx.ready(function(){
+			layer&&layer.load(2);
+		    wx.getLocation({
+		    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+		    success: function (res) {
+
+		      window.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+		      window.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+		      
+		      var lng=res.longitude,lat=res.latitude;
+		      var map = new BMap.Map("allmap");
+			  var point = new BMap.Point(lng,lat);
+			  var siteuri="http://api.map.baidu.com/geocoder/v2/?ak=mw1vcDT5kqdgcvwAtfcMevBkt5YhXdL2&callback=renderReverse&location="+lat+","+lng+"&output=json&pois=1";
+
+			  
+
+			  // $.ajax({url:,type:"GET",success:function(res){
+			  // 	console.log(res,"地理信息");
+			  // }})
+			  map.centerAndZoom(point,12);
+			  console.log(map,"map",point);
+		      console.log(latitude,longitude,"里面");
+		      
+		      //城市
+		      app.lat=res.latitude;//经度
+		      app.lng=res.longitude;//纬度
+		      var scri=document.createElement("script");
+		      scri.src=siteuri;
+		      document.body.appendChild(scri);
+		      
+		    },
+		    complete:function(res){
+		    	console.log("这是最好执行的吗？",res);
+		    	layer&&layer.load(2,{time:1});
+
+		    	  
+				// 流加载
+				layui.use(["flow","util"],function(){
+				    	var flow=layui.flow;
+				    	var util=layui.util;
+
+						flow.load({
+					    		elem:"#maindata",
+					    		done:function(page,next){
+					    			console.log(page);
+					    			var lis = [];
+							        //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+							        $.ajax({
+							        	type:"POST",
+							        	url:"{:U('/Mobile/store/store_list_index')}",
+							        	dataType:"json",
+							        	data:{
+							        		page:page
+							        	},
+							        	success:function(res){
+							        		console.log(res,"请求成功");
+							        		if(res.code){
+							        		 var data=res.data;
+							        		 if(data.length){
+							        		 	layui.each(data,function(index, item){
+							        		 		console.log(window.longitude,window.latitude,"经纬度");
+							        		 		var dis=go_distance([window.longitude||0,window.latitude||0],[item.lng||0,item.lat||0]);
+
+							        		 		
+							        		 		
+							        		 		dis=(dis/1000).toFixed(1);
+							        		 		if(dis>999){dis="999+"}
+							        		 		var href="{:U('Mobile/Store/homemerchan',array('store_id'=>'store_val'))}";
+
+							        		 	    href=href.replace('store_val',item.store_id);
+
+										        	var str=`
+													<li data-id="${item.store_id}" class="mu-li" onclick="layer&&layer.load(1);window.location.assign('${href}')" >
+							    					<div class="ml-left">
+							    						<img src="${item.store_logo}" class="ml-img" onerror="imgerr(this)" />
+							    					</div>
+							    					<div class="ml-right">
+							    						<div class="mr-top ${item.isactive==1?'active':''}">
+							    							<span class="mt-site">${item.store_name}</span>
+							    							<span class="mt-named"></span>
+							    						</div>
+							    						<div class="mr-center">
+							    							<div class="mc-location">
+							    							    <i class="layui-icon layui-icon-location"></i>
+							    								
+							    								<span class="ml-text">${item.store_address!='null'?(item.store_address||'未设置地址'):'未设置地址'}</span>
+							    							</div>
+							    							<div class="mc-nav-icon">
+							    								<img src="__STATIC__/jzqg/img/merchant.png" alt="" class="mni-img" onclick="event.stopPropagation();openL(${item.lng||0},${item.lat||0},'${item.store_address}');"/>
+							    							</div>
+							    						</div>
+							    						<div class="mr-bottom" style="display:${window.longitude?'':'none'}">
+							    							<img src="__STATIC__/jzqg/img/distance.png" alt="" class="mb-icon" />
+							    							距你<span class="mb-distance">${dis}</span>公里
+							    						</div>
+							    					</div>
+							    				  </li>
+										        	`;
+										          lis.push(str);
+									            });
+									            //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+										        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+										        next(lis.join(''), true);
+							        		 }else{
+							        		 	
+							        		 	next(lis.join(''),false);
+							        		 }	
+							        		}else{
+							        			next(lis.join(''),false);
+							        		}
+							        	},
+							        	error:function(){
+							        		console.error("请求失败");
+							        	}
+
+							        })
+					    		}
+					    });
+				    	//工具流
+				    	util.fixbar({
+				    		bar1:false,
+				    		css:{
+				    			bottom:100,
+				    			right:10
+				    		}
+				    	});
+
+				})
+		    }
+		    });
+		    
+
+		});
+		wx.error(function(){
+			console.log("执行了？");
+	    	//信息流
+	    	  
+			// 流加载
+			layui.use(["flow","util"],function(){
+			    	var flow=layui.flow;
+			    	var util=layui.util;
+
+					flow.load({
+				    		elem:"#maindata",
+				    		done:function(page,next){
+				    			console.log(page);
+				    			var lis = [];
+						        //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+						        $.ajax({
+						        	type:"POST",
+						        	url:"{:U('/Mobile/store/store_list_index')}",
+						        	dataType:"json",
+						        	data:{
+						        		page:page
+						        	},
+						        	success:function(res){
+						        		console.log(res,"请求成功");
+						        		if(res.code){
+						        		 var data=res.data;
+						        		 if(data.length){
+						        		 	layui.each(data,function(index, item){
+						        		 		console.log(window.longitude,window.latitude,"经纬度");
+						        		 		var dis=go_distance([window.longitude||0,window.latitude||0],[item.lng||0,item.lat||0]);
+
+						        		 		
+						        		 		if(dis>999){dis="999+"}
+
+						        		 		var href="{:U('Mobile/Store/homemerchan',array('store_id'=>'store_val'))}";
+
+						        		 	    href=href.replace('store_val',item.store_id);
+
+									        	var str=`
+												<li data-id="${item.store_id}" class="mu-li" onclick="window.location.assign('${href}')" >
+						    					<div class="ml-left">
+						    						<img src="${item.store_logo}" class="ml-img" onerror="imgerr(this)" />
+						    					</div>
+						    					<div class="ml-right">
+						    						<div class="mr-top ${item.isactive==1?'active':''}">
+						    							<span class="mt-site">${item.store_name}</span>
+						    							<span class="mt-named"></span>
+						    						</div>
+						    						<div class="mr-center">
+						    							<div class="mc-location">
+						    							    <i class="layui-icon layui-icon-location"></i>
+						    								<!--<img src="__STATIC__/jzqg/img/search-location.png" alt="" class="ml-icon" />-->
+						    								<span class="ml-text">${item.store_address}</span>
+						    							</div>
+						    							<div class="mc-nav-icon">
+						    								<img src="__STATIC__/jzqg/img/merchant.png" alt="" class="mni-img" onclick="event.stopPropagation();openL(${item.lng||0},${item.lat||0},'${item.store_address}');"/>
+						    							</div>
+						    						</div>
+						    						<div class="mr-bottom" style="display:${window.longitude?'':'none'}">
+						    							<img src="__STATIC__/jzqg/img/distance.png" alt="" class="mb-icon" />
+						    							距你<span class="mb-distance">${dis}</span>米
+						    						</div>
+						    					</div>
+						    				  </li>
+									        	`;
+									          lis.push(str);
+								            });
+								            //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+									        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+									        next(lis.join(''), true);
+						        		 }else{
+						        		 	
+						        		 	next(lis.join(''),false);
+						        		 }	
+						        		}else{
+						        			next(lis.join(''),false);
+						        		}
+						        	},
+						        	error:function(){
+						        		console.error("请求失败");
+						        	}
+
+						        })
+				    		}
+				    });
+			    	//工具流
+			    	util.fixbar({
+			    		bar1:false,
+			    		css:{
+			    			bottom:100,
+			    			right:10
+			    		}
+			    	});
+
+			})
+		});
+        //图片不存在
+        function imgerr(ind){
+
+         ind&&(()=>{
+	          var src="__STATIC__/jzqg/img/no-img.png";
+	          ind.setAttribute("src",src);
+         })();
+
+        };
+	    function go_ajax(){
+
+	    }
+	    function go_distance(pa,pb){
+	    	// 百度地图API功能
+			var map = new BMap.Map("allmap");
+			var pointA = new BMap.Point(...pa);  // 创建点坐标A--大渡口区
+			var pointB = new BMap.Point(...pb);  // 创建点坐标B--江北区
+			var dis=(map.getDistance(pointA,pointB)).toFixed(2);//获取两点距离,保留小数点后两位
+			return dis;
+	    }
+	    function go_city(obj){
+	    	event.stopPropagation();
+	    	window.location.assign("{:U('Mobile/Store/txmap')}");
+	    	window.sessionStorage.setItem("store_nav",JSON.stringify(obj));
+	    }
+	    function openL(lon,lat,name){
+	    	layer&&layer.load(0,{time:2000});
+	    	wx.openLocation({
+		      latitude: lat||0, // 纬度，浮点数，范围为90 ~ -90
+		      longitude: lon||0, // 经度，浮点数，范围为180 ~ -180。
+		      name: name||'', // 位置名
+		      address: '', // 地址详情说明
+		      infoUrl: 'javascript:history.go(-1)' // 在查看位置界面底部显示的超链接,可点击跳转
+		      });
+	    }
+
+
+		var app=new Vue({
+			el:"#app",
+			data:{
+			 siteuri:'',
+			 city:'',
+			 cite:"",
+			 lng:0,
+			 lat:0,
+			 wxobj:{
+				appId: "{$signPackage['appId']}", 
+
+			    timestamp: '{$signPackage["timestamp"]}', 
+
+			    nonceStr: '{$signPackage["nonceStr"]}', 
+
+			    signature: '{$signPackage["signature"]}'
+			 },
+			 site:''
+			},
+			
+			created:function(){
+				console.log(this.city);
+				
+			},
+			methods:{
+				vueOpen:function(){
+					var name=this.city.formatted_address;
+					var lat=this.city.location.lat,lng=this.city.location.lng;
+					console.log(lat,lng,"经纬度");
+					window.openL(lng,lat,name);
+				}
+			}
+		});
+	</script>
+	<script>
+	    function renderReverse(site){
+	    	if(site){
+	    		app.city=site.result;
+	    	}
+	    	console.log(site,"真给老子长脸");
+	    }
+	</script>
+</body>
+
+</html>

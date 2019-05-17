@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>搜索</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<script src="__STATIC__/jzqg/js/jquery.min.js"></script>
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+
+		<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+		<!-- layer.js -->
+		<script type="text/javascript" src="__STATIC__/jzqg/js/layui.js" ></script>
+		<style>
+			/*搜索框*/
+			.s-search{
+				padding:0.25rem;
+				width:100%;
+				box-sizing:border-box;
+			}
+			.ss-frame{
+				border-radius:20px;
+				overflow:hidden;
+				width:100%;
+				background-color:#fff;
+				display:flex;
+				align-items:center;
+				position:relative;
+			}
+			.ss-f-icon{
+				height:0.65rem;
+				width:0.65rem;
+				margin-left:0.5rem;
+				position:absolute;
+				z-index:2;
+			}
+			.ss-f-icon:active{
+				opacity:0.5;
+			}
+			.ss-f-search{
+				flex:1;
+				height:1rem;
+				text-align:center;
+				font-size:0.4rem;
+				padding-left:1.4rem;
+				padding-right:1.4rem;
+				border:none;
+				outline:none;
+			}
+			.ss-f-search::-webkit-input-placeholder{
+				color:#bfbfbf;
+			}
+			.ss-f-search:focus{
+				border:none;
+				outline:none;
+			}
+			
+			/*tabs切换*/
+			.stm-header{
+				display:flex;
+				align-items:center;
+				justify-content:space-around;
+				background-color:#fff;
+				margin-bottom:0.04rem;
+			}
+			.sh-item{
+				height:1rem;
+				line-height:1rem;
+				text-align:center;
+				position:relative;
+				border:0.04rem solid transparent;
+			}
+			.sh-item>span{
+				font-family: PingFang-SC-Medium;
+				font-size: 0.33rem;
+				font-weight: normal;
+				font-stretch: normal;
+				letter-spacing: 0rem;
+			}
+			.sh-item.active{
+				color:#ff4444;
+				border-bottom-color:#ff4444;
+			}
+			
+			.sc-item{
+				display:flex;
+				background-color:#fff;
+				border-bottom:0.1rem solid rgba(236,238,238,1);
+				padding:0.4rem 0.2rem;
+			}
+			.si-left{
+				width:2.1rem;
+				height:2.1rem;
+				display:flex;
+				align-items:center;
+				justify-content: center;
+				text-align:center;
+			}
+			.shop-img{
+				width:2.1rem;
+				height:2.1rem;
+				background-color: #ffffff;
+				border-radius: 0.07rem;
+			}
+			.si-l-img{
+				width:2rem;
+				height:2rem;
+				border-radius:100%;
+			}
+			.si-right{
+				flex:1;
+				display:flex;
+				flex-direction: column;
+				justify-content: space-between;
+				padding-left:0.1rem;
+			}
+			.si-r-name {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.36rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #000000;
+			}
+			.sra-icon {
+				width: 0.31rem;
+				height: 0.35rem;
+				margin-top:0.04rem;
+			}
+			.sra-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.31rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #999999;
+			}
+			
+			/*切换到商品的样式*/
+			.shop-title{
+				overflow:hidden;
+				text-overflow:ellipsis;
+				white-space:nowrap;
+				width:7rem;
+			}
+			.sn-pic {
+				width: 0.49rem;
+				height: 0.49rem;
+				border-radius:50%;
+				vertical-align: middle;
+			}
+			.sn-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.28rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #7d7d7d;
+				margin-left:0.1rem;
+			}
+			.shop-bottom{
+				display:flex;
+				align-items:center;
+			}
+			.s-l-money{
+				font-family: PingFang-SC-Bold;
+				font-size: 0.44rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.53rem;
+				letter-spacing: 0rem;
+				color: #fe5455;
+			}
+			.sb-right{
+				flex:1;
+				text-align:right;
+			}
+			.s-l-buy{
+				display:inline-block;
+				width: 0.91rem;
+				height: 0.54rem;
+				line-height:0.54rem;
+				text-align:center;
+				border-radius: 0.07rem;
+				border: solid 0.02rem #cc1623;
+				color:#FE5455;
+				font-size:0.3rem;
+				
+			}
+
+
+			/*新添加的样式*/
+			.shop-name,.si-r-address{
+				display:flex;
+				align-items:center;
+				margin-top:0.1rem;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+
+			<div class="nav-back"><a onclick="layer&&layer.load(1)" href="{:U('Mobile/Index/index')}" class="nb-link"><img src="/Public/component/home.png" class="nl-icon"></a> <span class="nb-text">搜索</span></div>
+
+			<!--搜索框-->
+			<div class="s-search">
+				<div class="ss-frame">
+					<img src="__STATIC__/jzqg/img/search.png" alt="" class="ss-f-icon" @click="searchfn()"  />
+					<input placeholder="请输入关键词搜索" class="ss-f-search" v-model="searchval"  @keydown="keyfn($event)" />
+
+				</div>
+			</div>
+			<!--tabs切换-->
+			<div class="s-tabs">
+				<div class="s-t-main">
+					<div class="stm-header">
+						<div v-bind:class="{'sh-item':true,'active':(1==tabsActive)}" v-on:click="tabsFn(1)" >
+							<span>商品</span>
+						</div>
+						<div v-bind:class="{'sh-item':true,'active':(2==tabsActive)}" v-on:click="tabsFn(2)" >
+							<span>商家</span>
+						</div>
+					</div>
+					<div class="stm-content">
+						<div class="s-c-data" id="trade"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+		    //图片不存在
+		    function imgerr(ind,user){
+
+		        ind&&(()=>{
+		          var src="__STATIC__/jzqg/img/";
+		          if(user){
+		          	src="__STATIC__/images/1440439367001464442.png";
+		          }else{
+		          	src+="no-img.png";
+		          }
+		          ind.setAttribute("src",src);
+		        })();
+
+		    };
+		    layui.use(["layer","flow"],function(res){
+		    	var layer=layui.layer;
+		    	var flow=layui.flow;
+		    	//商品懒加载
+		    	flow.load({
+		    		elem:"#trade",
+		    		done:function(page,next){
+		    			console.log(page);
+	    			var lis = [];
+	    			var typeV="{$list.type}";
+	    			var searchv=app.searchval;
+			        //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+			        $.ajax({
+			        	type:"POST",
+			        	url:"{:U('/Mobile/Store/search_content')}",
+			        	dataType:"json",
+			        	data:{
+			        		page:page,
+			        		type:typeV,
+			        		keyword:searchv
+			        	},
+			        	success:function(res){
+			        		console.log(res,"请求成功");
+			        		if(res.code){
+			        		 var data=res.data;
+			        		 if(data.length){
+			        		 	layui.each(data,function(index, item){
+			        		 		if("{$list.type}"==1){
+
+					        			var href="{:U('Mobile/Store/product',array(goods_id=>'gid'))}";
+					        			href=href.replace('gid',item.goods_id);
+							        	var str=`
+										<div class="sc-item" >
+										<div class="si-left">
+											<img src="${item.original_img}" onerror="imgerr(this)" style="width:2rem;height:2rem;"/>
+										</div>
+										<div class="si-right">
+											<div>
+												<div class="si-r-name shop-title">
+												${item.goods_name}
+												</div>
+												<div class="shop-name">
+													<img src="${item.store_logo}" alt="" class="sn-pic" onerror="imgerr(this,'user')" />
+													<span class="sn-span">${item.store_name}</span>
+												</div>
+											</div>
+											<div class="shop-bottom">
+												<div class="sb-left">
+													<span class="s-l-money">￥${item.shop_price}</span>
+												</div>
+												<div class="sb-right">
+													<a onclick="layer&&layer.load(1);" href="${href}" class="layui-btn layui-btn-xs layui-btn-danger">购买</a>
+												</div>
+											</div>
+										</div>
+									</div>
+							        	`;
+			        		 		}else if("{$list.type}"==2){
+
+					        			var href="{:U('Mobile/Store/homemerchan',array(store_id=>'sid'))}";
+					        			href=href.replace('sid',item.store_id);
+							        	var str=`
+										<div class="sc-item" onclick="layer&&layer.load(1);window.location.assign('${href}')" >
+									<div class="si-left">
+										<img src="${item.store_logo}" alt="" class="si-l-img" onerror="imgerr(this,'user')" />
+									</div>
+									<div class="si-right">
+										<div class="si-r-name">
+											${item.store_name}
+										</div>
+										<div class="si-r-address">
+											<i class="layui-icon layui-icon-location"></i>
+											<span class="sra-span">
+												${item.store_address!='null'?(item.store_address||'未设置地址'):'未设置地址'}
+											</span>
+										</div>
+									</div>
+								</div>
+							        	`;
+			        		 		}
+						          lis.push(str);
+					            });
+					            //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+						        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+						        next(lis.join(''), true);
+			        		 }else{
+			        		 	
+			        		 	next(lis.join(''),false);
+			        		 }	
+			        		}else{
+			        			next(lis.join(''),false);
+			        		}
+			        		app.tradepage=page;
+			        	},
+			        	error:function(){
+			        		console.error("请求失败");
+			        	}
+
+			        })
+		    		}
+		    	})
+
+
+		    })
+			var app=new Vue({
+				el:"#app",
+				data:{
+					tabs:[
+					 {
+					 	val:"商品"
+					 },
+					 {val:"商家"}
+					],
+					tabsActive:"{$list.type}",
+					searchval:"",
+					searchcontent:[]
+				},
+				created:function(){
+					var sv=window.sessionStorage.getItem("searchval");
+					console.log(sv);
+					if(sv){
+						this.searchval=sv;
+					}
+				},
+				methods:{
+					keyfn:function(ev){
+						if(ev.code==="Enter"){
+							this.searchfn();
+						}
+					},
+					//搜索方法
+					searchfn:function(){
+						this.tabsFn(this.tabsActive||1);
+					},
+					/*tabs导航栏*/
+					tabsFn:function(tar){
+						layer.load(1);
+						window.sessionStorage.setItem("searchval",this.searchval);
+						var rt=tar||1,sval=this.searchval||'';
+						this.tabsActive=rt;
+
+						if(rt=="1"){
+		        			var href="{:U('Mobile/Store/search',array(type=>'1'))}";
+						}else if(rt=="2"){
+							var href="{:U('Mobile/Store/search',array(type=>'2'))}";
+						}
+						if(rt==1||rt==2){
+
+							window.location.href=href;
+						}
+
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>{$list[title]}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<script src="__STATIC__/jzqg/js/jquery.min.js"></script>
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+		<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+		<!-- layer.js -->
+		<script type="text/javascript" src="__STATIC__/jzqg/js/layui.js" ></script>
+		
+		<style>
+
+		    .nav-back{
+		    	background: #fff;
+		    }
+			.help-li{
+
+				
+				padding:0.3rem;
+				border-bottom:0.2rem solid rgba(236,238,238,1);
+			}
+			.help-li:active{
+				opacity:0.7;
+			}
+			.help-li:last-child{
+				border-bottom:0;
+			}
+			.item-title{
+				overflow:hidden;
+				text-overflow: ellipsis;
+				white-space:nowrap;
+				font-size:0.6rem;
+				color:#000;
+				font-weight: bold;
+			}
+			.item-content{
+				font-size:0.3rem;
+				color:#999;
+				
+			}
+			.item-time{
+				font-size:0.25rem;
+				color:#999;
+				text-align:right;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<lw-back back-v="{$list[title]}"></lw-back>
+			<ul action="#" id="helpcenter">
+			       <li class="help-li" >
+						<p class="item-title">
+							{$list.title}
+						</p>
+						
+						<p class="item-time">
+							{$list.add_time}
+						</p>
+						<p class="item-content">
+							{$list.description}
+						</p>
+						<div id="content"></div>
+					</li>
+			</ul>
+		</div>
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+		    $(document).ready(function(){
+		    	var con="{$list.content}";
+		    	var escape = document.createElement('textarea');
+				function escapeHTML(html) {
+				    escape.textContent = html;
+				    return escape.innerHTML;
+				}
+				function unescapeHTML(html) {
+				    escape.innerHTML = html;
+				    return escape.textContent;
+				}
+		    	$("#content").html(unescapeHTML(con));
+
+		    	console.log(con);
+		    });
+			layui.use(["flow","layer","util"],function(res){
+				
+				var flow=layui.flow;
+				var layer=layui.layer;
+				//工具
+				var util=layui.util;
+
+				
+
+				//固定块
+				util.fixbar({
+					bar1:false,
+					css:{
+						right:10,bottom:200
+					},
+					click:function(type){
+
+					}
+				})
+				// 信息流加载
+				
+		    	
+
+			})
+			var app=new Vue({
+				el:"#app"
+			});
+		</script>
+	</body>
+</html>

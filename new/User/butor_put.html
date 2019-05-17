@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>经销商申请</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<!-- jquery -->
+		<script src="__STATIC__/js/jquery.js"></script>
+
+
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+		
+		<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+		<!-- layer.js -->
+		<script type="text/javascript" src="__STATIC__/jzqg/js/layer.js" ></script>
+		<style>
+			.a-row{
+				margin-bottom:0.05rem;
+				display:flex;
+				align-items:center;
+				min-height:1rem;
+				background-color:#fff;
+			}
+			.a-col-3{
+				width:40%;
+			}
+			.a-col-9{
+				width:55%;
+			}
+			.a-text-input{
+				width:100%;
+				padding-right:0.7rem;
+				box-sizing:border-box;
+				font-size:0.39rem;
+			}
+			.a-text-input:active,.a-text-input:focus,.a-text-input{
+				background:transparent;
+				border:none;
+				outline:none;
+			}
+			.a-text-name{
+				text-indent:0.7rem;
+				font-size:0.39rem;
+				color:#000;
+			}
+			.a-select{
+				display:flex;
+				padding-right:0.7rem;
+			}
+			.a-select:active{
+				opacity:0.6;
+			}
+			.as-title {
+				font-size: 0.39rem;
+				color: #000000;
+			}
+			.as-icon{
+				text-align:right;
+				flex:1;
+				display:flex;
+				align-items:center;
+				justify-content: flex-end;
+			}
+			.as-icon::after{
+				content:"";
+				display:inline-block;
+				border:0.2rem solid rgb(96,96,96);
+				border-bottom:0;
+				margin-left:0.5rem;
+				border-left-color:transparent;
+				border-right-color:transparent;
+			}
+			
+			.ac-frame{
+				display:flex;
+				align-items:center;
+				padding:0.3rem 0 0 0.7rem;
+			}
+			.ac-f-status{
+				position:relative;
+			}
+			.afs-checkbox{
+				position:absolute;
+				top:0;
+				left:0;
+				right:0;
+				bottom:0;
+				width:100%;
+				height:100%;
+				z-index:2;
+				margin:0;
+				padding:0;
+				opacity:0;
+			}
+			.afs-shape{
+				width:0.5rem;
+				height:0.5rem;
+				padding-top:0.1rem;
+				box-sizing: border-box;
+				display:flex;
+				justify-content:center;
+				border-radius:50%;
+				animation:all 0.5s;
+				background-image:url(__STATIC__/jzqg/img/check-none.png);
+				background-position:0 0;
+				background-size:0.5rem 0.5rem;
+				background-repeat:no-repeat;
+				transition:all .3s;
+				opacity:0.5;
+			}
+			.a-checkbox{
+				background-color:#fff;
+			}
+			.afs-checkbox:checked+.afs-shape{
+				background-image: url(__STATIC__/jzqg/img/check-huang.png);
+				opacity:1;
+			}
+			.a-submit{
+				padding:1rem 0.5rem;
+				width:100%;
+				box-sizing: border-box;
+				background:#fff;
+			}
+			.a-s-btn{
+				width:100%;
+				height:1rem;
+				text-align:center;
+				border-radius:1rem;
+				background-color: #ff4444;
+				border:none;
+				font-size:0.42rem;
+				color:#fff;
+				outline:none;
+			}
+			.ac-f-text{
+				font-size: 0.33rem;
+				font-weight: normal;
+				font-stretch: normal;
+				letter-spacing: 0rem;
+				color: #000000;
+				padding:0 0.1rem;
+			}
+			
+			/*营业执照*/
+			.issue-row{
+				background-color:#fff;
+			}
+			.issue-row>.a-text-name{
+				line-height:1rem;
+			}
+			.issue-ul{
+				padding-bottom:2rem;
+				background-color:#fff;
+			}
+			.iul-img{
+				width:100%;
+				height:100%;
+			}
+			.idcard-ul{
+				display:flex;
+				padding:0 0.7rem;
+				flex-wrap:wrap;
+			}
+			.iu-item,.iu-img{
+				width:2rem;
+				height:2rem;
+				border:0.01rem solid rgba(0,0,0,0.2);
+				display:inline-flex;
+				align-items:center;
+				position:relative;
+				justify-content:center;
+				
+				margin:0 0.3rem 0.2rem 0;
+			}
+			.iu-img{
+				opacity:0.5;
+				border-color:#ff4444;
+				background-color:rgba(236,238,238,1);
+			}
+			.add-img{
+				font-size:1rem;
+				color:#ff4444;
+			}
+			.upload{
+				position:absolute;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				
+				height:100%;
+				margin:0;
+				padding:0;
+				z-index:999;
+				opacity:0;
+			}
+			.iul-cancel{
+				width:0.4rem;
+				height:0.4rem;
+				position:absolute;
+				right:-0.2rem;
+				top:-0.2rem;
+				z-index:2;
+			}
+			.iul-cancel:active{
+				opacity:0.8;
+			}
+			.sheel-book{
+				font-size:0.3rem;
+				color:#FC852A;
+			}
+
+			/*侧边栏城市*/
+			.s-c-fixed{
+				position:fixed;
+				right:0;
+				top:0;
+				bottom:0;
+				left:1rem;
+				z-index:1000;
+				background-color:#fff;
+				font-size:0.3rem;
+			}
+			.scf-row{
+				padding:0.3rem;
+			}
+			.scf-top{
+				background-color:#ccc;
+				height:1.2rem;
+				display:flex;
+				justify-content:space-between;
+				color:#000000;
+				align-items:center;
+				opacity:0.8;
+				padding:0 0.3rem;
+				font-size:0.45rem;
+			}
+			.filtrate-right{
+				font-size:0.4rem;
+			}
+			.filtrate-right:active{
+				color:red;
+			}
+			.sr-title{
+				font-weight:bold;
+				font-size:0.45rem;
+				padding-bottom:0.2rem;
+			}
+			.sr-s-input{
+				background-color:#ccc;
+				color:#000000;
+				opacity:0.8;
+				font-size:0.4rem;
+				border-radius:5px;
+				border:1px solid #ccc;
+				height:1rem;
+				width:100%;
+				padding:0.2rem;
+				outline:none;
+			}
+			.sr-select{
+				display:flex;
+				align-items:center;
+				justify-content: space-between;
+				height:1rem;
+				border:1px solid #ccc;
+				font-size:0.5rem;
+				padding:0 0.2rem;
+			}
+			.ss-icon{
+				font-size:0.5rem;
+				color:#ccc;
+				opacity:0.8;
+			}
+			.sr-o-area{
+				background-color:#ccc;
+				display:flex;
+				flex-wrap:wrap;
+				border:1px solid #ccc;
+				border-top:none;
+				border-top-width:0;
+			}
+			.soa-item{
+				font-size:0.4rem;
+				padding:0.3rem 0.5rem;
+				/*border:1px solid rgba(0,0,0,0.3);*/
+				cursor:pointer;
+			}
+			.soa-item.active{
+				background-color:#fff;
+				color:#000000;
+			}
+			.soa-item:active{
+				opacity:0.7;
+			}
+			.scf-position{
+				position:absolute;
+				bottom:0;
+				left:0;
+				right:0;
+				display:flex;
+			}
+			body .sp-btn{
+				flex:1;
+				padding:0.3rem 0;
+				text-align:center;
+				outline-color:transparent;
+				outline:none;
+				margin:0;
+				font-size:0.45rem;
+				border-radius:0;
+			}
+			.soa-i-frame{
+				padding:0.3rem 0.3rem 1.3rem 0.3rem;
+				font-size:0.4rem;
+				max-height: 10rem;
+			    overflow: auto;
+			}
+			.soa-i-f-child{
+				padding:0.2rem 0.3rem;
+				display:inline-block;
+				margin-right:0.2rem;
+				margin-bottom:0.2rem;
+			}
+			.ss-value{
+				font-size:0.43rem;
+				color:#000;
+				font-weight:bold;
+				opacity:0.3;
+			}
+			.addr.active,.ss-value.active{
+				background-color:#ccc
+				color:#fff;
+			}
+			.sr-option{
+				border:1px solid #ccc;
+				border-top:none;
+				border-top-width:0;
+				position:fixed;
+				z-index:999;
+				background-color:#fff;
+				width:100%;
+				bottom:0;
+			}
+			.bg-danger.sp-btn{
+				border-color:#f2dede;
+			}
+			.soa-i-f-child.active{
+				background-color:#31708f;
+				color:#fff;
+			}
+			.sr-s-value{
+				display:flex;
+			}
+
+			.city-zhe{
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				z-index:2;
+				background-color:rgba(0,0,0,0.5);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<lw-back back-v="经销商申请"></lw-back>
+			<form action="{:U('/Mobile/User/butor_apply')}" id="address" enctype="multipart/form-data">
+				<div class="a-ul">
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">联系人</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入联系人姓名" class="a-text-input" 
+							name="nickname"
+							/>
+						</div>
+					</div>
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">联系方式</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入联系人电话" class="a-text-input" name="mobile" />
+						</div>
+					</div>
+					
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">地址</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入联系人地址" class="a-text-input" v-model="siteval" @change="siteFn()" name="address" />
+							
+						</div>
+					</div>
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">包装厂名</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入包装厂名称" class="a-text-input" name="company_name" />
+							
+						</div>
+					</div>
+					
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">包装厂电话</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入包装厂电话" class="a-text-input" name="company_phone" />
+							
+						</div>
+					</div>
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">发货物流</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入发货物流" class="a-text-input" name="logistics" />
+							
+						</div>
+					</div>
+					
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">物流电话</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入物流电话" class="a-text-input" name="logistics_phone" />
+							
+						</div>
+					</div>
+					
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">物流收货地址</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入物流收货地址" class="a-text-input" name="logistics_address" />
+							
+						</div>
+					</div>
+					<div>
+						
+						<div class="a-row" @click.stop="togglearea">
+							<div class="a-col-3">
+								<div class="a-text-name">代理地区</div>
+							</div>
+							<div class="a-col-9">
+								<div class="a-select" >
+									<span class="as-title">
+									{{selectValue[0]||'XX省'}}-
+									{{selectValue[1]||'XX市'}}
+									<!-- {{selectValue[2]||'XX区'}} -->
+
+									</span>
+									<div class="as-icon">
+										
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="sr-option" id="areachoose" style="display:none;">
+							<div class="sr-o-area">
+								<div v-on:click="postsites(0,0)"  v-bind:class="{'soa-item':iftrue,'active':0==coCount}" >省份</div>
+								<div v-on:click="postsites(1,1)"  v-bind:class="{'soa-item':iftrue,'active':1==coCount}" >城市</div>
+								<!-- <div v-on:click="postsites(2,2)"  v-bind:class="{'soa-item':iftrue,'active':2==coCount}" >区域</div> -->
+							</div>
+							<div class="soa-i-frame">
+								<div v-for="(item,indexii) in cityObj[coCount]" v-bind:class="{'soa-i-f-child':iftrue,'active':(indexii==selectCount[coCount])}" v-on:click="searchareafn(indexii,item.val,item.name)">{{item.name}}</div>
+							</div>
+						</div>
+					</div>
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">QC姓名</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入QC姓名" class="a-text-input" name="qc_name" />
+						</div>
+					</div>
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">QC联系方式</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入QC联系方式" class="a-text-input" name="qc_phone" />
+						</div>
+					</div>
+					
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">商标名称</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入商标名称" class="a-text-input"  name="brand_name" />
+						</div>
+					</div>
+					
+					<div class="issue-row">
+						
+						<div class="a-text-name">商标</div>
+						<ul class="idcard-ul">
+						      <li v-if="imgs.length>0" v-for='(item ,index ) in imgs' class="iu-item">
+						          <img :src="item" class="iul-img">
+						          <img src="__STATIC__/jzqg/img/cancel-red.png" alt="" class="iul-cancel" @click="del_img(index)" />
+						      </li>
+						      <li style="position:relative" v-show="imgs.length>=1 ? false : true" class="iu-img">
+						          <span class="add-img">+</span><input class="upload" @change='add_img'  type="file" accept="image/*" name="qc_img" id="qcImg">
+						      </li>
+						</ul>
+
+					</div>
+				</div>
+				<div class="a-checkbox">
+					<div class="ac-frame">
+						<div class="ac-f-status">
+							<input type="checkbox" class="afs-checkbox" v-model="isagree" />
+							<div class="afs-shape"></div>
+						</div>
+						<span class="ac-f-text">已阅读并同意</span>
+						<a href="javascript:navShop()" class="sheel-book">《经销商协议》</a>
+					</div>
+				</div>
+				<div class="a-submit">
+					<button class="a-s-btn" @click="submitFn()" onclick="return false;">提交申请</button>
+				</div>
+			</form>
+
+			<div class="city-zhe" v-if="ssqtrue" @click="togglearea"></div>
+			<div id="allmap" style="display: none;"></div>
+		</div>
+		<!-- 百度地图api通过地址获取经纬度 -->
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2&ak=mw1vcDT5kqdgcvwAtfcMevBkt5YhXdL2"></script>
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+			function navShop(){
+
+	        	$.ajax({
+	                url:"{:U('/Mobile/user/shop_x')}",
+	                type:'POST',
+	                dataType:"json",
+	                success:function(res){
+	                	console.log(res,"协议");
+	                	if(res.code==1){
+	                		layer.open({
+							  title: '经销商协议'
+							  ,
+							  content: res.data.butor_x||'暂无协议',
+							  area: 'auto',
+							  maxHeight:'600px',
+							  maxWidth:'400px'
+							});
+	                	}
+						
+	                },
+	                error:function(err){
+	                	layer.msg("请求失败",{icon:2});
+	                }
+
+	            });
+	        }
+		    function ok(jointObj){
+		    	var judgeture=true;
+		    	var keyarr = ["nickname", "mobile", "address", "company_name", "company_phone", "logistics", "logistics_phone", "logistics_address", "province","qc_name", "qc_phone", "brand_name","qc_img"],maxi=0;
+	            
+			    for(var vi=0;vi<=maxi;vi++){
+			      
+			      switch(keyarr[vi]){
+			        // 真实姓名
+			        case "nickname":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"联系人姓名不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 手机号
+			        case "mobile":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var tel=Number(jointObj[keyarr[vi]].val);
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"联系方式不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 地址
+			        case "address":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"地址不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 包装厂名
+			        case "company_name":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"包装厂不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 包装厂电话
+			        case "company_phone":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"包装厂电话不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 发货物流
+			        case "logistics":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"商家登录密码不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 物流电话
+			        case "logistics_phone":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var tel=Number(jointObj[keyarr[vi]].val);
+			          if(/^\d{6,}$/.test(tel)){
+			          	++maxi;
+			          }else{
+			          	alertobj={val:"物流电话必须6位整数以上",show:true};
+			            judgeture = false;
+			            return;
+			          }
+			          })():(()=>{
+			            alertobj={val:"物流电话不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 物流收货地址
+			        case "logistics_address":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"发货地址不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        //代理地区
+			        case "province":jointObj[keyarr[vi]].val?
+			        (()=>{
+			        	var province=jointObj[keyarr[vi]].val;
+			        	if(province[0]!=''&&province[1]!=''&&province[2]!=''){
+			        		++maxi;
+			        	}else{
+			        		alertobj={val:"代理地区不能为空",show:true};
+			           		judgeture = false;
+			        	}
+			          })():(()=>{
+			            alertobj={val:"代理地区不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // QC姓名
+			        case "qc_name":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"发货地址不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // QC联系方式
+			        case "qc_phone":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"QC联系方式不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 商标名称
+			        case "brand_name":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"商标名称不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 商标图片
+			        case "qc_img":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"商标图片不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+
+			        default:if(maxi<keyarr.length){
+			        	++maxi;
+
+			        }
+			      }
+			    }
+			    
+			    if(judgeture){
+			    	alertobj={val:"符合",show:false};
+			    }
+			    return alertobj;
+		    }
+			var app=new Vue({
+				el:"#app",
+				data:{
+					imgs:[],
+					isagree:"",
+					dataobj:{},
+					siteval:"",
+					iftrue:true,
+					iffalse:false,
+					areaArr:["省份","城市"],/*["省份","城市","区域"]*/
+					selectCount:[-1,-1],
+					coCount:-1,
+					areaobj:[],
+					cityObj:[],
+					ssqtrue:false,
+					province:[],
+					selectValue:['','',''],
+					selectId:[0,0,0]
+				},
+				created:function(){
+					var that=this;
+					$.ajax({
+						url:"/index.php?m=Home&c=Api&a=getRegion&level=1&parent_id=0",
+						type:"GET",
+						success:function(data){
+							var ses=$("<select/>").html(data);
+							console.log(ses);
+							var cityarr=[]
+							for(let i=0;i<ses[0].length;i++){
+								cityarr.push({
+									val:$(ses[0][i]).attr("value"),
+									name:$.trim($(ses[0][i]).text())
+								});
+								
+							}
+							that.cityObj=[
+							cityarr
+							];
+							that.province=cityarr;
+
+						},
+						error:function(err){
+							console.log(err,"错误");
+						}
+					})
+				},
+				methods:{
+					go_site(level,parentid,seI){
+						var that=this;
+
+						$.ajax({
+							url:"/index.php?m=Home&c=Api&a=getRegion&level="+level+"&parent_id="+parentid,
+							type:"GET",
+							success:function(data){
+								console.log(data);
+								var ses=$("<select/>").html(data);
+								console.log(ses);
+								var cityarr=[]
+								for(let i=0;i<ses[0].length;i++){
+									cityarr.push({
+										val:$(ses[0][i]).attr("value"),
+										name:$.trim($(ses[0][i]).text())
+									});
+									
+								}
+								console.log(cityarr,"是");
+								that.cityObj[seI]=cityarr;
+								that.coCount=seI;
+
+							},
+							error:function(err){
+								console.log(err,"错误");
+							}
+						})
+					},
+					togglearea:function(){
+						//开关
+						if($("#areachoose").css("display")=="none"){
+							//切换到省份
+							this.coCount=0;
+							$("#areachoose").fadeIn("linear");
+							this.ssqtrue=true;
+							$("#page").one("click",()=>{
+								//切换到省份
+								this.coCount=-1;
+								$("#areachoose").fadeOut(100);
+								this.ssqtrue=false;
+							})
+							
+						}else{
+							//毁灭痕迹
+							this.coCount=-1;
+							$("#areachoose").fadeOut(100);
+							this.ssqtrue=false;
+							
+						}
+					},
+					infornav:function(item){
+						//条状详情页面
+						window.location.assign("../BLusinessDetails/index.html");
+					},
+					closebottom:function(){
+						//关闭底部弹窗
+						this.bsdata.show=false;
+					},
+					areafn:function(){
+						//打开地区检索
+						this.slidecitys.show=!this.slidecitys.show;
+					},
+					postsites:function(data,ii){
+						//请求
+						console.log(data,"我靠",ii);
+						this.coCount=ii;
+						if(ii==0){
+							this.cityObj[0]=this.province;
+							this.cityObj[1]=[];
+							this.cityObj[2]=[];
+							if(!this.province){
+								this.go_site(2,0,0);
+							}
+						}else if(ii==1){
+							this.cityObj[2]=[];
+						}
+						
+					},
+					searchareafn:function(data,name,val){
+						var that=this;
+						console.log(this.coCount,"三级镰刀",data,name);
+						if(this.coCount==0){
+							this.selectCount[0]=data;
+						    //地址字段
+							this.selectValue[0]=val;
+							this.selectValue[1]='';
+							this.selectValue[2]='';
+
+							//地址id
+							this.selectId[0]=name;
+							this.selectId[1]='';
+							this.selectId[2]='';
+
+							this.go_site(2,name,1);
+						    
+						}else if(this.coCount==1){
+							this.selectCount[1]=data;
+							this.selectValue[1]=val;
+							this.selectValue[2]='';
+
+							this.selectId[1]=name;
+							this.selectId[2]='';
+
+							this.togglearea();
+							// this.go_site(3,name,2);
+						}else if(this.coCount==2){
+							this.selectCount[2]=data;
+							this.selectValue[2]=val;
+
+
+							this.selectId[2]=name;
+
+							this.togglearea();
+
+						}
+						
+					},
+					// 经纬度
+					siteFn(str){
+						var str=this.siteval;
+						console.log("是否改变");
+						var map=new BMap.Map("allmap");
+				        var localS=new BMap.LocalSearch(map);
+				        console.log(str);
+				        localS.setSearchCompleteCallback((searchResult) =>{
+				        	
+				        	if(searchResult.getPoi){
+				        		var poi = searchResult.getPoi(0);
+				        		if(poi){
+				        			this.dataobj["lng"]=poi.point.lng;
+					           		this.dataobj["lat"]=poi.point.lat;
+				        		}
+					            
+				        	}
+				    　　});
+
+        				localS.search(str);
+					},
+					submitFn(){
+						if(this.isagree){
+							var tar=$("#address").serializeArray();
+
+							var data=this.dataobj||{};
+
+							var jointObj={};
+							var arrd=tar.map((a)=>{return a.name;});
+							console.log(arrd);
+							tar.map((a)=>{jointObj[a.name]={val:a.value}});
+							console.log(jointObj);
+							//省市区
+							var site=this.selectValue;
+							jointObj["province"]={val:[site[0],site[1],site[2]]};
+							jointObj["qc_img"]={val:this.imgs[0]};
+
+
+							var result=ok(jointObj);
+							console.log(result);//ok
+							if(result.show){
+								layer.msg(result.val,{icon:2});
+								return false;
+							}
+
+
+							tar.map((a)=>{ data[a.name]=a.value;});
+							console.log(data);
+							
+							var idarr=this.selectId;
+
+							//省
+							data["province_name"]=site[0];
+							data["province_id"]=idarr[0];
+
+							//市
+							data["city_name"]=site[1];
+							data["city_id"]=idarr[1];
+							
+							//区
+							data["area_name"]=site[2];
+							data["area_id"]=idarr[2];
+							
+
+							data["qc_img"]=this.imgs[0];
+
+							var form=new FormData();
+
+							for(var ii in data){
+								form.append(ii,data[ii]);
+							}
+							
+							
+							form.append("qc_img",$("#qcImg")[0].files[0]);
+
+
+
+							$.ajax({
+								type:"POST",
+								url:"{:U('/Mobile/User/butor_apply')}",
+								data:data,
+								dataType:"json",
+								success:function(res){
+									if(res.code==0){
+									  layer.msg(res.msg,{icon:2})
+
+									}else if(res.code==1){
+										layer.confirm(res.msg+",是否回到店铺首页", {icon: 3, title:'提示'}, function(index){  
+											window.location.assign("{:U('Mobile/User/index')}");
+										    layer.close(index);
+										});
+										
+									}else if(res.code==2){
+
+										setTimeout(
+											function(){
+												window.location.assign('{:U('Mobile/User/butor_index')}')},
+													2000);
+									}
+
+									
+								},
+								error:function(err){
+									layer.msg("请求错误",{icon:2})
+								}
+							});
+						}else{
+							layer.msg("请同意协议！",{icon:0})
+						}
+						
+
+						return false;
+					},
+					add_img(event){
+						layer.load(1);
+						var that=this;
+						console.log(event);
+						var files=event.target.files;
+						for(let i=0;i<files.length;i++){
+							
+							var imgData=files[i];
+
+							var form=new FormData();
+							
+							
+							form.append("img",imgData);
+				            
+							$.ajax({
+								type:"POST",
+								url:"{:U('/Mobile/Goods/upload_img')}",
+								data:form,
+								processData : false, //必须false才会自动加上正确的Content-Type
+						        dataType: 'json',
+						        contentType : false ,//必须false才会避开jQuery对 formdata 的默认处理 
+								success:function(res){
+									layer.load(1,{time:1});
+									console.log(res,"你好");
+									if(res.code){
+										that.imgs.push(res.data.img.urlpath);
+										var str=`
+										  <li class="iu-item">
+									          <img src=${res.data.img.urlpath} class="iul-img">
+									         
+									      </li>
+										`;
+										var list=$(str);
+										$("#morePic").prepend(list);
+									}else{
+										layer.alert(res.msg);
+									}
+
+								},
+								error:function(err){
+									layer.alert("请求错误");
+									layer.load(1,{time:1});
+								}
+							});
+						}
+				   },
+				   del_img(count){
+				   	   this.imgs.splice(count,1);
+				   	   $("#qcImg").val("");
+
+				   }
+				}
+			});
+		</script>
+	</body>
+</html>

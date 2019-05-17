@@ -1,0 +1,500 @@
+
+<!DOCTYPE html >
+
+<html>
+
+<head>
+
+<meta name="Generator" content="TPshop v1.1" />
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width">
+
+<!-- <title>首页-{$tpshop_config['shop_info_store_title']}</title> -->
+<title>首页</title>
+
+<meta http-equiv="keywords" content="{$tpshop_config['shop_info_store_keyword']}" />
+
+<meta name="description" content="{$tpshop_config['shop_info_store_desc']}" />
+
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+<script src="__STATIC__/jzqg/js/flexible.js"></script>
+ 
+<!--公共样式-->
+<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+<!--轮播js-->
+<script src="__STATIC__/jzqg/js/swiper.min.js"></script>
+<!--轮播样式-->
+<link rel="stylesheet" href="__STATIC__/jzqg/css/swiper.min.css" />
+<!--引入vue-->
+<script src="__STATIC__/jzqg/js/vue.js"></script>
+<script src="__STATIC__/jzqg/js/component.js"></script>
+<script src="__STATIC__/jzqg/js/axios.js"></script>
+<script src="__STATIC__/js/jquery.js"></script>
+<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+<!-- layer.js -->
+<script type="text/javascript" src="__STATIC__/jzqg/js/layer.js" ></script>
+
+<style>
+  .home-data{
+    background-color:rgba(236,238,238,1);
+    padding-bottom:1rem;
+  }
+  .home-header{
+    display:flex;
+    justify-content: space-around;
+    padding:0.25rem 0;
+    background-color:#fff;
+    margin-bottom:0.25rem;
+  }
+  .hh-item{
+    text-align:center;
+  }
+  .hh-item>p{
+    margin:0;
+  }
+  .hh-i-num{
+    font-size:0.5rem;
+    color:rgb(255,70,69);
+  }
+  .hh-i-text{
+    font-size:0.35rem;
+    color:rgb(152,152,152);
+    padding:3px 0;
+  }
+  .hb-image{
+    height:6rem;
+    width:100%;
+  }
+  .h-b-item{
+    width:100%!important;
+    height:6rem;
+  }
+  .hbi-img{
+    width:100%;
+    height:6rem;
+  }
+  .new-banner .hbi-img{
+    height:5rem;
+  }
+  .home-banner{
+    position:relative;
+    height:5rem;
+    overflow:hidden;
+  }
+  .hb-p{
+    position:absolute;
+    z-index:2;
+    bottom:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+  }
+  .hb-point{
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .h-b-control{
+    width:0.2rem;
+    height:0.2rem;
+    border-radius:100%;
+    border:1px solid #fff;
+    overflow:hidden;
+    margin:0 7px;
+  }
+  .h-b-control.active{
+    background-color:#fff;
+  }
+  .home-classify{
+    background-color:#fff;
+    margin-bottom:0.25rem;
+  }
+  .hc-frame{
+    display:flex;
+    flex-wrap:wrap;
+  }
+  .hc-f-item{
+    width:25%;
+    text-align:center;
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+    padding:0.25rem 0;
+  }
+  a.hc-f-item:hover,a.hc-f-item:active{
+    text-decoration: none;
+    opacity:0.7;
+  }
+  .hfi-img{
+    width:1.35rem;
+    height:1.35rem;
+    border-radius:100%;
+    background-position:center;
+    background-size:1.35rem 1.35rem;
+    background-repeat:no-repeat;
+  }
+  .hfi-text{
+    font-size:0.4rem;
+    padding:5px 0;
+    color:#000;
+    white-space:nowrap;
+  }
+  .hc-f-footer{
+    text-align: center;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size:0.4rem;
+    padding:0.25rem 0;
+  }
+  .hc-f-footer:active{
+    opacity:0.7;
+  }
+  .hff-text{
+    padding:0 3px;
+    color:#000;
+  }
+  .hc-f-footer:after{
+    content:"";
+    display:block;
+    width:0;
+    height:0;
+    border:0.175rem solid #000;
+    border-bottom:0;
+    border-left-color:transparent;
+    border-right-color:transparent;
+  }
+  .hc-f-footer.active:after{
+    border-top:0;
+    border-bottom: 0.175rem solid #000;
+  }
+  .home-cd{
+    height:6rem;
+    width:100%;
+  }
+  .hc-img{
+    height:6rem;
+    overflow:hidden;
+  }
+  .hc-img>img{
+    height:6rem;
+    width:100%;
+  }
+  .hd-c-list{
+    display:flex;
+    flex-wrap:wrap;
+    width:100%;
+  }
+  .hcl-item{
+    width:50%;
+    box-sizing:border-box;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    padding:0 0.1rem;
+  }
+  .hcl-item:active{
+    opacity:0.7;
+  }
+  .hcl-i-frame{
+    /*width:5.5rem;*/
+    width:99%;
+    background-color:#fff;
+    border-radius: 5px;
+    margin-top:0.25rem;
+    box-shadow: 0 0 1px #fff;
+      overflow: hidden;
+      /*border:1px solid #dcdcdc;*/
+  }
+  .hi-t-img{
+    width:100%;
+    /*height:5.5rem;*/
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    height:100%;
+  }
+  .hi-top{
+    /*height:5.5rem;*/
+    width:100%;
+    padding-bottom:100%;
+    position:relative;
+  }
+  .hi-bottom{
+    padding:0.15rem;
+    
+  }
+  .hi-b-title{
+    font-size:0.4rem;
+    color:rgba(19,19,19,0.9);
+    
+  }
+  .hi-b-center{
+    display:flex;
+    align-items:center;
+    padding:0.1rem 0;
+  }
+  .hbc-img{
+    width:0.6rem;
+    height:0.6rem;
+    border-radius:100%;
+  }
+  .hbc-name{
+    font-size:0.3rem;
+    color:rgba(135,135,135,1);
+
+    padding-left:0.1rem;
+  }
+  .hf-frame{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    /*padding:0.25rem 0;*/
+  }
+  .hf-left{
+    color:rgba(254,85,84,1);
+    font-size:0.5rem;
+  }
+  .hf-btn{
+    border:1px solid rgba(254,85,84,1);
+    border-radius:5px;
+    color:rgba(254,85,84,1);
+    font-size:0.5rem;
+    padding:2px;
+  }
+
+  /*最底部的文字*/
+  .info-text{
+    font-size:0.4rem;
+    color:#000;
+    text-decoration:none;
+
+  }
+
+  .info-item{
+    text-align:center;
+    margin-top:1rem;
+    width:100%;
+  }
+</style>
+
+
+</head>
+
+<body>
+    <div id="app">
+    <!--头部-->
+    <div class="home-header">
+      <div class="hh-item">
+        <p class="hh-i-num">{$data.user}</p>
+        <p class="hh-i-text">会员数</p>
+      </div>
+      
+      <div class="hh-item">
+        <p class="hh-i-num">{$data.butor}</p>
+        <p class="hh-i-text">经销商</p>
+      </div>
+      <div class="hh-item">
+        <p class="hh-i-num">{$data.store}</p>
+        <p class="hh-i-text">商家</p>
+      </div>
+    </div>
+    <!--轮播-->
+    <div class="home-banner swiper-container" style='height:6rem;'>
+      <div class="hb-image swiper-wrapper">
+        <volist name="data.slide" id="vo">
+
+          <a onclick="layer&&layer.load(1);" class="h-b-item swiper-slide" data-href="{$vo.link}" href="{$vo.link}">
+            <img src="{$vo.ad_code}" class="hbi-img" onerror="imgerr(this)" />
+          </a>
+        </volist>
+      </div>
+      <!--<div class="hb-p">
+        <ul class="hb-point">
+          <li class="h-b-control active"></li>
+          <li class="h-b-control"></li>
+        </ul>
+      </div>-->
+      <div class="swiper-pagination"></div>
+    </div>
+    <!--搜索框-->
+    <div class="home-search">
+      <div class="hs-frame">
+        <img src="__STATIC__/jzqg/img/search.png" alt="" class="hs-f-icon" />
+        <input placeholder="请输入关键词搜索" class="hs-f-search" onfocus="layer&&layer.load(1);window.sessionStorage.clear('searchval','');window.location.assign('{:U('Mobile/Store/search',array(type=>'1'))}')" />
+      </div>
+    </div>
+    <!--分类-->
+    <div class="home-classify">
+
+      <div class="hc-frame">
+        <volist name="data.cate" id="vo" key="key">
+          <a href="{:U('Mobile/Store/classify',array('cate_id'=>$vo[ad_id]))}" class="hc-f-item" v-if="{$key}<=classControl" onclick="layer&&layer.load(1);">
+            <div class="hfi-img" style="backgroundImage:url({$vo.ad_code})" data-img="{$vo.ad_code}">
+            </div>
+            <div class="hfi-text">
+              {$vo.ad_name}
+            </div>
+          </a>
+        </volist>
+      </div>
+
+      <div v-bind:class="{'hc-f-footer':true,'active':(classControl>8)} "  v-on:click="classfn()">
+        <template v-if="classControl<=8">
+        <span class="hff-text">更多分类</span>
+        <i class="hff-down"></i>
+        </template>
+        <template v-else>
+          <span class="hff-text">收起</span>
+        <i class="hff-down"></i>
+        </template>
+      </div>
+    </div>
+    <!--推荐新闻-->
+    <div class="new-banner home-banner">
+      <div class="hb-image swiper-wrapper">
+        <volist name="data.news" id="vo">
+          <a class="h-b-item swiper-slide" href="{$vo.ad_link}">
+            <img src="{$vo.ad_code}" class="hbi-img" onerror="imgerr(this)" />
+          </a>
+        </volist>
+      </div>
+    </div>
+    <!--商品数据-->
+    <div class="home-data">
+      <div class="hd-content">
+        <div class="hd-c-list">
+          <volist name="goods_list" id="vo">
+            <a class="hcl-item" href="{:U('Store/product',array('goods_id'=>$vo['goods_id']))}" onclick="layer&&layer.load(1);">
+              <div class="hcl-i-frame">
+                <div class="hi-top"><img src="{$vo.original_img}" alt="" class="hi-t-img" onerror="imgerr(this)"/></div>
+                <div class="hi-bottom">
+                  <div class="hi-b-title">
+                    {$vo.goods_name}
+                  </div>
+                  <div class="hi-b-center">
+                    <img src="{$vo.store_logo}" alt="" class="hbc-img" onerror="imgerr(this,'user')"/>
+                    <span class="hbc-name">{$vo.store_name}</span>
+                  </div>
+                  <div class="hbc-footer">
+                    <div class="hf-frame">
+                      <span class="hf-left">
+                        ￥{$vo.shop_price}
+                      </span>
+                      <div class="layui-btn layui-btn-xs layui-btn-danger">
+                        购买
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </volist>
+          <div class="info-item">
+            <p class="info-text">
+              微玖仟提供技术支持
+            </p>
+            <p class="info-text">wei9000.com</p>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    <div style="height:50px;"></div>
+    <!-- 底部导航 -->
+    <lw-tabbar page-active="0" />
+    </div>
+    <script>
+      //图片不存在
+      function imgerr(ind,user){
+
+          ind&&(()=>{
+            var src="__STATIC__/jzqg/img/";
+            if(user){
+              src="__STATIC__/images/1440439367001464442.png";
+            }else{
+              src+="no-img.png";
+            }
+            ind.setAttribute("src",src);
+          })();
+
+      };
+      window.onload=function(){
+
+        //轮播逻辑
+        var swiper = new Swiper('.swiper-container', {
+          spaceBetween: 30,
+          effect: 'fade',
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            dynamicBullets:true
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+          autoplay:{
+            delay:2000,
+            diableOnInteraction:true
+          },
+          loop:true
+        });
+        //轮播逻辑
+        var newswiper = new Swiper('.new-banner', {
+          loop:true,
+          autoplay:{
+            delay:3000,
+            diableOnInteraction:true
+          }
+        });
+      }
+      //声明Vue
+      var app=new Vue({
+        el:"#app",
+        data:{
+          classifyArr:[
+          {name:'热卖',img:'__STATIC__/jzqg/img/hotbug.png',navsrc:'Mobile/Store/classify'},
+          {name:'新品',img:'__STATIC__/jzqg/img/hotbug.png'},
+          {name:'男生',img:'__STATIC__/jzqg/img/hotbug.png'},
+          {name:'女生',img:'__STATIC__/jzqg/img/hotbug.png'},
+          {name:'爆款',img:'__STATIC__/jzqg/img/hotbug.png'},
+          {name:'特惠',img:'__STATIC__/jzqg/img/hotbug.png'},
+          {name:'品牌',img:'__STATIC__/jzqg/img/hotbug.png'},
+          {name:'其他',img:'__STATIC__/jzqg/img/hotbug.png'},
+          {name:'好货',img:'__STATIC__/jzqg/img/hotbug.png'},
+          {name:'酬宾',img:'__STATIC__/jzqg/img/hotbug.png'}
+          ],
+          classControl:8,
+          //分类更多的事件
+          classfn:function(){
+            
+            if(this.classControl==8){
+              // 最多100
+              this.classControl=100;
+            }else{
+              this.classControl=8;
+            }
+           }
+        },
+        //生命周期
+        beforeCreate:function(){
+        },
+        created:function(){
+          
+        },
+        mounted:function(){
+        }
+      })
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>商家主页</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<!--vue-->
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<!--jquery-->
+		<script src="__STATIC__/jzqg/js/jquery.min.js"></script>
+
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+
+
+		<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+		<!-- layer.js -->
+		<script type="text/javascript" src="__STATIC__/jzqg/js/layui.js" ></script>
+
+		<!--轮播js-->
+		<script src="__STATIC__/jzqg/js/swiper.min.js"></script>
+		<!--轮播样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/swiper.min.css" />
+		<!-- 微信api -->
+		<script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+		<style>
+		    .hc-item{
+		    	white-space:nowrap;
+		    	padding:0 0.5rem;
+		    }
+		    .lw-btn:active{
+		    	opacity:0.7;
+		    }
+			#homeBanner{
+				width:100%!important;
+			}
+			/*#homeMerchant{
+				margin-bottom:2rem;
+			}*/
+			#app{
+				padding-bottom:0!important;
+			}
+			
+			.hm-header{
+				background-color:#fff;
+				margin-bottom:0.1rem;
+			}
+			.hh-b-img{
+				width:100%;
+				height:4rem;
+			}
+			
+			.hh-content{
+				display:flex;
+				justify-content:space-around;
+				padding:0.5rem 0;
+				align-items:center;
+				z-index: 2;
+			}
+			.hc-i-count{
+				color:#000;
+				font-size:0.4rem;
+			}
+			.hc-i-prop{
+				color:#999;
+				font-size:0.3rem;
+			}
+			.hc-center{
+				text-align:center;
+				z-index: 2;
+			}
+			.hc-t-img{
+				width:2rem;
+				height:2rem;
+				border-radius:50%;
+				margin-top:-1.5rem;
+				
+			}
+			.hf-icon{
+				width:0.5rem;
+				height:0.5rem;
+				vertical-align: middle;
+				margin-left:0.25rem;
+			}
+			.hc-name{
+				font-size:0.5rem;
+				color:#000;
+			}
+			.hc-footer{
+				color:#999;
+			}
+			.hc-top{
+				height:1rem;
+			}
+			
+			.hm-topic{
+				font-size:.39rem;
+				color:#000;
+				text-indent:0.3rem;
+				padding:0.3rem 0;
+				border-bottom:0.01rem solid rgba(236,238,238,1);
+				background-color:#fff;
+			}
+			.hm-ul{
+				padding:0;
+				margin:0;
+			}
+			.hm-li{
+				padding:0.3rem;
+				border-bottom:0.01rem solid rgba(236,238,238,1);
+				background-color:#fff;
+			}
+			.hd-right,.hl-data{
+				flex:1;
+				display:flex;
+				align-items:center;
+				position:relative;
+			}
+			.hr-img{
+				width:2.5rem;
+				height:2.5rem;
+			}
+			.h-d-icon{
+				display:flex;
+				align-items:center;
+			}
+			.hdi-img{
+				width:0.5rem;
+				height:0.5rem;
+				vertical-align: middle;
+				margin-right:0.1rem;
+				border-radius:100%;
+			}
+			.hr-data{
+				display:flex;
+				flex-direction: column;
+				justify-content: space-between;
+				padding-left:0.25rem;
+				height:2.5rem;
+			}
+			.h-d-price{
+				font-size:0.4rem;
+				color:#FF0000;
+			}
+			.hdi-text{
+				font-size:0.3rem;
+				color:#999;
+			}
+			.h-d-title{
+				width:6rem;
+				overflow:hidden;
+				text-overflow: ellipsis;
+				white-space:nowrap;
+				margin-bottom:0.2rem;
+			}
+			.hd-left{
+				position:relative;
+				margin:0.1rem;
+			}
+			/*复选框*/
+			.hm-ul .afs-checkbox{
+				display:none;
+			}
+			.ac-frame{
+				display:flex;
+				align-items:center;
+				padding:0.3rem 0 0 0.7rem;
+			}
+			.ac-f-status{
+				position:relative;
+			}
+			.afs-checkbox{
+				position:absolute;
+				top:0;
+				left:0;
+				right:0;
+				bottom:0;
+				width:100%;
+				height:100%;
+				z-index:2;
+				margin:0;
+				padding:0;
+				opacity:0;
+			}
+			.afs-shape{
+				width:0.5rem;
+				height:0.5rem;
+				padding-top:0.1rem;
+				box-sizing: border-box;
+				display:flex;
+				justify-content:center;
+				border-radius:50%;
+				animation:all 0.5s;
+				background-image:url(__STATIC__/jzqg/img/check-none.png);
+				opacity:0.5;
+				
+				background-position:0 0;
+				background-size:0.5rem 0.5rem;
+				background-repeat:no-repeat;
+				transition:all 0.3s;
+			}
+			.afs-checkbox:checked+.afs-shape{
+				background-image:url(__STATIC__/jzqg/img/check-huang.png) ;
+				opacity:1;
+			}
+			
+			/*定位底部样式*/
+			.hm-footer{
+				display:flex;
+				align-items:center;
+				background-color:#fff;
+				box-shadow:0 -0.1rem 0.1rem rgba(0,0,0,0.1);
+			}
+			#allChoose{
+				display:flex;
+				align-items:center;
+			}
+			.hf-result{
+				flex:1;
+			    height: 1.2rem;
+			    border: none;
+			    outline: none;
+			    font-size: 0.3rem;
+			    color: #fff;
+			    background-color:#FF4444;
+			    line-height:1.2rem;
+			    text-align:center;
+			}
+			.footer-fixed{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				width:100%;
+				z-index:999;
+			}
+			.pi-icon{
+				width:0.5rem;
+				height:0.5rem;
+				vertical-align: middle;
+
+				padding-right:0.1rem;
+				
+			}
+			.h-f-left{
+				display:flex;
+				align-items:center;
+				
+			}
+			.h-f-left>div{
+				padding-right:0.5rem;
+			}
+			.pfl-icon{
+				width:2rem;
+				display:flex;
+				align-items:center;
+			}
+			
+			/*支付弹窗*/
+			
+			.zhe{
+				background-color:rgba(0,0,0,0.5);
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				height:100%;
+				z-index:-1;
+			}
+			.ewm-plug{
+				transition:transform 0.2s;
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				margin:auto;
+				
+				
+				width:8rem;
+				z-index:-1;
+				text-align:center;
+				height:11rem;
+				min-height:11rem;
+			}
+			.ep-code{
+				background:#fff;
+				padding-bottom:1rem;
+			}
+			.ec-img{
+				width:6rem;
+				height:6rem;
+			}
+			.ep-footer{
+				height:1rem;
+				background-color:#fff;
+				border:none;
+				color:#FF0000;
+				font-size:0.4rem;
+				
+				position:absolute;
+				left:0;
+				right:0;
+				width:100%;
+				bottom:0;
+			}
+			.ep-footer:active{
+				opacity:0.6;
+			}
+			.ec-topic{
+				font-size:0.4rem;
+				color:#000;
+				padding:0.5rem 0;
+			}
+			.ec-text{
+				width:6rem;
+				margin:auto;
+				font-size:0.3rem;
+			}
+			.ewm-cancel{
+				margin-top:1rem;
+			}
+			.e-i{
+				width:1.5rem;
+				height:1.5rem;
+			}
+			
+			.fade-leave-to,
+			.fade-enter{
+				transition:transform 0.2s;
+			}
+			.fade-leave-active,
+			.fade-enter-active{
+				transform:translateY(-15rem);
+			}
+
+			/*置顶*/
+			#layui-fixbar{
+				bottom:2rem;
+			}
+
+			.hr-img{
+				width:2.5rem;
+				height:2.5rem;
+			}
+
+			.stm-content{
+				background: rgba(236,238,238,1);
+			}
+
+
+			/*联系客服和电话*/
+			.mobile{
+				position:fixed;
+				right:10px;
+				bottom:150px;
+				width:50px;
+				height:50px;
+				text-align:center;
+				line-height:50px;
+				border-radius:100%;
+				box-shadow:0 0 1px rgba(0,0,0,0.3);
+				background-color:#fff;
+				font-size:15px;
+			}
+			.kefu .layui-icon,.mobile .layui-icon{
+				font-size:20px;
+				padding:0 5px;
+			}
+			.kefu{
+				position:fixed;
+				right:0px;
+				bottom:80px;
+				height:40px;
+				text-align:center;
+				line-height:40px;
+				border-bottom-left-radius:50px;
+				border-top-left-radius:50px;
+				box-shadow:0 0 1px rgba(0,0,0,0.3);
+				background-color:#fff;
+				font-size:15px;
+				padding:0 15px;
+				display:flex;
+				align-items:center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<lw-back back-v="商家主页"></lw-back>
+			<div id="homeMerchant">
+				<div class="hm-header">
+				    <!--轮播-->
+				    <div class="home-banner swiper-container" id="homeBanner" >
+				      <div class="hb-image swiper-wrapper">
+				        <volist name="store.moreimgs" id="banner">
+				         
+				           <div class="h-b-item swiper-slide" onclick="prevImage('{$banner}')">
+				           <img src="{$banner}" alt="" class="hh-b-img" onerror="imgerr(this)" />
+				           </div>
+				            
+				        </volist>
+				      </div>
+				    </div>
+					<div class="hh-content">
+						<div class="hc-item">
+							<span class="hc-i-count">{$store['shop_num']}</span>
+							<span class="hc-i-prop">商品</span>
+						</div>
+						<div class="hc-center">
+							<div class="hc-top">
+								<img src="{$store['store_logo']}" alt="" class="hc-t-img" onerror="imgerr(this,'user')"/>
+								
+							</div>
+							<div class="hc-center">
+							
+								<p class="hc-name">{$store['store_name']}</p>
+								<div class="hc-footer">
+									<span>{$store['store_address']}</span>
+									<img src="__STATIC__/jzqg/img/merchant.png" alt="" class="hf-icon" onclick="openL('{$store.lng}','{$store.lat}','{$store.store_address}')" />
+								</div>
+								<p class='zen'>
+								{$store['store_zy']}
+								</p>
+							</div>
+						</div>
+						<div class="hc-item">
+							<span class="hc-i-count">{{colls}}</span>
+							<span class="hc-i-prop">收藏</span>
+						</div>
+					</div>
+					<!--<div style="margin: 1rem">-->
+						<!--<span>{$store['store_zy']}</span>-->
+					<!--</div>-->
+				</div>
+
+				<div class="hm-main">
+					<p class='hm-topic'>商品列表</p>
+					<ul class="hm-ul" id="maindata"></ul>
+				</div>
+				<div style="height:1.2rem;"></div>
+				<div class="footer-fixed">
+					<div class="hm-footer">
+						<div class="h-f-left">
+							<div class="hd-left" id="allChoose">
+									<div class="ac-f-status">
+										<input type="checkbox" class="afs-checkbox"  v-bind:checked="ccc" />
+										<div class="afs-shape"></div>
+									</div>
+									<span class="ac-text">全选</span>
+							</div>
+							<!--callect控制着收藏的状态-->
+					 		<div class="pfl-icon" @click="callectfn()">
+					 			<img v-bind:src="callectdata[callect].img" alt="" class="pi-icon" />
+					 			
+					 			<span>{{callectdata[callect].text}}</span>
+					 		</div>
+							<div class="yet-count">
+								已选择<span id="allcount">0</span>件商品
+							</div>
+						</div>
+						
+						<div class="hf-result" @click="submitFn()">结算</div>
+					</div>
+				</div>
+			</div>
+			<a onclick="layer&&layer.load(0,{time:1000});" class="mobile" href="tel://{$store['store_mobile']}">
+			   <i class="layui-icon layui-icon-cellphone"></i>
+			</a>
+			<div class="kefu" onclick="kefu()">
+			   <i class="layui-icon layui-icon-login-wechat"></i><span>客服</span>
+			</div>
+			
+		</div>
+		
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+
+		    window.onload=function(){
+		        //轮播逻辑
+		        var newswiper = new Swiper('#homeBanner', {
+		          loop:true,
+		          autoplay:{
+		            delay:3000,
+		            diableOnInteraction:true
+		          }
+		        });
+		    }
+		    // 微信配置
+
+			wx.config({
+
+			    debug: false, 
+
+			    appId: "{$signPackage['appId']}", 
+
+			    timestamp: '{$signPackage["timestamp"]}', 
+
+			    nonceStr: '{$signPackage["nonceStr"]}', 
+
+			    signature: '{$signPackage["signature"]}',
+
+			    jsApiList: ['getLocation','openLocation','previewImage'] // 功能列表，我们要使用JS-SDK的什么功能
+
+			});
+
+			wx.ready(function(){
+			    wx.getLocation({
+			    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+			    success: function (res) {
+
+			      var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+			      var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+			      
+			      var lng=res.longitude,lat=res.latitude;
+			      console.log(latitude,longitude,"里面");
+			      app.city={
+			      	lng:longitude,
+			      	lat:latitude
+			      }
+			      
+			    },
+			    complete:function(res){
+			    	console.log("这是最好执行的吗？",res);
+
+			    }
+			    });
+			    
+
+			});
+			wx.error(function(){
+				console.log("执行了？");
+		    	//信息流
+			});
+			//图片预览
+			function prevImage(src){
+
+				var imgarr=[];
+				var imgtar=$("#homeBanner .hh-b-img");
+				imgtar.each(function(i,v){
+					imgarr.push($(v).attr("src"));
+					console.log(v);
+				});
+				console.log(imgarr);
+				wx.previewImage({
+					current: src, // 当前显示图片的http链接
+					urls: imgarr // 需要预览的图片http链接列表
+				})
+			}
+			//客服联系
+			function kefu()
+
+			{
+		      layer.open({
+		        type: 1 //此处以iframe举例
+		        ,title: '客服二维码'
+		        ,shade: 0
+		        ,offset:50,
+		        // ,maxmin: true
+		        shade:0.5,
+		        shadeClose:true
+		        ,content: '<img src="{$store.store_weima}" width="300" onerror="codeerr(this)">'
+		        ,btn: [ '关闭弹窗'] //只是为了演示
+		        ,yes: function(ind){
+		        	 layer.close(ind);
+		        }
+		        
+		        ,zIndex: layer.zIndex //重点1
+		        ,success: function(layero){
+		          layer.setTop(layero); //重点2
+		        }
+		      });
+
+			}
+			
+			function openL(lon,lat,name){
+				layer&&layer.load(0,{time:2000});
+		    	wx.openLocation({
+			      latitude: lat||0, // 纬度，浮点数，范围为90 ~ -90
+			      longitude: lon||0, // 经度，浮点数，范围为180 ~ -180。
+			      name: name||'', // 位置名
+			      address: '', // 地址详情说明
+			      infoUrl: 'javascript:history.go(-1)' // 在查看位置界面底部显示的超链接,可点击跳转
+			      });
+		    };
+			function go_city(obj){
+		    	event.stopPropagation();
+		    	window.location.assign("{:U('Mobile/Store/txmap')}");
+		    	window.sessionStorage.setItem("store_nav",JSON.stringify(obj));
+		    }
+		    function hmli(tar){
+				$(tar).find(".afs-checkbox").click();
+			}
+			//复选事件
+			function allcheck(){
+				//阻止冒泡事件
+				event.stopPropagation();
+				var trueCheck=$(".hm-ul .afs-checkbox:checked").length,allCheck=$(".hm-ul .afs-checkbox").length;
+				
+				if(trueCheck===allCheck){
+					$("#allChoose .afs-checkbox").prop("checked",true);
+				}else{
+					$("#allChoose .afs-checkbox").prop("checked",false);
+					
+				}
+				$("#allcount").text(trueCheck);
+			}
+		    //图片不存在
+		    function imgerr(ind,user){
+
+		        ind&&(()=>{
+		          var src="__STATIC__/jzqg/img/";
+		          if(user){
+		          	src="__STATIC__/images/1440439367001464442.png";
+		          }else{
+		          	src+="no-img.png";
+		          }
+		          ind.setAttribute("src",src);
+		        })();
+
+		    };
+
+		    function codeerr(ind){
+		    	imgerr(ind);
+		    	
+		    	layer.alert("暂无二维码图片，请关注玖泽公众号并反馈此问题，联系此经销商尽快补上二维码",{title:"玖泽提醒"});
+		    }
+		    function gobuy(sid){
+		    	if(sid){
+
+			    	var  href="{:U('Store/product',array('goods_id'=>'gid'))}";
+
+			    	href=href.replace('gid',sid);
+			    	window.location.href=href;
+		    	}else{
+		    		layer.msg("返回的goodid错误，无法跳转");
+		    	}
+		    }
+			layui.use(["flow","layer","carousel","util"],function(res){
+				console.log(res,"你好");
+				var flow=layui.flow;
+				var layer=layui.layer;
+				//工具
+				var util=layui.util;
+
+				//轮播
+				var carousel=layui.carousel;
+
+
+				carousel.render({
+					elem:"#homeBanner",
+					window:"100%",
+					height:"4rem",
+					interval:4000,
+					// anim:'updown'
+				});
+
+				// //固定块
+				// util.fixbar({
+				// 	bar1:true,
+				// 	bar2:true,
+				// 	css:{
+				// 		right:10,bottom:100
+				// 	},
+				// 	click:function(type){
+				// 		console.log("是否有用？",type);
+				// 		if(type==="bar1"){
+				// 			window.location.href=("tel://{$store['store_mobile']}");
+				// 		}
+				// 	}
+				// })
+				//信息流
+		    	flow.load({
+		    		elem:"#maindata",
+		    		done:function(page,next){
+		    			console.log(page);
+		    			var lis = [];
+				        //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+				        $.ajax({
+				        	type:"POST",
+				        	url:"{:U('/Mobile/store/homemerchan_content')}",
+				        	dataType:"json",
+				        	data:{
+				        		store_id:app.sid,
+				        		page:page
+				        	},
+				        	success:function(res){
+				        		console.log(res,"请求成功");
+				        		if(res.code){
+				        		 var data=res.data;
+				        		 if(data.length){
+				        		 	app.callectarr.push(...data);
+				        		 	layui.each(data,function(index, item){
+				        		 		var ischeck=$("#allChoose .afs-checkbox").prop("checked");
+							        	var str=`
+										<li class="hm-li" onclick="hmli(this)">
+											<div class="hl-data">
+												<div class="hd-left">
+													<div class="ac-f-status">
+														<input type="checkbox" class="afs-checkbox" v-bind:checked="ccc" value="${item.goods_id}" ${ischeck?'checked':''} onchange="allcheck()" />
+														<div class="afs-shape"></div>
+													</div>
+												</div>
+												<div class="hd-right">
+													<img src="${item.original_img}" onerror="imgerr(this)" class="hr-img"/>
+													<div class="hr-data">
+														<div class="h-d-top">
+															
+															<!--<div class="h-d-title"></div>-->
+															<div class="h-d-icon">
+																<img src="{$store.store_logo}" alt="" class="hdi-img" onerror="imgerr(this,'user')"/>
+																<span class="hdi-text">${item.store_name}</span>
+															</div>
+														</div>
+
+														<div class="h-d-price">
+														 <a class="layui-btn layui-btn-xs layui-btn-danger lw-btn" onclick="event.stopPropagation();gobuy(${item.goods_id})">购买</a>
+														 <span style="float:right;position:absolute;right:20px;line-height:30px;">￥${item.wholesale_price}</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</li>
+							        	`;
+							          lis.push(str);
+						            });
+						            //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+							        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+							        next(lis.join(''), true);
+				        		 }else{
+				        		 	
+				        		 	next(lis.join(''),false);
+				        		 }	
+				        		}else{
+				        			next(lis.join(''),false);
+				        		}
+				        	},
+				        	error:function(){
+				        		console.error("请求失败");
+				        	}
+
+				        })
+				        
+		    		}
+		    	});
+			
+
+			})
+			var app=new Vue({
+				el:"#app",
+				data:{
+					colls:"{$store['collect_num']}",
+					sid:"{$store['store_id']}",
+					ccc:false,
+					show:false,
+					callect: "{$store['collect']}",
+					callectdata:[
+						{img:"__STATIC__/jzqg/img/callect.png",text:"收藏"},
+						{img:"__STATIC__/jzqg/img/callect-true.png",text:"已收藏"}
+					],
+					callectarr:[],
+					city:{
+						lng:0,
+						lat:0
+					}
+				},
+				methods:{
+					moreBuy:function(gid){
+						if((typeof gid)!=="object"){
+							gid=[gid];
+						}
+						var gidarr=gid;
+						layer.load();
+						$.ajax({
+							url:"{:U('/Mobile/Order/butor_order')}",
+							type:"POST",
+							dataType:"json",
+							data:{
+								goods_id:JSON.stringify(gidarr)
+							},
+							success:(res)=>{
+								layer.load(0,{time:1});
+								if(res.code){
+									var data=res.data;
+									
+									if(data){
+										var judge=0;
+										for(var i=0;i<data.length;i++){
+											if(data[i].spec){
+												judge++;
+											}
+										}
+										console.log(judge,"judge");
+										if(judge){
+											console.log(data,"huo");
+											window.sessionStorage.setItem("vipobj",JSON.stringify(data));
+											window.sessionStorage.setItem("store_id",JSON.stringify(gid));
+											window.location.assign('{:U('Mobile/Order/vip_order')}');
+										}else{
+											layer.alert("此商品的规格组数量为零，无法批发下单",{title:"玖泽提醒",shadeClose:true},function(ind){
+												layer.close(ind);
+											})
+										}
+									}
+
+								}else{
+									layer.msg(res.msg);
+								}
+								
+							},
+							error:function(){
+								layer.load(0,{time:1});
+
+								layer.msg("下单失败",{icon:2});
+							}
+						});
+					},
+					submitFn:function(){
+						var lisch=$(".hm-ul .afs-checkbox:checked"),gid=[];
+						lisch.each(function(i,a){
+							gid.push($(a).val());
+						});
+						if(gid.length){
+							this.moreBuy(gid);
+						}else{
+							layer.msg("你未选择任何商品！");return false;
+						}
+
+						
+						// this.closeorder();
+					},
+					//收藏的方法
+					callectfn:function(gid){
+						var that=this;
+						console.log(gid,"你好");
+						console.log(that.callect);
+						var typeS;
+						if(that.callect=='1'){typeS='0';}else if(that.callect=='0'){typeS='1';}
+					     
+						layer.load(0);
+						$.ajax({
+							type:"POST",
+							url:"{:U('/Mobile/Store/store_collect')}",
+							data:{
+								"store_id":that.sid,
+								"type":typeS
+							},
+							dataType:"json",
+							success:function(res){
+								layer.load(0,{time:1});
+								if(res.code===1){
+									if(that.callect==0){
+										that.callect=1;
+										that.colls++;
+									}else if(that.callect==1){
+										that.callect=0;
+										that.colls--;
+									}
+									layer.msg(res.msg);
+
+								}else if(res.code===2){
+									if(that.callect==0){
+										that.callect=1;
+										that.colls++;
+									}else if(that.callect==1){
+										that.callect=0;
+										that.colls--;
+									}
+									layer.msg(res.msg);
+								}
+								else if(res.code===0){
+									layer.msg(res.msg,{icon:2})
+								}
+							},
+							error:function(err){
+								console.log(err,"错误");
+								layer.load(0,{time:1});
+								layer.msg("收藏请求失败",{icon:2});
+							}
+						})
+						
+					},
+					//隐藏遮布的方法
+					closeorder:function(){
+						this.show=!this.show;
+					}
+				}
+			});
+			//jquery的领域
+			$(document).ready(function(){
+				//全选事件
+				$("#allChoose .afs-checkbox").change(function(tar){
+					
+					$(".hm-ul .afs-checkbox").prop("checked",$(tar.currentTarget).prop("checked"));
+					$("#allcount").text($(".hm-ul .afs-checkbox:checked").length);
+
+				})
+			})
+		</script>
+	</body>
+</html>

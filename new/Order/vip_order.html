@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>经销商订单</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<script src="__STATIC__/jzqg/js/jquery.min.js"></script>
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+
+		<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+		<!-- layer.js -->
+		<script type="text/javascript" src="__STATIC__/jzqg/js/layer.js" ></script>
+		<include file="Public/wx_api" />
+		<style>
+			
+			.cd-li{
+				display:flex;
+				align-items:center;
+				margin-bottom:0.05rem;
+				padding:0.5rem;
+				
+				background-color:#fff;
+			}
+			.cl-r-icon{
+				width:0.5rem;
+				height:0.5rem;
+			}
+			.crt-topic{
+				font-size:0.42rem;
+				color:#000;
+			}
+			.cl-r-text{
+				padding:0 0.5rem;
+			}
+			.crt-address{
+				font-size:0.33rem;
+				color:#6a6a6a;
+			}
+			.cl-right{
+				flex:1;
+				align-items:center;
+				display:flex;
+			}
+			.cl-choose{
+				font-size: 0.39rem;
+				color: #ff4444;
+			}
+			.choose-add{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				width:100%;
+				height: 1.25rem;
+				background-color: #ff4444;
+				border:none;
+				outline:none;
+				font-size:0.42rem;
+				color:#fff;
+			}
+			/*分类商品的样式*/
+			
+			.sc-item{
+				display:flex;
+				background-color:#fff;
+				margin-bottom:0.05rem;
+				padding:0.4rem 0.2rem;
+			}
+			.si-left{
+				width:2.1rem;
+				height:2.1rem;
+				display:flex;
+				align-items:center;
+				justify-content: center;
+				text-align:center;
+			}
+			.shop-img{
+				width:2.1rem;
+				height:2.1rem;
+				background-color: #ffffff;
+				border-radius: 0.07rem;
+			}
+			.si-l-img{
+				width:1.25rem;
+				height:1.25rem;
+				border-radius:100%;
+			}
+			.si-right{
+				flex:1;
+				display:flex;
+				flex-direction: column;
+				justify-content: space-between;
+				padding-left:0.1rem;
+			}
+			.si-r-name {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.36rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #000000;
+			}
+			.sra-icon {
+				width: 0.31rem;
+				height: 0.35rem;
+				margin-top:0.04rem;
+			}
+			.sra-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.31rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #999999;
+			}
+			/*商品的样式*/
+			.shop-title{
+				overflow:hidden;
+				text-overflow:ellipsis;
+				white-space:nowrap;
+				width:7rem;
+			}
+			.sn-pic {
+				width: 0.56rem;
+				height: 0.56rem;
+				border-radius:50%;
+				vertical-align: middle;
+			}
+			.sn-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.3rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #7d7d7d;
+				display:flex;
+				align-items:center;
+				height:0.56rem;
+			}
+			.l-icon{
+				font-size:0.3rem;
+			}
+			.shop-bottom{
+				display:flex;
+				align-items:center;
+			}
+			.s-l-money{
+				font-family: PingFang-SC-Bold;
+				font-size: 0.3rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.53rem;
+				letter-spacing: 0rem;
+				color: #fe5455;
+			}
+			.sb-right{
+				flex:1;
+				text-align:right;
+			}
+			
+			/*提交订单修改的*/
+			.so-self{
+				padding:0.1rem 0.3rem;
+				margin-bottom:0.04rem;
+				background-color:#fff;
+			}
+			.shop-name:active{
+				opacity:0.7;
+			}
+			.so-self>.shop-name{
+				display:flex;
+				align-items:center;
+			}
+			.so-self .sn-span{
+			    text-indent:0.3rem;
+			}
+		    
+			.issue-arrow{
+				width:0.7rem;
+				height:0.7rem;
+			}
+			.sb-right-cut{
+				width:0.3rem;
+				height:0.3rem;
+			}
+			.sb-hui{
+				color:#999;
+				font-size:0.3rem;
+				display:inline-block;
+				height: 0.44rem;
+				line-height:0.44rem;
+				text-align:center;
+				
+			}
+			.sf-frame{
+				display:flex;
+				background-color:#fff;
+				height:1rem;
+				
+			}
+			.sb-footer{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				height:1rem;
+				
+			}
+			.sf-left{
+				width:70%;
+				display:flex;
+				padding:0 0.2rem;
+			}
+			.sf-right{
+				width:30%;
+				height: 1rem;
+				background-color: #ff4444;
+				border:none;
+				outline:none;
+				font-size:0.39rem;
+				color:#fff;
+				line-height:1rem;
+				text-align:center;
+			}
+			.sf-right:active{
+				opacity:0.7;
+			}
+			.sl-count{
+				line-height:1rem;
+				font-size:0.3rem;
+				white-space:nowrap;
+			}
+			.sl-price{
+				margin:auto 0;
+				text-align:right;
+				width:100%;
+				font-size:0.3rem;
+			}
+			.sp-active{
+				color:#FF0000;
+			}
+			.sp-text{
+				font-size:0.25rem;
+				color:#999;
+			}
+			.ss-data{
+				display:flex;
+				justify-content: space-around;
+				width:100%;
+				padding:0.5rem 0;
+				background-image:linear-gradient(45deg,#FF4444 20%,#FF4D00 100%);
+			}
+			.ss-d-item{
+				flex:1;
+				line-height:0.5rem;
+				color:#fff;
+				text-align: center;
+				display:inline-block;
+			}
+			.sdi-count{
+				font-size:0.4rem;
+				line-height:0.7rem;
+			}
+			.sdi-text{
+				font-size:0.2rem;
+			}
+			
+			.sdi-i-input{
+				color:#fff;
+				width:60%;
+				text-align:center;
+				font-size:0.4rem;
+				background-color:transparent;
+				border:none;
+				outline:none;
+				border-bottom:0.02rem solid #fff;
+				line-height:0.7rem;
+			}
+			.sdi-i-input::placeholder{
+				color:#ffffff;
+				opacity:0.5;
+				
+			}
+			.zhe{
+				background-color:rgba(0,0,0,0.5);
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				height:100%;
+				z-index:-1;
+			}
+			.ewm-plug{
+				transition:transform 0.2s;
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				margin:auto;
+				
+				background:#fff;
+				width:8rem;
+				z-index:-1;
+				text-align:center;
+				height:11rem;
+				min-height:11rem;
+			}
+			.ep-topic{
+				display:flex;
+				height:2rem;
+				align-items: center;
+				padding:0 0.5rem;
+				background-image:linear-gradient(to top,#FF4444 20%,#FF4D00 100%);
+				color:#fff;
+			}
+			.et-left{
+			  	flex:1;	
+			  	text-align:left;
+			  	font-size:0.4rem;
+			}
+			.et-right{
+				width:0.8rem;
+				height:0.8rem;
+			}
+			.ec-img{
+				width:6rem;
+			}
+			.ep-footer{
+				height:1rem;
+				background-color:#fff;
+				border:none;
+				color:#FF0000;
+				font-size:0.4rem;
+				
+				position:absolute;
+				left:0;
+				right:0;
+				width:100%;
+				bottom:0;
+			}
+			.ep-footer:active{
+				opacity:0.6;
+			}
+			.ec-text{
+				width:6rem;
+				margin:auto;
+				font-size:0.4rem;
+			}
+			.fade-leave-to,
+			.fade-enter{
+				transition:transform 0.2s;
+			}
+			.fade-leave-active,
+			.fade-enter-active{
+				transform:translateY(-15rem);
+			}
+			
+			/*表格*/
+			.sc-table{
+				text-align:center;
+				width:100%;
+				background-color:#fff;
+			}
+			.sc-result{
+				background-color:rgba(236,238,238,1);
+			}
+			.sc-table td,.sc-table th{
+				height:1.5rem;
+			}
+			.sc-table thead th{
+				text-align:center;
+				color:#999;
+				font-size:.39rem;
+			}
+			
+			.sc-table tbody td{
+				font-size:.39rem;
+				color:#000000;
+			}
+			.sc-table .sd-unit{
+				color:#999;
+				font-size:.3rem;
+			}
+			.sc-table .sd-num{
+				color:#FF0000;
+				font-size:.39rem;
+				line-height:0.8rem;
+				height:0.8rem;
+				display:block;
+			}
+			.sc-table td>span,.sc-table th>span{
+				line-height:0.8rem;
+				height:0.8rem;
+				display:block;
+			}
+			.sc-table .sd-input{
+				background-color:transparent;
+				outline:none;
+				border:none;
+				color:#FF9000;
+				font-size:0.39rem;
+				
+				border-bottom:0.01rem solid #FF9000;
+				width:2rem;
+				text-align: center;
+				line-height:0.8rem;
+				height:0.8rem;
+			}
+			.sc-table .sd-input::placeholder{
+				color:#FF9000;
+				font-size:0.39rem;
+			}
+			.sr-input{
+				line-height:0.8rem;
+				height:0.8rem;
+				border:none;
+				border-bottom:0.01rem solid rgba(0,0,0,0.2);
+				font-size:0.39rem;
+				color:#000;
+				width:2rem;
+				
+				background-color:transparent;
+				outline:none;
+				text-align: center;
+			}
+			.sr-input::placeholder{
+				color:#999;
+				font-size:0.3rem;
+			}
+
+			/*产品属性*/
+			
+			.pp-ul,.pp-u-li{
+				padding:0;
+				margin:0;
+			}
+			
+			.pp-ul{
+				background-color:#fff;
+				margin-bottom:0.1rem;
+			}
+			.pp-u-li{
+				display:flex;
+				padding:0.2rem 0;
+			}
+			.pul-left{
+				width:40%;
+				text-indent:0.3rem;
+				font-size:0.39rem;
+				color:#999;
+				display:inline-flex;
+			}
+			.pul-left:after{
+				content:":";
+			}
+			.pul-right{
+				font-size:0.39rem;
+				color:#000;
+			}
+			.order-item{
+				margin-bottom:1rem;
+				border-bottom:1px solid rgba(0,0,0,0.1);
+				/*border-top:1px solid rgba(0,0,0,0.1);*/
+				margin-top:0.1rem;
+			}
+
+
+			/*背景色*/
+			#submitOrder{
+				background-color: rgba(236,238,238,1);
+				opacity:0;
+			}
+			.sb-footer{
+				border-top:1px solid rgba(0,0,0,0.1);
+			}
+
+			.ep-code{
+				padding:0.5rem 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			
+			<lw-back back-v="经销商·订单"></lw-back>
+			<form action="#" id="submitOrder" onsubmit="return submitFn()" :style="{opacity:(vipobj?1:0)}">
+				<div class="choose-data">
+					<div @click="sessionfn()">
+						  <div class="cd-li">
+							  <div class="cl-right">
+								  <img src="__STATIC__/jzqg/img/choose-location.png" alt="" class="cl-r-icon" />
+								  <div class="cl-r-text">
+									  <div class="crt-topic">
+										  <span class="crt-t-name">{$address.consignee}</span>
+										  <span class="crt-t-phone">{$address.mobile}</span>
+									  </div>
+									  <div class="crt-address">
+										  {$address.address}
+									  </div>
+									  <input type="hidden" value="{$address.address_id}" name="address_id" />
+								  </div>
+							  </div>
+							  <img src="__STATIC__/jzqg/img/arrow-right.png" alt="" class="issue-arrow" />
+						  </div>
+					</div>
+				</div>
+				<template v-for="(item,index) in vipobj">
+					<div class="order-item" v-if="item.spec">
+
+						<div class="so-self">
+							
+							<div class="shop-name" :data-id="item['store_id']" @click="navfn(item['store_id'])">
+								<img :src="item['store_logo']" alt="" class="sn-pic" onerror="imgerr(this,'user')" />
+								<div class="sn-span">{{item['store_name']}}<i class="l-icon layui-icon layui-icon-right"></i></div>
+							</div>
+						</div>
+						<div class="s-c-data">
+							<div class="sc-item">
+								<div class="si-left">
+
+									<img :src="item['original_img']" alt="" class="shop-img" onerror="imgerr(this)" />
+								</div>
+								<div class="si-right">
+									<div>
+										<div class="si-r-name shop-title">
+											{{item['goods_name']}}
+										</div>
+									</div>
+									<div class="shop-bottom">
+										<div class="sb-left">
+											<span class="sb-hui">工厂货号：{{item['goods_sn']}}</span>
+										</div>
+										<div class="sb-right">
+											<span class="s-l-money">{{item['wholesale_price']}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="sb-select">
+							<div> 
+								<div class="ss-content">
+									<table class="sc-table">
+										<thead class="sc-head">
+										  <tr>
+											<th><span>
+												尺码
+											</span></th>
+											<th><span>
+												颜色
+											</span></th>
+											<th><span>
+												配码
+											</span></th>
+										  </tr>
+										</thead>
+										<tbody class="sc-body">
+										  <template v-for="(bigItem,bigIndex) in item['spec']">
+
+										      <template v-for="(twoitem,twoIndex) in bigItem">
+										        <template v-if="twoitem.chunk">
+										         <tr class="sc-result">
+													<td>
+														<div class="sr-div">
+															<span class="sd-num">{{item.xnum}}</span>
+															<p class="sd-unit">每箱装（个）</p>
+														</div>
+													</td>
+													
+													<td>
+														<div class="sr-div">
+															<input type="text" class="sd-input" placeholder="请输入箱数" :value="twoitem.count?twoitem.count:''" @input="numberFn(index,bigIndex,$event,twoIndex)"/>
+															<p class="sd-unit">箱数（箱）</p>
+														</div>
+													</td>
+													
+													<td>
+														<div class="sr-div">
+															<span class="sd-num num-all">{{(twoitem.all||0)}}</span>
+															<p class="sd-unit">
+																该尺码总对数（对）
+															</p>
+														</div>
+													</td>
+											    </tr>
+										        </template>
+										        <template v-else>
+										         <tr>
+													<td>
+														<span>{{twoitem['name'][0]}}</span>
+													</td>
+													
+													<td>
+														<span>{{twoitem['name'][1]}}</span>
+													</td>
+													
+													<td>
+														<input class="sr-input" :value="twoitem['name'][2]||0" type="number" min='0' @input="withCode(index,bigIndex,twoIndex,$event)">
+													</td>
+												 </tr>
+										        </template>
+												
+										      </template>
+
+										      
+										  
+										  </template>
+											
+										</tbody>
+									</table>
+								</div>
+								<div class="ss-data">
+									<div class="ss-d-item">
+										<p class="sdi-count">{{item.all_count||0}}</p>
+										<p class="sdi-text">总件数</p>
+									</div>
+									<div class="ss-d-item">
+										<p class="sdi-count">{{item.all_two||0}}</p>
+										<p class="sdi-text">总对数</p>
+									</div>
+									<div class="ss-d-item">
+										<p class="sdi-count">￥{{item.all_price||0}}</p>
+										<p class="sdi-text">商品总价</p>
+									</div>
+									<div class="ss-d-item">
+										<div class="sdi-input">
+											<input type="text" class="sdi-i-input" placeholder="选项" :value="goods_sn[item.goods_id]||''" @input="goodssn($event,item.goods_id)"/>
+										</div>
+										<p class="sdi-text">提交货号</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</template>
+
+				<!--购买信息-->
+				<div class="p-property">
+				 	<ul class="pp-ul">
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				全部商品件数
+				 			</div>
+				 			<div class="pul-right">
+				 				{{whool.all_count}}
+				 			</div>
+				 		</li>
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				全部商品箱数
+				 			</div>
+				 			<div class="pul-right">
+				 				{{whool.all_number}}
+				 			</div>
+				 		</li>
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				全部商品总价
+				 			</div>
+				 			<div class="pul-right">
+				 				￥{{whool.all_price}}
+				 			</div>
+				 		</li>
+				 		<!-- <li class="pp-u-li">
+				 			<div class="pul-left">
+				 				物流费用
+				 			</div>
+				 			<div class="pul-right">
+				 				不含
+				 			</div>
+				 		</li> -->
+				 		
+				 	</ul>
+				</div>
+				<div class="sb-footer">
+					<div class="sf-frame">
+						<div class="sf-left">
+							<span class="sl-count">
+							  共{{whool.all_two}}对商品
+							</span>
+							<div class="sl-price">
+								<p>合计：￥<span class="sp-active">{{whool.all_price}}</span>元</p>
+								<!-- <span class="sp-text">不含运费</span> -->
+							</div>
+						</div>
+						<div class="sf-right" v-on:click="submitFn()">
+							确认下单
+						</div>
+					</div>
+				</div>
+				<!--遮布-->
+				<div class="zhe" v-on:click="closeorder()" v-if="show" :style="{zIndex:(show?2:-1)}"></div>
+				<transition name="fade">
+					<!--扫码弹窗-->
+					<div class="ewm-plug" v-if="show" :style="{zIndex:(show?2:-1)}">
+						<div class="ep-topic">
+							<div class="et-left">下单成功</div>
+							<img src="__STATIC__/jzqg/img/gou-order.png" alt="" class="et-right" onerror="imgerr(this)" />
+						</div>
+						<div class="ep-code">
+							<img :src="result.img" alt="" class="ec-img" onerror="coderr(this)" onclick="prevI(this.getAttribute('src'))" />
+							<p class="ec-text">
+								请扫描以上二维码，域商家客服人员确认首付定金金额！
+							</p>
+						</div>
+						<div class="ep-footer" @click="closeorder()">
+							我知道了
+						</div>
+					</div>
+				</transition>
+			</form>
+			<div style="height:1rem;"></div>
+		</div>
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+		    function submitFn(){
+		    	return false;
+		    }
+		    function codeerr(ind){
+		    	imgerr(ind);
+
+		    	layer.alert("暂无二维码图片，请关注玖泽公众号并反馈此问题，联系此经销商尽快补上二维码",{title:"玖泽提醒"});
+		    }
+		    //图片不存在
+		    function imgerr(ind,user){
+
+		        ind&&(()=>{
+		          var src="__STATIC__/jzqg/img/";
+		          if(user){
+		          	src="__STATIC__/images/1440439367001464442.png";
+		          }else{
+		          	src+="no-img.png";
+		          }
+		          ind.setAttribute("src",src);
+		        })();
+
+		    };
+			var app=new Vue({
+				el:"#app",
+				data:{
+					goods_sn:{},
+					show:false,
+					chooseCount:0,
+					num:'',
+					store_id:'',
+					c_id:'',
+					y_id:'',
+					address_id:"{$address.address_id}",
+					vipobj:{},
+					whool:{
+						all_two:'',
+						all_count:'',
+						all_price:'',
+						all_number:''
+					},
+					result:{
+						img:''
+					}
+				},
+				beforeCreated:function(){
+					layer.load(2);
+				},
+				created:function(){
+					var that=this;
+					var storeid=window.sessionStorage.getItem("store_id");
+					var vipobj=window.sessionStorage.getItem("vipobj");
+					var goodsn=window.sessionStorage.getItem("goods_sn");
+
+					vipobj=JSON.parse(vipobj);
+					goodsn=JSON.parse(goodsn);
+
+					if(goodsn){
+						that.goods_sn=goodsn;
+					}
+
+					console.log(vipobj,"vipobj");
+
+					for(var i in vipobj){
+						var all_price=0,price=vipobj[i].wholesale_price,truenum=0;
+						var all_count=all_two=0;
+
+						var all_number=0;//总箱数
+
+						var Iobj=vipobj[i].spec;
+
+
+						for(var iii in Iobj){
+							var IIIobj=Iobj[iii];
+							var rObj=IIIobj[IIIobj.length-1];
+							if(!rObj.chunk){
+								IIIobj[IIIobj.length]={
+									chunk:true,
+									count:'',
+									all:''
+								};
+								
+							}else{
+
+								all_number+=Number(rObj.count)||0;
+								all_count+=Number(rObj.all)||0;
+							}
+							for(var fi in IIIobj){
+								
+								if(!IIIobj[fi].chunk){
+									
+									if(!IIIobj[fi].name[2]){
+										
+										IIIobj[fi].name[2]=0;
+									}
+									truenum+=Number(IIIobj[fi].name[2])||0;
+								}
+							}
+							
+							
+						}
+						
+						all_two=all_count;
+						all_price+=(all_count*price);
+
+						
+						vipobj[i].all_two=all_two;
+						vipobj[i].all_count=all_count;
+						vipobj[i].all_price=all_price;
+						vipobj[i].all_number=all_number;
+
+					}
+
+
+					console.log(vipobj);
+					this.vipobj=vipobj;
+					//store_id
+					this.store_id=storeid;
+					//总结所有商品的总件数、总箱数、总价格、总对数
+					this.compolAll();
+				},
+				mounted:function(){
+					layer.load(2,{time:1});
+				},
+				methods:{
+					//跳转商家主页
+					navfn(sid){
+				 		var href="{:U('Mobile/Store/homemerchan',array('store_id'=>'store_val'))}";
+
+				 	    href=href.replace('store_val',sid);
+
+				 	    window.location.assign(href);
+				    },
+					compolAll:function(){
+						console.log("有效吗？");
+						var vipobj=this.vipobj;
+						//所有商品的总件数、总箱数、总价格、总对数
+						var wC=0,wN=0,wP=0,wT=0;
+						for(var i in vipobj){
+							//总件数
+							wC+=vipobj[i].all_count||0;
+							//总对数
+							wT+=vipobj[i].all_two||0;
+							//总价格
+							wP+=vipobj[i].all_price||0;
+							//总箱数
+							wN+=vipobj[i].all_number||0;
+
+						}
+						var obj=this.whool;
+						//总件数
+						obj.all_count=Number(wC)||0;
+						//总对数
+						obj.all_two=Number(wT)||0;
+						//总价格
+						obj.all_price=Number(wP)||0;
+						//总箱数
+						obj.all_number=Number(wN)||0;
+						this.whool=obj;
+						console.log(this.whool,obj);
+					},
+					updateFn:function(){
+						var vipobj=this.vipobj;
+						for(var i in vipobj){
+							var all_price=0,price=vipobj[i].wholesale_price,all_number=0,truenum=0;
+							var all_count=all_two=0;
+
+							var Iobj=vipobj[i].spec;
+							
+
+
+								for(var iii in Iobj){
+									
+									var IIIobj=Iobj[iii];
+									var rObj=IIIobj[IIIobj.length-1];
+									
+									if(!rObj.chunk){
+										IIIobj[IIIobj.length]={
+											chunk:true,
+											count:'',
+											all:''
+										}
+									}else{
+
+										//总箱数
+										all_number+=Number(rObj.count)||0;
+										//总件数
+										all_count+=Number(rObj.all);
+
+									}
+
+									for(var fi in IIIobj){
+									
+										if(!IIIobj[fi].chunk){
+											
+											if(!IIIobj[fi].name[2]){
+												IIIobj[fi].name[2]=0;
+											}
+											console.log(IIIobj[fi].name[2],"IIIobj");
+											truenum+=Number(IIIobj[fi].name[2])||0;
+										}
+									}
+
+									
+								}
+
+							console.log(all_number,"总数",truenum);
+							
+							//总对数
+							all_two=all_count;
+							//总价格
+							all_price+=(all_count*price);
+							console.log(all_count,all_two,all_price);
+							vipobj[i].all_two=all_two;
+							vipobj[i].all_count=all_count;
+							vipobj[i].all_price=all_price;
+							vipobj[i].all_number=all_number;
+						}
+						this.vipobj=vipobj;
+					},
+					//箱数计算
+					numberFn:function(ind,oI,ev,relI){
+						var relObj=this.vipobj;
+						var evVal=Number($(ev.target).val())||0;
+						var xAll=0;
+						var relO=relObj[ind]['spec'][oI];
+						for(var i in relO){
+							if(!relO[i]['chunk']){
+								xAll+=Number(relO[i]['name'][2])||0;
+							}
+						}
+						
+						if(xAll){
+							
+							console.log(relObj,"管");
+							//箱数
+							
+							relObj[ind]['spec'][oI][relI].count=evVal||0;
+							
+						
+							//$(ev.target).parents('tr').find(".num-all").text((xAll*evVal));
+							relObj[ind]['spec'][oI][relI].all=(xAll*evVal)||0;
+
+							console.log("箱数",evVal);
+							$(ev.target).val(Number(evVal)||0);
+							this.vipobj=relObj;
+							console.log(this.vipobj,"vipobj");
+
+							this.updateFn();
+							this.compolAll();
+						}else{
+							layer.msg("得知你填的配码为零,请重新填写");
+							$(ev.target).val('');
+						}
+						console.log(xAll,"总价");
+
+					},
+					// 配码计算属性
+					withCode:function(ind,oI,thI,ev){
+						var relObj=this.vipobj;
+						console.log(relObj,"管");
+						var evVal=Number($(ev.target).val())||0;
+
+						relObj[ind]['spec'][oI][thI]['name'][2]=evVal||0;
+
+						//每箱装的数量
+						var xnum=relObj[ind].xnum;
+
+						//计算所有配码的总数
+						var wcAll=0,wcArr=relObj[ind].spec[oI];
+
+						console.log(wcArr,"wcArr");
+
+						for(var wi in wcArr){
+							if(!wcArr[wi]['chunk']){
+								var nV=wcArr[wi]['name'][2];
+								wcAll+=parseInt(nV);
+							}
+						}
+
+						
+						if(wcAll>xnum){
+							layer.msg("该配码总和不能大于"+xnum);
+							wcAll-=evVal;
+							evVal=parseInt(xnum)-parseInt(wcAll);
+							relObj[ind]['spec'][oI][thI]['name'][2]=evVal;
+
+							$(ev.target).val(evVal);
+							wcAll=xnum;
+						}
+						var lastArr=wcArr[wcArr.length-1];
+						if(lastArr.chunk){
+
+							lastArr['all']=wcAll*lastArr['count'];
+							
+						}
+						
+
+
+						console.log("总和配码",wcAll);
+						$(ev.target).val(evVal);
+						this.vipobj=relObj;
+
+						//relObj[oI][tI][thI]['name'][2]=
+						this.updateFn();
+						this.compolAll();
+					},
+					goodssn:function($event,gid){
+						console.log($event,gid);
+						var tar=$event.srcElement;
+
+						var val=Number($(tar).val())||0;
+						if(val){
+							this.goods_sn[gid]=val;
+						}else{
+							$(tar).val('');
+							layer.msg('货号类型为整数!',{icon:0});
+						}
+						
+						
+					},
+					sessionfn:function(){
+						layer&&layer.load(0);
+						var data=this.vipobj;
+						window.sessionStorage.setItem("vipobj",JSON.stringify(data));
+						window.sessionStorage.setItem("goods_sn",JSON.stringify(this.goods_sn));
+						window.location.assign("{:U('User/address_list',array('source'=>'viporder'))}")
+						// window.sessionStorage.setItem("textarea",this.textarea);
+					},
+					submitFn:function(){
+						layer.load(1);
+						var that=this;
+						var data={
+							address_id:that.address_id
+
+						};
+						var vipobj=that.vipobj;
+						data.store_id=vipobj[0].store_id;
+						var judge=true,msg='';
+
+						console.log(data,that.vipobj);
+						for(var i in vipobj){
+							if(!judge){break;}
+							var Iobj=vipobj[i].spec;
+							for(var ii in Iobj){
+								if(!judge){break;}
+								var IIIobj=Iobj[ii];
+
+								
+									for(var fi in IIIobj){
+										
+										if(IIIobj[fi].chunk){
+											
+											// if(!IIIobj[fi].all){
+											// 	msg="配码总和不能为空或为零";judge=false;break;
+											// }
+										}
+									}
+									
+									
+								
+							 }
+						
+					   }
+					   if(!judge){
+					   	layer.msg(msg,{icon:2});
+					   	layer.load(1,{time:1});
+					   	return false;
+					   }
+					   console.log(vipobj,"vipobj");
+					   var goods=[];
+
+					   var goodsSn=[],gs=that.goods_sn;
+					   for(var i in vipobj){
+					   	 var oO=vipobj[i].spec,sid=vipobj[i].goods_id,allC=vipobj[i].all_count;
+					   	 console.log(sid,"sid");
+					   	 
+					   	 	for(var iii in oO){
+					   	 		var thO=oO[iii];
+					   	 		var guige={'attr_list':[],'every_num':''};
+					   	 		for(var fi in thO){
+					   	 			var fourO=thO[fi];
+					   	 			if(fourO['chunk']){
+					   	 				guige['every_num']=fourO['count']
+					   	 			}else{
+					   	 				guige['attr_list'].push({
+					   	 					key:fourO.key,
+					   	 					num:fourO['name'][2]
+					   	 				})
+					   	 			}
+					   	 		}
+					   	 	    
+					   	 	    if(allC){
+					   	 	    	if(!goods[sid]){goods[sid]=[]}
+					   	 	    	if(guige.every_num){
+							   	 		goods[sid].push(guige);
+						   	 		}
+					   	 	    }
+					   	 	}
+					   	 if(!Number(gs[sid])){
+					   	 	gs[sid]='';
+					   	 }
+					   	 
+					   }
+					  
+					  
+					  for(var gi in gs){
+					  	goodsSn.push([gi,gs[gi]]);
+					  }
+					  console.log(goodsSn,"打印goodsSn");
+					  console.log(goods,"打印goods");
+
+
+					  
+					  if(!judge){
+					   	layer.msg(msg,{icon:2});
+					   	layer.load(1,{time:1});
+					   	return false;
+					   }
+
+					  if(goods.length){
+					  	  console.log();
+						  data['goods']=JSON.stringify(goods);
+						  data['goods_sn']=JSON.stringify(goodsSn);
+						  $.ajax({
+								type:"POST",
+								url:"{:U('/Mobile/Order/create_butor_order')}",
+								data:data,
+								dataType:"json",
+								success:function(res){
+									layer.load(1,{time:1});
+									if(res.code==0){
+										layer.alert(res.msg,{icon:2});
+
+									}else if(res.code==1){
+										layer.confirm("是否联系客服？",{icon:1,title:"提示"},function(index){
+											layer.close(index);
+											that.result.img=res.data;
+											that.closeorder();
+										});
+										
+									}
+									console.log(res);
+
+								},
+								error:function(err){
+									layer.load(1,{time:1});
+									layer.alert("请求错误",{icon:2})
+								}
+							});
+					  }else{
+					  	layer.load(1,{time:1});
+					  	layer.confirm("得知订单总对数为零，不能购买",{title:"玖泽提醒"},function(index){
+					  		//history.go(-1);
+					  		layer.close(index);
+					  	  }
+					  		);
+					  }
+					},
+					//选择数量加减方法
+					ccFn:function(count){
+						console.log(count);
+						
+						var countVal=parseInt(this.chooseCount)||0;
+						countVal+=count||0;
+						console.log(countVal);
+						if(countVal<=0){
+							this.chooseCount=0;
+						}else{
+							this.chooseCount=countVal;
+						}
+					},
+					closeorder:function(){
+						if(this.show){
+							href="{:U('/Mobile/User/order_index',array(type=>0))}";
+							window.location.href=href;
+						}
+						this.show=!this.show;
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

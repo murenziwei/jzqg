@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>商家申请</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<script src="__STATIC__/jzqg/js/axios.min.js"></script>
+		<script src="__STATIC__/js/jquery.js"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.3"></script>
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+		<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+		<!-- layer.js -->
+		<script type="text/javascript" src="__STATIC__/jzqg/js/layer.js" ></script>
+		<style>
+		    #allmap{
+		    	display:none;
+		    }
+			.a-row{
+				margin-bottom:0.05rem;
+				display:flex;
+				align-items:center;
+				min-height:1rem;
+				background-color:#fff;
+			}
+			.a-col-3{
+				width:40%;
+			}
+			.a-col-9{
+				width:55%;
+			}
+			.a-text-input{
+				width:100%;
+				padding-right:0.7rem;
+				box-sizing:border-box;
+				font-size:0.39rem;
+			}
+			.a-text-input:active,.a-text-input:focus,.a-text-input{
+				background:transparent;
+				border:none;
+				outline:none;
+			}
+			.a-text-name{
+				text-indent:0.7rem;
+				font-size:0.39rem;
+				color:#000;
+			}
+			.a-select{
+				display:flex;
+				padding-right:0.7rem;
+			}
+			.a-select:active{
+				opacity:0.6;
+			}
+			.as-title {
+				font-size: 0.39rem;
+				color: #000000;
+			}
+			.as-icon{
+				text-align:right;
+				flex:1;
+			}
+			.as-icon::after{
+				content:"";
+				display:inline-block;
+				border:0.2rem solid rgb(96,96,96);
+				border-bottom:0;
+				margin-left:0.5rem;
+				border-left-color:transparent;
+				border-right-color:transparent;
+			}
+			
+			.ac-frame{
+				display:flex;
+				align-items:center;
+				padding:0.3rem 0 0 0.7rem;
+			}
+			.ac-f-status{
+				position:relative;
+			}
+			.afs-checkbox{
+				position:absolute;
+				top:0;
+				left:0;
+				right:0;
+				bottom:0;
+				width:100%;
+				height:100%;
+				z-index:2;
+				margin:0;
+				padding:0;
+				opacity:0;
+			}
+			.afs-shape{
+				width:0.5rem;
+				height:0.5rem;
+				padding-top:0.1rem;
+				box-sizing: border-box;
+				display:flex;
+				justify-content:center;
+				border-radius:50%;
+				animation:all 0.5s;
+				background-image:url(__STATIC__/jzqg/img/check-none.png);
+				background-position:0 0;
+				background-size:0.5rem 0.5rem;
+				background-repeat:no-repeat;
+				transition:all .3s;
+				opacity:0.5;
+			}
+			.afs-checkbox:checked+.afs-shape{
+				background-image: url(__STATIC__/jzqg/img/check-huang.png);
+				opacity:1;
+			}
+			.a-submit{
+				padding:1rem 0.5rem;
+				width:100%;
+				box-sizing: border-box;
+			}
+			.a-s-btn{
+				width:100%;
+				height:1rem;
+				text-align:center;
+				border-radius:1rem;
+				background-color: #ff4444;
+				border:none;
+				font-size:0.42rem;
+				color:#fff;
+				outline:none;
+			}
+			.ac-f-text{
+				font-size: 0.33rem;
+				font-weight: normal;
+				font-stretch: normal;
+				letter-spacing: 0rem;
+				color: #000000;
+				padding:0 0.1rem;
+			}
+			
+			/*营业执照*/
+			.issue-row{
+				background-color:#fff;
+			}
+			.issue-row>.a-text-name{
+				line-height:1rem;
+			}
+			.issue-ul{
+				padding-bottom:2rem;
+				background-color:#fff;
+			}
+			.iul-img{
+				width:100%;
+				height:100%;
+			}
+			.idcard-ul{
+				display:flex;
+				padding:0 0.7rem;
+				flex-wrap:wrap;
+			}
+			.iu-item,.iu-img{
+				width:2rem;
+				height:2rem;
+				border:0.01rem solid rgba(0,0,0,0.2);
+				display:inline-flex;
+				align-items:center;
+				position:relative;
+				justify-content:center;
+				
+				margin:0 0.3rem 0.2rem 0;
+			}
+			.iu-img{
+				opacity:0.5;
+				border-color:#ff4444;
+				background-color:rgba(236,238,238,1);
+			}
+			.add-img{
+				font-size:1rem;
+				color:#ff4444;
+			}
+			.upload{
+				position:absolute;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				
+				height:100%;
+				margin:0;
+				padding:0;
+				z-index:999;
+				opacity:0;
+			}
+			.iul-cancel{
+				width:0.4rem;
+				height:0.4rem;
+				position:absolute;
+				right:-0.2rem;
+				top:-0.2rem;
+				z-index:2;
+			}
+			.iul-cancel:active{
+				opacity:0.8;
+			}
+			.sheel-book{
+				font-size:0.3rem;
+				color:#FC852A;
+			}
+		</style>
+	</head>
+	<body>
+
+<div class="nav-back">
+	<a onclick="window.history.go(-1)" class="nb-link">
+		<img src="/Public/component/left-cut.png" class="nl-icon"></a>
+	<span class="nb-text">商家申请</span>
+</div>
+<form action="{:U('/Mobile/Store/store_apply')}" enctype="multipart/form-data" method="POST" id="from-store">
+	<div class="a-ul">
+		<div class="a-row">
+			<div class="a-col-3">
+				<div class="a-text-name">联系人</div>
+			</div>
+			<div class="a-col-9">
+				<input type="text" placeholder="请输入联系人姓名" class="a-text-input" name="contacts_name" required="required" />
+			</div>
+		</div>
+		<div class="a-row">
+			<div class="a-col-3">
+				<div class="a-text-name">联系方式</div>
+			</div>
+			<div class="a-col-9">
+				<input type="text" placeholder="请输入联系人电话" class="a-text-input" name="contacts_mobile"  required="required" />
+			</div>
+		</div>
+		<div class="a-row">
+			<div class="a-col-3">
+				<div class="a-text-name">地址</div>
+			</div>
+			<div class="a-col-9">
+				<input type="text" id="address" placeholder="请输入联系人地址" class="a-text-input" name="company_address" required="required" onchange="changesite()" />
+			</div>
+		</div>
+		<div class="a-row">
+			<div class="a-col-3">
+				<div class="a-text-name">商家名称</div>
+			</div>
+			<div class="a-col-9">
+				<input type="text" placeholder="请输入商家名称" class="a-text-input" name="store_name" required="required"  />
+			</div>
+		</div>
+		<div class="a-row">
+			<div class="a-col-3">
+				<div class="a-text-name">商家登录账号</div>
+			</div>
+			<div class="a-col-9">
+				<input type="text" placeholder="请输入登录账号" class="a-text-input" name="seller_name" required="required"  />
+			</div>
+		</div>
+
+		<div class="a-row">
+			<div class="a-col-3">
+				<div class="a-text-name">商家登录密码</div>
+			</div>
+			<div class="a-col-9">
+				<input type="text" placeholder="请输入登录密码" class="a-text-input" name="password"  required="required" />
+			</div>
+		</div>
+
+		<div class="issue-row">
+			<div class="a-text-name">营业执照</div>
+			<ul class="idcard-ul" id="idcardUL">
+			      <li style="position:relative" class="iu-img" id="addImg">
+			          <span class="add-img">+</span><input class="upload" name='uploadImage' type="file" accept="image/*" onchange="add_img(this)"  id="uploadImage">
+			      </li>
+			</ul>
+		</div>
+		<div class="issue-row">
+			<div class="a-text-name">店铺展示</div>
+			<ul class="idcard-ul" id="morePic">
+			      <li style="position:relative" class="iu-img" id="addImg">
+			          <span class="add-img">+</span><input class="upload" name='uploadImage' type="file" accept="image/*" onchange="more_img(this)"  id="moreImage" multiple="">
+			      </li>
+			</ul>
+		</div>
+	</div>
+	<div class="a-checkbox">
+		<div class="ac-frame">
+			<div class="ac-f-status">
+				<input type="checkbox" class="afs-checkbox" id="isagree" />
+				<div class="afs-shape"></div>
+			</div>
+			<span class="ac-f-text">已阅读并同意</span>
+			<a href="javascript:navShop()" class="sheel-book">《商家入驻协议》</a>
+		</div>
+	</div>
+	<div class="a-submit">
+		<input class="a-s-btn" type="button" value="提交申请" onclick="submitFn()" />
+	</div>
+</form>
+<div id="allmap"></div>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.3&ak=mw1vcDT5kqdgcvwAtfcMevBkt5YhXdL2"></script>
+	<script>
+	    layer&&layer.load(1);
+	    document.onreadystatechange=loadingChange;
+	    function loadingChange(){
+	    	console.log(document.readyState);
+	    	if(document.readyState=="complete"){
+	    		layer.load(1,{time:1});
+	    	}
+	    }
+	    function ok(jointObj){
+	    	var judgeture=true;
+	    	var keyarr = ["contacts_name", "contacts_mobile", "company_address", "store_name", "seller_name", "password"],maxi=0;
+            
+		    for(var vi=0;vi<=maxi;vi++){
+		      
+		      switch(keyarr[vi]){
+		        // 真实姓名
+		        case "contacts_name":jointObj[keyarr[vi]].val?
+		        (()=>{
+		          ++maxi;
+		          })():(()=>{
+		            alertobj={val:"联系人姓名不能为空",show:true};
+		            judgeture = false;
+		            return;
+		        })();break;
+		        // 手机号
+		        case "contacts_mobile":jointObj[keyarr[vi]].val?
+		        (()=>{
+		          var tel=Number(jointObj[keyarr[vi]].val);
+		          
+		          	++maxi;
+		          
+		          })():(()=>{
+		            alertobj={val:"联系方式不能为空",show:true};
+		            judgeture = false;
+		            return;
+		        })();break;
+		        // 地址
+		        case "company_address":jointObj[keyarr[vi]].val?
+		        (()=>{
+		          ++maxi;
+		          })():(()=>{
+		            alertobj={val:"地址不能为空",show:true};
+		            judgeture = false;
+		            return;
+		        })();break;
+		        // 商家名称
+		        case "store_name":jointObj[keyarr[vi]].val?
+		        (()=>{
+		          ++maxi;
+		          })():(()=>{
+		            alertobj={val:"商家名称不能为空",show:true};
+		            judgeture = false;
+		            return;
+		        })();break;
+		        // 商家账号
+		        case "seller_name":jointObj[keyarr[vi]].val?
+		        (()=>{
+		          ++maxi;
+		          })():(()=>{
+		            alertobj={val:"商家登录账号不能为空",show:true};
+		            judgeture = false;
+		            return;
+		        })();break;
+		        // 商家密码
+		        case "password":jointObj[keyarr[vi]].val?
+		        (()=>{
+		          ++maxi;
+		          })():(()=>{
+		          	console.log("必经？");
+		            alertobj={val:"商家登录密码不能为空",show:true};
+		            judgeture = false;
+		            return;
+		        })();break;
+		        default:if(maxi<keyarr.length){
+		        	++maxi;
+
+		        }
+		      }
+		    }
+		    
+		    if(judgeture){
+		    	alertobj={val:"符合",show:false};
+		    }
+		    return alertobj;
+	    }
+	    //店铺展示 全局变量moreimg
+	    let moreimg=[];
+	    let trading='';
+	    function ajax_upload(files){
+			layer.load(1);
+			var form=new FormData();
+			
+			
+			form.append("img",files);
+            
+			$.ajax({
+				type:"POST",
+				url:"{:U('/Mobile/Goods/upload_img')}",
+				data:form,
+				processData : false, //必须false才会自动加上正确的Content-Type
+		        dataType: 'json',
+		        contentType : false ,//必须false才会避开jQuery对 formdata 的默认处理 
+				success:function(res){
+					layer.load(1,{time:1});
+					console.log(res,"你好");
+					if(res.code){
+						moreimg.push(res.data.img.urlpath);
+						var str=`
+						  <li class="iu-item">
+					          <img src=${res.data.img.urlpath} class="iul-img">
+					         
+					      </li>
+						`;
+						var list=$(str);
+						$("#morePic").prepend(list);
+					}else{
+						layer.alert(res.msg);
+					}
+
+				},
+				error:function(err){
+					layer.alert("请求错误");
+					layer.load(1,{time:1});
+				}
+			});
+	    }
+	    function more_img(event){
+			var files=event.files;
+
+			if(files.length){
+				for(var au=0;au<files.length;au++){
+				
+					var imgData=files[au];
+					console.log(imgData);
+					
+		            ajax_upload(imgData);
+				}
+			}
+	    }
+	    // 删除图片
+	    function del_img(event){
+
+	    	$(event).parent(".iu-item").remove();
+	    	if($("#idcardUL").children().length==1){
+	    		$("#addImg").show();
+	    		//清理file
+	    		$("#uploadImage").val('');
+	    	};
+	    }
+	    // 增加图片
+	    function add_img(event){
+			layer.load(1);
+			var imgs=[];
+			var files=event.files;
+			for(var i=0;i<files.length;i++){
+				var form=new FormData();
+
+				var imgData=files[i];
+
+
+				
+	            if(imgData.name){
+	               form.append('img',imgData);
+	               $.ajax({
+						type:"POST",
+						url:"{:U('/Mobile/Goods/upload_img')}",
+						data:form,
+						processData : false, //必须false才会自动加上正确的Content-Type
+				        dataType: 'json',
+				        contentType : false ,//必须false才会避开jQuery对 formdata 的默认处理 
+						success:function(res){
+							console.log(res,"res");
+							layer.load(1,{time:1});
+							if(res.code){
+
+								trading=(res.data.img.urlpath);
+								var str=`
+								  <li class="iu-item">
+							          <img src=${res.data.img.urlpath} class="iul-img">
+							          <img src="__STATIC__/jzqg/img/cancel-red.png" alt="" class="iul-cancel" onclick="del_img(this)" />
+							      </li>
+								`;
+								var list=$(str);
+								$("#idcardUL").prepend(list);
+
+								//隐藏增加图片功能
+								$("#addImg").hide();
+							}else{
+								layer.alert(res.data);
+							}
+
+						},
+						error:function(err){
+							layer.alert("请求错误");
+							layer.load(1,{time:1});
+						}
+					});	
+	            }else{
+	            	layer.load(1,{time:1});
+	            }
+			}
+
+			if(files.length==0){
+				layer.load(1,{time:1});
+			}
+	    }
+	    function siteFn(str){
+	    	str=str?str:'';
+			//console.log("是否改变");
+			var map=new BMap.Map("allmap");
+	        var localS=new BMap.LocalSearch(map);
+	       // console.log(str);
+	        localS.setSearchCompleteCallback((searchResult) =>{
+
+	        	if(searchResult.getPoi){
+	        		console.log(searchResult);
+	        		var poi = searchResult.getPoi(0);
+	        		console.log(poi,"poi");
+	        		if(poi){
+
+			            lng=poi.point.lng||0;
+			            lat=poi.point.lat||0;
+	        		}
+	        		console.log(lng,lat);
+	        	}
+	    　　});
+
+			localS.search(str);
+		}
+
+		let lng;let lat;
+		function changesite(){
+			var address = $('input[name="company_address"]').val();
+
+            //获取经纬度
+            siteFn(address);
+		}
+
+		function submitFn() {
+			var dataarr=$("#from-store").serializeArray();
+			var jointObj={};
+			dataarr.map((a)=>{jointObj[a.name]={val:a.value}});
+			
+			var result=ok(jointObj);
+			console.log(result,"返回");
+			
+			//营业执照
+			
+			if(result.show){
+				layer.msg(result.val,{icon:2});
+			}else if(!trading){
+				layer.msg("营业执照不能为空",{icon:2});
+			}else if(moreimg.length===0){
+				layer.msg("店铺展示不能为空",{icon:2});
+			}else if(!(lng&&lat)){
+				layer.msg("请填写有效地址",{icon:2});
+			}
+			
+			if(!result.show&&trading&&moreimg.length>0&&(lng&&lat)){
+				
+			}else{
+				return false;
+			}
+            var formdata = new FormData();
+            for(var fd in dataarr){
+            	formdata.append(dataarr[fd].name,dataarr[fd].value);
+            }
+            console.log(jointObj,"你好");
+
+            formdata.append('uploadImage',trading);
+
+
+            
+            formdata.append('lng',lng);
+
+            formdata.append('lat',lat);
+
+            formdata.append('logoimgs',moreimg);
+
+            
+
+            if($("#isagree").prop("checked")){
+            	$.ajax({
+	                url:"{:U('/Mobile/Store/store_apply')}",
+	                type:'POST',
+	                data:formdata,
+	                processData:false,
+	                contentType:false,
+	                dataType:"json",
+	                success:function(res){
+	                	console.log(res,"嘛");
+	                	
+	                    if(res.code==0){
+	                    	layer.msg(res.msg,{icon:2});
+						}else if(res.code==1){
+							window.location.assign("{:U('Mobile/Store/store_check')}")
+							
+						}else if(res.code==2){
+
+						}
+
+						
+	                },
+	                error:function(err){
+	                	layer.msg("请求失败",{icon:2});
+	                }
+
+	            });
+            }else{
+            	layer.msg("请同意协议！",{icon:2});
+            }
+            
+        }
+        function navShop(){
+
+        	$.ajax({
+                url:"{:U('/Mobile/user/shop_x')}",
+                type:'POST',
+                dataType:"json",
+                success:function(res){
+                	console.log(res,"协议");
+                	if(res.code==1){
+                		layer.open({
+						  title: '商家协议'
+						  ,content: res.data.shop_x||'暂无协议',
+						  area: 'auto',
+						  maxHeight:'600px',
+						  maxWidth:'400px'
+						});
+                	}
+					
+                },
+                error:function(err){
+                	layer.msg("请求失败",{icon:2});
+                }
+
+            });
+        }
+	</script>
+</body>
+</html>

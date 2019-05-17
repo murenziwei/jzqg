@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>提交订单</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+		<style>
+			#submitOrder{
+				padding-bottom:2rem;
+			}
+			.cd-li{
+				display:flex;
+				align-items:center;
+				margin-bottom:0.05rem;
+				padding:0.5rem;
+				
+				background-color:#fff;
+			}
+			.cl-r-icon{
+				width:0.5rem;
+				height:0.5rem;
+			}
+			.crt-topic{
+				font-size:0.42rem;
+				color:#000;
+			}
+			.cl-r-text{
+				padding:0 0.5rem;
+			}
+			.crt-address{
+				font-size:0.33rem;
+				color:#6a6a6a;
+			}
+			.cl-right{
+				flex:1;
+				align-items:center;
+				display:flex;
+			}
+			.cl-choose{
+				font-size: 0.39rem;
+				color: #ff4444;
+			}
+			.choose-add{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				width:100%;
+				height: 1.25rem;
+				background-color: #ff4444;
+				border:none;
+				outline:none;
+				font-size:0.42rem;
+				color:#fff;
+			}
+			/*分类商品的样式*/
+			
+			.sc-item{
+				display:flex;
+				background-color:#fff;
+				margin-bottom:0.05rem;
+				padding:0.4rem 0.2rem;
+			}
+			.si-left{
+				width:2.1rem;
+				height:2.1rem;
+				display:flex;
+				align-items:center;
+				justify-content: center;
+				text-align:center;
+			}
+			.shop-img{
+				width:2.1rem;
+				height:2.1rem;
+				background-color: #ffffff;
+				border-radius: 0.07rem;
+			}
+			.si-l-img{
+				width:1.25rem;
+				height:1.25rem;
+				border-radius:100%;
+			}
+			.si-right{
+				flex:1;
+				display:flex;
+				flex-direction: column;
+				justify-content: space-between;
+			}
+			.si-r-name {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.36rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #000000;
+			}
+			.sra-icon {
+				width: 0.31rem;
+				height: 0.35rem;
+				margin-top:0.04rem;
+			}
+			.sra-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.31rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #999999;
+			}
+			/*商品的样式*/
+			.shop-title{
+				overflow:hidden;
+				text-overflow:ellipsis;
+				white-space:nowrap;
+				width:7rem;
+			}
+			.sn-pic {
+				width: 0.49rem;
+				height: 0.49rem;
+				border-radius:50%;
+				vertical-align: middle;
+			}
+			.sn-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.28rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #7d7d7d;
+			}
+			.shop-bottom{
+				display:flex;
+				align-items:center;
+			}
+			.s-l-money{
+				font-family: PingFang-SC-Bold;
+				font-size: 0.3rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.53rem;
+				letter-spacing: 0rem;
+				color: #fe5455;
+			}
+			.sb-right{
+				flex:1;
+				text-align:right;
+			}
+			
+			/*提交订单修改的*/
+			.so-self{
+				padding:0.1rem 0.3rem;
+				margin-bottom:0.04rem;
+				background-color:#fff;
+			}
+			.so-self>.shop-name{
+				display:flex;
+				align-items:center;
+			}
+			.so-self .sn-span{
+			    text-indent:0.3rem;
+			}
+			.sb-right-cut{
+				width:0.3rem;
+				height:0.3rem;
+			}
+			.sb-hui{
+				color:#999;
+				font-size:0.3rem;
+				display:inline-block;
+				height: 0.44rem;
+				line-height:0.44rem;
+				text-align:center;
+				
+			}
+			.sf-frame{
+				display:flex;
+				background-color:#fff;
+				height:1rem;
+				
+			}
+			.sb-footer{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				height:1rem;
+				
+			}
+			.sf-left{
+				width:70%;
+				display:flex;
+				padding:0 0.2rem;
+			}
+			.sf-right{
+				width:30%;
+				height: 1rem;
+				background-color: #ff4444;
+				border:none;
+				outline:none;
+				font-size:0.39rem;
+				color:#fff;
+			}
+			.sf-right:active{
+				opacity:0.7;
+			}
+			.sl-count{
+				line-height:1rem;
+				font-size:0.3rem;
+			}
+			.sl-price{
+				margin:auto 0;
+				text-align:right;
+				width:100%;
+				font-size:0.3rem;
+			}
+			.sp-active{
+				color:#FF0000;
+			}
+			.sp-text{
+				font-size:0.25rem;
+				color:#999;
+			}
+			.ss-data{
+				width:100%;
+				padding:0.5rem 0;
+				background-image:linear-gradient(45deg,#FF4444 20%,#FF4D00 100%);
+			}
+			.ss-d-item{
+				width:24%;
+				line-height:0.5rem;
+				color:#fff;
+				text-align: center;
+				display:inline-block;
+			}
+			.sdi-count{
+				font-size:0.4rem;
+				line-height:0.7rem;
+			}
+			.sdi-text{
+				font-size:0.2rem;
+			}
+			
+			.sdi-i-input{
+				color:#fff;
+				width:60%;
+				text-align:center;
+				font-size:0.4rem;
+				background-color:transparent;
+				border:none;
+				outline:none;
+				border-bottom:0.02rem solid #fff;
+				line-height:0.7rem;
+			}
+			.sdi-i-input::placeholder{
+				color:#ffffff;
+				opacity:0.5;
+				
+			}
+			.zhe{
+				background-color:rgba(0,0,0,0.5);
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				height:100%;
+				z-index:999;
+			}
+			.ewm-plug{
+				transition:transform 0.2s;
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				margin:auto;
+				
+				background:#fff;
+				width:8rem;
+				z-index:1000;
+				text-align:center;
+				height:11rem;
+				min-height:11rem;
+			}
+			.ep-topic{
+				display:flex;
+				height:2rem;
+				align-items: center;
+				padding:0 0.5rem;
+				background-image:linear-gradient(to top,#FF4444 20%,#FF4D00 100%);
+				color:#fff;
+			}
+			.et-left{
+			  	flex:1;	
+			  	text-align:left;
+			  	font-size:0.4rem;
+			}
+			.et-right{
+				width:0.8rem;
+				height:0.8rem;
+			}
+			.ec-img{
+				width:6rem;
+				height:6rem;
+			}
+			.ep-footer{
+				height:1rem;
+				background-color:#fff;
+				border:none;
+				color:#FF0000;
+				font-size:0.4rem;
+				
+				position:absolute;
+				left:0;
+				right:0;
+				width:100%;
+				bottom:0;
+			}
+			.ep-footer:active{
+				opacity:0.6;
+			}
+			.ec-text{
+				width:6rem;
+				margin:auto;
+				font-size:0.4rem;
+			}
+			.fade-leave-to,
+			.fade-enter{
+				transition:transform 0.2s;
+			}
+			.fade-leave-active,
+			.fade-enter-active{
+				transform:translateY(-15rem);
+			}
+			
+			/*表格*/
+			.sc-table{
+				text-align:center;
+				width:100%;
+				background-color:#fff;
+			}
+			.sc-result{
+				background-color:rgba(236,238,238,1);
+			}
+			.sc-table td,.sc-table th{
+				height:1.5rem;
+			}
+			.sc-table thead th{
+				text-align:center;
+				color:#999;
+				font-size:.39rem;
+			}
+			
+			.sc-table tbody td{
+				font-size:.39rem;
+				color:#000000;
+			}
+			.sc-table .sd-unit{
+				color:#999;
+				font-size:.3rem;
+			}
+			.sc-table .sd-num{
+				color:#FF0000;
+				font-size:.39rem;
+				line-height:0.8rem;
+				height:0.8rem;
+				display:block;
+			}
+			.sc-table td>span,.sc-table th>span{
+				line-height:0.8rem;
+				height:0.8rem;
+				display:block;
+			}
+			.sc-table .sd-input{
+				background-color:transparent;
+				outline:none;
+				border:none;
+				color:#FF9000;
+				font-size:0.39rem;
+				
+				border-bottom:0.01rem solid #FF9000;
+				width:2rem;
+				text-align: center;
+				line-height:0.8rem;
+				height:0.8rem;
+			}
+			.sc-table .sd-input::placeholder{
+				color:#FF9000;
+				font-size:0.39rem;
+			}
+			.sr-input{
+				line-height:0.8rem;
+				height:0.8rem;
+				border:none;
+				border-bottom:0.01rem solid rgba(0,0,0,0.2);
+				font-size:0.39rem;
+				color:#000;
+				width:2rem;
+				
+				background-color:transparent;
+				outline:none;
+				text-align: center;
+			}
+			.sr-input::placeholder{
+				color:#999;
+				font-size:0.3rem;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			
+			<lw-back back-v="提交订单"></lw-back>
+			<form action="#" id="submitOrder">
+				<div class="choose-data">
+					<div class="cd-li">
+						<div class="cl-right">
+							<img src="__STATIC__/jzqg/img/choose-location.png" alt="" class="cl-r-icon" />
+							<div class="cl-r-text">
+								<div class="crt-topic">
+									<span class="crt-t-name">李伟</span>
+									<span class="crt-t-phone">13825000114</span>
+								</div>
+								<div class="crt-address">
+									广州市天河区天河达到1953号
+								</div>
+							</div>
+						</div>
+						<a href="{:U('Mobile/Channel/chooseaddress')}')" class="cl-choose">选择</a>
+					</div>
+				</div>
+				
+				<div class="so-self">
+					
+					<div class="shop-name">
+						<img src="__STATIC__/jzqg/img/search/search-item.png" alt="" class="sn-pic" />
+						<span class="sn-span">广州皮革厂</span>
+						<img src="__STATIC__/jzqg/img/arrow-right.png" alt="" class="sb-right-cut" />
+					</div>
+				</div>
+				<div class="s-c-data">
+					<a class="sc-item" href="../product/index.html">
+						<div class="si-left">
+							<img src="__STATIC__/jzqg/img/search/test-data.png" alt="" class="shop-img" />
+						</div>
+						<div class="si-right">
+							<div>
+								<div class="si-r-name shop-title">
+									广州皮革怆双鞋买卖两毛钱，可解决生理问题又存着好看，穿起来像麻麻
+								</div>
+							</div>
+							<div class="shop-bottom">
+								<div class="sb-left">
+									<span class="sb-hui">工厂货号：232132</span>
+								</div>
+								<div class="sb-right">
+									<span class="s-l-money">$999.00</span>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="sb-select">
+					<div> 
+						<div class="ss-content">
+							<table class="sc-table">
+								<thead class="sc-head">
+								  <tr>
+									<th><span>
+										尺码
+									</span></th>
+									<th><span>
+										颜色
+									</span></th>
+									<th><span>
+										配码
+									</span></th>
+								  </tr>
+								</thead>
+								<tbody class="sc-body">
+									<tr>
+										<td>
+											<span>35</span>
+										</td>
+										
+										<td>
+											<span>青色</span>
+										</td>
+										
+										<td>
+											<input class="sr-input" value="20">
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<span>35</span>
+										</td>
+										
+										<td>
+											<span>青色</span>
+										</td>
+										
+										<td>
+											<input class="sr-input" placeholder="请输入匹配吗">
+										</td>
+									</tr>
+									<tr class="sc-result">
+										<td>
+											<div class="sr-div">
+												<span class="sd-num">20</span>
+												<p class="sd-unit">每箱装（个）</p>
+											</div>
+										</td>
+										
+										<td>
+											<div class="sr-div">
+												<input type="text" class="sd-input" placeholder="请输入箱数" />
+												<p class="sd-unit">箱数（箱）</p>
+											</div>
+										</td>
+										
+										<td>
+											<div class="sr-div">
+												<span class="sd-num">40</span>
+												<p class="sd-unit">
+													该尺码总对数（对）
+												</p>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="ss-data">
+							<div class="ss-d-item">
+								<p class="sdi-count">100</p>
+								<p class="sdi-text">总件数</p>
+							</div>
+							<div class="ss-d-item">
+								<p class="sdi-count">100</p>
+								<p class="sdi-text">总对数</p>
+							</div>
+							<div class="ss-d-item">
+								<p class="sdi-count">￥10033</p>
+								<p class="sdi-text">商品总价</p>
+							</div>
+							<div class="ss-d-item">
+								<div class="sdi-input">
+									<input type="text" class="sdi-i-input" placeholder="选项" />
+								</div>
+								<p class="sdi-text">提交货号</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="sb-footer">
+					<div class="sf-frame">
+						<div class="sf-left">
+							<span class="sl-count">
+							  共150对商品
+							</span>
+							<div class="sl-price">
+								<p>合计：￥<span class="sp-active">2322.23</span>元</p>
+								<span class="sp-text">不含运费</span>
+							</div>
+						</div>
+						<button class="sf-right" v-on:click="closeorder()">
+							确认下单
+						</button>
+					</div>
+				</div>
+				<!--遮布-->
+				<div class="zhe" v-on:click="closeorder()" v-if="show"></div>
+				<transition name="fade">
+					<!--扫码弹窗-->
+					<div class="ewm-plug" v-if="show">
+						<div class="ep-topic">
+							<div class="et-left">下单成功</div>
+							<img src="__STATIC__/jzqg/img/gou-order.png" alt="" class="et-right" />
+						</div>
+						<div class="ep-code">
+							<img src="__STATIC__/jzqg/img/pay.jpg" alt="" class="ec-img" />
+							<p class="ec-text">
+								请扫描以上二维码，域商家客服人员确认首付定金金额！
+							</p>
+						</div>
+						<button class="ep-footer" @click="closeorder()">
+							我知道了
+						</button>
+					</div>
+				</transition>
+			</form>
+		</div>
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+			var app=new Vue({
+				el:"#app",
+				data:{
+					show:false,
+					
+				},
+				
+				methods:{
+					closeorder:function(){
+						this.show=!this.show;
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

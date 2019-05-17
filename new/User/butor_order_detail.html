@@ -1,0 +1,1098 @@
+
+<!DOCTYPE html>
+<head>
+	<title>发布详情</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script src="__STATIC__/jzqg/js/flexible.js"></script>
+	<script src="__STATIC__/jzqg/js/vue.js"></script>
+	<script src="__STATIC__/js/jquery.js"></script>
+
+	<!--vue公共组件-->
+	<script src="__STATIC__/jzqg/js/component.js"></script>
+	<!--公共样式-->
+	<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+	
+	<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+	<!-- layer.js -->
+	<script type="text/javascript" src="__STATIC__/jzqg/js/layui.js" ></script>
+	<style>
+		
+		
+		/*商品*/
+		.main-item{
+			margin-bottom:0.2rem;
+			background-color:#fff;
+		}
+		.mi-header{
+			display:flex;
+			align-items:center;
+			justify-content: space-between;
+			height:1.2rem;
+			
+			background: -webkit-gradient(linear, right bottom, left top, color-stop(30%, #ffc107), to(red));
+		    background: linear-gradient(to top left, #ffc107 30%, red);
+		    padding:0 0.3rem;
+		}
+		
+		.mh-item{
+			color:#fff;
+			
+		}
+		.m-i-count{
+			font-size:0.4rem;
+			
+		}
+		.m-i-text{
+			font-size:0.3rem;
+		}
+		
+		.mc-class{
+			height:100%;
+			position:absolute;
+			bottom:0;
+			right:0;
+			left:0;
+			top:0;
+			width:100%;
+			margin:auto;
+		}
+		.mi-content{
+			
+			/*padding:0.3rem 0;*/
+			background-color:#fff;
+		}
+		.mi-footer{
+			padding:0.3rem;
+			display:flex;
+			align-items:center;
+			
+		}
+		
+		.mf-left{
+			
+		}
+		.mf-right{
+			flex:1;
+			text-align:right;
+		}
+		.edit-btn{
+			border-color:#FFA866;
+			color:#FFA866;
+			background-color:#fff;
+		}
+		.ser-btn{
+			height:0.7rem;
+			line-height:0.7rem;
+			font-size:0.3rem;
+			text-align:center;
+			padding:0 0.5rem;
+			border:0.02rem solid;
+			margin-left:0.3rem;
+			border-radius:5px;
+			display:inline-block;
+			white-space:nowrap;
+		}
+		.mc-flex{
+			width:50%;
+			margin-bottom:0.1rem;
+			position:relative;
+			padding-bottom:50%;
+			display:inline-block;
+		}
+		
+		.fixed-label{
+			position:fixed;
+			right:0;
+			bottom:4rem;
+			
+		}
+		.fixed-text{
+			background-color:#ff9000;
+			color:#fff;
+			padding:0.2rem 0.4rem;
+			border-radius:5rem;
+			font-size:0.4rem;
+			border-top-right-radius:0;
+			border-bottom-right-radius:0;
+		}
+		.ft-img{
+			width:0.4rem;
+			height:0.4rem;
+			vertical-align: middle;
+			margin-right:0.1rem;
+		}
+
+			.cd-li{
+				display:flex;
+				align-items:center;
+				margin-bottom:0.05rem;
+				padding:0.5rem;
+				
+				background-color:#fff;
+			}
+			.cl-r-icon{
+				width:0.5rem;
+				height:0.5rem;
+			}
+			.crt-topic{
+				font-size:0.42rem;
+				color:#000;
+			}
+			.cl-r-text{
+				padding:0 0.5rem;
+			}
+			.crt-address{
+				font-size:0.33rem;
+				color:#6a6a6a;
+			}
+			.cl-right{
+				flex:1;
+				align-items:center;
+				display:flex;
+			}
+			.cl-choose{
+				font-size: 0.39rem;
+				color: #ff4444;
+			}
+			.choose-add{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				width:100%;
+				height: 1.25rem;
+				background-color: #ff4444;
+				border:none;
+				outline:none;
+				font-size:0.42rem;
+				color:#fff;
+			}
+			.issue-arrow{
+				width:0.7rem;
+				height:0.7rem;
+			}
+			/*分类商品的样式*/
+			
+			.sc-item{
+				display:flex;
+				background-color:#fff;
+				margin-bottom:0.05rem;
+				padding:0.4rem 0.2rem;
+			}
+			.si-left{
+				width:2.1rem;
+				height:2.1rem;
+				display:flex;
+				align-items:center;
+				justify-content: center;
+				text-align:center;
+			}
+			.shop-img{
+				width:2.1rem;
+				height:2.1rem;
+				background-color: #ffffff;
+				border-radius: 0.07rem;
+			}
+			.si-l-img{
+				width:1.25rem;
+				height:1.25rem;
+				border-radius:100%;
+			}
+			.si-right{
+				flex:1;
+				display:flex;
+				flex-direction: column;
+				justify-content: space-between;
+			}
+			.si-r-name {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.36rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #000000;
+			}
+			.sra-icon {
+				width: 0.31rem;
+				height: 0.35rem;
+				margin-top:0.04rem;
+			}
+			.sra-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.31rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #999999;
+			}
+			/*商品的样式*/
+			.shop-title{
+				overflow:hidden;
+				text-overflow:ellipsis;
+				white-space:nowrap;
+				width:7rem;
+			}
+			.sn-pic {
+				width: 0.56rem;
+				height: 0.56rem;
+				border-radius:50%;
+				vertical-align: middle;
+			}
+			.sn-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.3rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #7d7d7d;
+				display:flex;
+				align-items:center;
+				height:0.56rem;
+			}
+			.l-icon{
+				font-size:0.3rem;
+			}
+			.shop-bottom{
+				display:flex;
+				align-items:center;
+			}
+			.s-l-money{
+				font-family: PingFang-SC-Bold;
+				font-size: 0.3rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.53rem;
+				letter-spacing: 0rem;
+				color: #fe5455;
+			}
+			.sb-right{
+				flex:1;
+				text-align:right;
+			}
+			
+			/*提交订单修改的*/
+			.so-self{
+				padding:0.1rem 0.3rem;
+				margin-bottom:0.04rem;
+				background-color:#fff;
+			}
+			.so-self>.shop-name{
+				display:flex;
+				align-items:center;
+			}
+			.so-self .sn-span{
+			    text-indent:0.3rem;
+			}
+			.sb-right-cut{
+				width:0.3rem;
+				height:0.3rem;
+			}
+			.sb-hui{
+				color:#999;
+				font-size:0.3rem;
+				display:inline-block;
+				height: 0.44rem;
+				line-height:0.44rem;
+				text-align:center;
+				
+			}
+			.sf-frame{
+				display:flex;
+				background-color:#fff;
+				height:1rem;
+				
+			}
+			.sb-footer{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				height:1rem;
+				
+			}
+			.sf-left{
+				width:70%;
+				display:flex;
+				padding:0 0.2rem;
+			}
+			.sf-right{
+				width:30%;
+				height: 1rem;
+				background-color: #ff4444;
+				border:none;
+				outline:none;
+				font-size:0.39rem;
+				color:#fff;
+				line-height:1rem;
+				text-align:center;
+			}
+			.sf-right:active{
+				opacity:0.7;
+			}
+			.sl-count{
+				line-height:1rem;
+				font-size:0.3rem;
+			}
+			.sl-price{
+				margin:auto 0;
+				text-align:right;
+				width:100%;
+				font-size:0.3rem;
+			}
+			.sp-active{
+				color:#FF0000;
+			}
+			.sp-text{
+				font-size:0.25rem;
+				color:#999;
+			}
+			.ss-data{
+				width:100%;
+				padding:0.5rem 0;
+				background-image:linear-gradient(45deg,#FF4444 20%,#FF4D00 100%);
+			}
+			.ss-d-item{
+				width:24%;
+				line-height:0.5rem;
+				color:#fff;
+				text-align: center;
+				display:inline-block;
+			}
+			.sdi-count{
+				font-size:0.4rem;
+				line-height:0.7rem;
+			}
+			.sdi-text{
+				font-size:0.2rem;
+			}
+			
+			.s-c-data{
+				border-bottom: 0.05rem solid rgba(236,238,238,1);
+				background-color:#fff;
+			}
+			
+			.sdi-i-input{
+				color:#fff;
+				width:60%;
+				text-align:center;
+				font-size:0.4rem;
+				background-color:transparent;
+				border:none;
+				outline:none;
+				border-bottom:0.02rem solid #fff;
+				line-height:0.7rem;
+			}
+			.sdi-i-input::placeholder{
+				color:#ffffff;
+				opacity:0.5;
+				
+			}
+			.zhe{
+				background-color:rgba(0,0,0,0.5);
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				height:100%;
+				z-index:999;
+			}
+			.ewm-plug{
+				transition:transform 0.2s;
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				margin:auto;
+				
+				width:8rem;
+				z-index:1000;
+				text-align:center;
+				height:11rem;
+				min-height:11rem;
+			}
+			.ep-topic{
+				display:flex;
+				height:2rem;
+				align-items: center;
+				padding:0 0.5rem;
+				background-image:linear-gradient(to top,#FF4444 20%,#FF4D00 100%);
+				color:#fff;
+			}
+			.et-left{
+			  	flex:1;	
+			  	text-align:left;
+			  	font-size:0.4rem;
+			}
+			.et-right{
+				width:0.8rem;
+				height:0.8rem;
+			}
+			.ec-img{
+				width:6rem;
+				height:6rem;
+			}
+			.ep-footer{
+				height:1rem;
+				background-color:#fff;
+				border:none;
+				color:#FF0000;
+				font-size:0.4rem;
+				
+				position:absolute;
+				left:0;
+				right:0;
+				width:100%;
+				bottom:0;
+			}
+			.ep-footer:active{
+				opacity:0.6;
+			}
+			.ec-text{
+				width:6rem;
+				margin:auto;
+				font-size:0.4rem;
+			}
+			.fade-leave-to,
+			.fade-enter{
+				transition:transform 0.2s;
+			}
+			.fade-leave-active,
+			.fade-enter-active{
+				transform:translateY(-15rem);
+			}
+			
+			/*表格*/
+			.sb-select{
+				margin-bottom:0.1rem;
+			}
+			.sc-table{
+				text-align:center;
+				width:100%;
+				background-color:#fff;
+			}
+			.sc-result{
+				background-color:rgba(236,238,238,1);
+			}
+			.sc-table td,.sc-table th{
+				height:1.5rem;
+			}
+			.sc-table thead th{
+				text-align:center;
+				color:#999;
+				font-size:.39rem;
+			}
+			
+			.sc-table tbody td{
+				font-size:.39rem;
+				color:#000000;
+			}
+			.sc-table .sd-unit{
+				color:#999;
+				font-size:.3rem;
+			}
+			.sc-table .sd-num{
+				color:#FF0000;
+				font-size:.39rem;
+				line-height:0.8rem;
+				height:0.8rem;
+				display:block;
+			}
+			.sc-table td>span,.sc-table th>span{
+				line-height:0.8rem;
+				height:0.8rem;
+				display:block;
+			}
+			.sc-table .sd-input{
+				background-color:transparent;
+				outline:none;
+				border:none;
+				color:#FF9000;
+				font-size:0.39rem;
+				
+				border-bottom:0.01rem solid #FF9000;
+				width:2rem;
+				text-align: center;
+				line-height:0.8rem;
+				height:0.8rem;
+			}
+			.sc-table .sd-input::placeholder{
+				color:#FF9000;
+				font-size:0.39rem;
+			}
+			.sr-input{
+				line-height:0.8rem;
+				height:0.8rem;
+				border:none;
+				border-bottom:0.01rem solid rgba(0,0,0,0.2);
+				font-size:0.39rem;
+				color:#000;
+				width:2rem;
+				
+				background-color:transparent;
+				outline:none;
+				text-align: center;
+			}
+			.sr-input::placeholder{
+				color:#999;
+				font-size:0.3rem;
+			}
+			
+			/*产品属性*/
+			
+			.pp-ul,.pp-u-li{
+				padding:0;
+				margin:0;
+			}
+			
+			.pp-ul{
+				background-color:#fff;
+				margin-bottom:0.1rem;
+			}
+			.pp-u-li{
+				display:flex;
+				padding:0.2rem 0;
+			}
+			.pul-left{
+				width:30%;
+				text-indent:0.3rem;
+				font-size:0.39rem;
+				color:#999;
+			}
+			.pul-left:after{
+				content:"：";
+			}
+			.pul-right{
+				font-size:0.39rem;
+				color:#000;
+			}
+			
+			/*头部共有*/
+			.status-item{
+				/*margin-bottom:2rem;*/
+			}
+			.order-status{
+				display:flex;
+				align-items:center;
+				padding:0.6rem 0.3rem;
+				background-image:linear-gradient(to right,#FA8C26 20%,#FC852A 100%);
+				border-bottom:0.2rem solid rgba(236,238,238,1);
+			}
+			.os-right{
+				flex:1;
+				text-align:right;
+			}
+			.ol-title{
+				font-size:0.4rem;
+				color:#fff;
+			}
+			.ol-info{
+				font-size:0.3rem;
+				color:#fff;
+			}
+			.ol-icon{
+				width:1.2rem;
+				height:1.2rem;
+			}
+			
+			/*代发货*/
+			
+			/*代收货*/
+			.getOrder{
+				text-align:center;
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				width:100%;
+			}
+			.go-fade{
+				font-size:0.3rem;
+				color:#000;
+				width:100%;
+				background-color:rgba(236,238,238,1);
+			}
+			.gg-order{
+				width: 100%;
+			    height: 1rem;
+			    background-color: #ff4444;
+			    border: none;
+			    outline: none;
+			    font-size: 0.39rem;
+			    color: #fff;
+			    line-height: 1rem;
+			    text-align: center;
+			}
+			.fade-text{
+				font-size:0.3rem;
+				
+			}
+			.fl-prop{
+				height:1rem;
+				line-height:1rem;
+			}
+			.fp-name{
+				width:30%;
+				font-size:0.4rem;
+				color:#000;
+				display:inline-block;
+			}
+			.fp-val{
+				width:65%;
+				text-align:right;
+				font-size:0.4rem;
+				display:inline-block;
+			}
+			.fade-li{
+				padding:0 0.3rem;
+			}
+			
+			/*等待支付*/
+			
+			.pay-cancel,.pay-order{
+				
+			    height: 1.2rem;
+			   
+			    border: none;
+			    outline: none;
+			    font-size: 0.39rem;
+			    color: #fff;
+			    line-height: 1.2rem;
+			    text-align: center;
+			}
+			.pay-order{
+				flex:2;
+				background-color: #ff4444;
+			}
+			.pay-cancel.bg{
+				background:rgba(236,238,238,1);
+			}
+			.pay-cancel{
+				flex:1;
+				background-color:#ff8855;
+			}
+			.pay-get{
+				display:flex;
+			}
+			.cc-control{
+				display:inline-flex;
+				align-items:center;
+			}
+			.cc-val{
+				width:1rem;
+				height:0.5rem;
+				border:1px solid #BFBFBF;
+				text-align:center;
+			}
+			.cc-prev,.cc-next{
+				height:0.5rem;
+				width:0.5rem;
+				line-height:0.5rem;
+				text-align:center;
+				border:1px solid #BFBFBF;
+				font-size:0.4rem;
+			}
+			.cc-prev:active,.cc-next:active{
+				color:red;
+			}
+			.fp-input{
+				width:50%;
+				display:inline-block;
+			}
+			.fi-i{
+				width:100%;
+				outline:none;
+				border:none;
+				font-size:0.4rem;
+				background-color:transparent;
+			}
+			.pay-li{
+				/*padding-bottom:2rem;*/
+			}
+			
+			/*已完成*/
+			.alert-order{
+				padding:0.3rem 0;
+			}
+	</style>
+		
+
+</head>
+<body>
+  <div id="app">
+      <lw-back back-v="发布详情"></lw-back>
+	  <div class="main" id="main">
+			  <div class='status-item'>
+			  	<if condition="$list.pay_status eq 0">
+
+					<div class="order-status">
+						<div class="os-left">
+							<p class="ol-title">待支付</p>
+							<p class="ol-info">7天后会自动取消订单</p>
+						</div>
+					</div>
+					<elseif condition="$list.pay_status eq 1"/>
+						<if condition="$list.status eq 0">
+
+								<div class="order-status">
+									<div class="os-left">
+										<p class="ol-title">待接单</p>
+									</div>
+							   </div>
+						    <elseif condition="$list.status eq 1" />
+							<div class="order-status">
+								<div class="os-left">
+									<p class="ol-title">已接单</p>
+								</div>
+						   </div>
+						   <else />
+						   <div class="order-status">
+								<div class="os-left">
+									<p class="ol-title">已支付</p>
+									<p class="ol-info">{$list.status?'被抢单':'可抢'}</p>
+								</div>
+						   </div>
+					    </if>
+				   <elseif condition="$list.pay_status eq 2"/>
+					<div class="order-status">
+						<div class="os-left">
+							<p class="ol-title">已退款</p>
+						</div>
+				   </div>
+			  	</if>
+			  	<!-- <div class="so-self">
+			  	 <div class="shop-name" onclick="navfn('{$list.store_id}')">
+				  	 
+						<img src="{$list[store_logo]}" alt="{$list[store_logo]}" class="sn-pic" onerror="imgerr(this,'user')" />
+						<div class="sn-span">{$list[store_name]} <i class="l-icon layui-icon layui-icon-right"></i></div>
+			  	 </div>
+			  	</div> -->
+				<div class="s-c-data">
+					<div class="fade-li pay-li">
+						<div class="fl-prop">
+							<div class="fp-name">数量</div>
+							<div class="fp-val">{$list.num}</div>
+			  				
+						</div>
+						<div class="fl-prop">
+							<div class="fp-name">快递费</div>
+							<div class="fp-val">包邮</div>
+						</div>
+						
+						<div class="fl-prop">
+							<div class="fp-name">商品货号</div>
+							<div class="fp-val">{$list.order_sn}</div>
+						</div>
+					</div>
+				</div>
+				<!--购买信息-->
+				<div class="p-property">
+				 	<ul class="pp-ul">
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				支付时间
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.add_time}
+				 			</div>
+				 		</li>
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				支付金额
+				 			</div>
+				 			<div class="pul-right">
+				 				￥{$list.money}
+				 			</div>
+				 		</li>
+				 		<li class="pp-u-li" v-if="{$list.status}">
+				 			<div class="pul-left">
+				 				订单状态
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.status?'被抢单':'可抢'}
+				 			</div>
+				 		</li>
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				订单号
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.order_number}
+				 			</div>
+				 		</li>
+				 		<!-- <li class="pp-u-li">
+				 			<div class="pul-left">
+				 				被抢单时间
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.get_time}
+				 			</div>
+				 		</li> -->
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				用户名
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.name}
+				 			</div>
+				 		</li>
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				手机号
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.mobile}
+				 			</div>
+				 		</li>
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				地址
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.address}
+				 			</div>
+				 		</li>
+				 	</ul>
+				</div>
+				
+				<div class="mi-content" id="micontent">
+					<foreach name="list.img" item="img">
+					   <div class="mc-flex">
+							<img src="{$img}" alt="" class="mc-class" onerror="imgerr(this)" onclick="prevAll('{$img}')" />
+						</div>
+					</foreach>
+				</div>
+				<div style="height:2rem;"></div>
+				<div class="getOrder">
+					<div class="pay-get">
+					    <if condition="$list.pay_status eq 2">
+					       <button class="pay-cancel bg">已取消订单</button>
+					       <elseif condition="($list.status eq 0)||($list.pay_status eq 0)" />
+					       <button class="pay-cancel"  onclick="no_order('{$list.id}')">取消订单</button>
+
+					    </if>
+
+						<if condition="$list.pay_status eq 1">
+						    <if condition="$list.status eq 1">
+						      <button class="pay-order" onclick="order('{$list.goods_id}')">去购买</button>
+						    </if>
+						    
+							<elseif condition="$list.pay_status eq 0" />
+					        
+							
+							<button class="pay-order" onclick="pay('{$list.id}')">￥ {$list.money} 支付</button>
+						</if>
+					</div>
+				</div>
+				
+			  </div>
+			
+	  </div>
+	  <!-- <div class="fixed-label">
+	    <a class="fixed-text" href="{:U('Mobile/User/butor_put_order')}" @click="clearsession()">
+	      <image src="__STATIC__/jzqg/img/pencil.png" class="ft-img"></image>发布
+	    </a>
+	  </div> -->
+  </div>
+  <include file="Public/wx_api" />
+  <script>
+        function prevAll(tar){
+        	if(wx){
+        		var allarr=[];
+
+        		var findimg=$("#micontent .mc-class");
+        		findimg.each((index,item)=>{
+        			allarr.push($(item).attr("src"));
+        		});
+        		console.log(allarr,tar);
+        		wx.previewImage({
+					current:tar||"__STATIC__/jzqg/img/no-img.png",
+					urls:allarr||[]
+				});
+        	}
+        }
+	    //跳转商家主页
+	    function navfn(sid){
+
+	 		var href="{:U('Mobile/Store/homemerchan',array('store_id'=>'store_val'))}";
+
+	 	    href=href.replace('store_val',sid);
+
+	 	    window.location.assign(href);
+	    }
+	    //图片不存在
+	    function imgerr(ind,user){
+
+	        ind&&(()=>{
+	          var src="__STATIC__/jzqg/img/";
+	          if(user){
+	          	src="__STATIC__/images/1440439367001464442.png";
+	          }else{
+	          	src+="no-img.png";
+	          }
+	          ind.setAttribute("src",src);
+	        })();
+
+	    };
+	    layui.use(["layer","util"],function(res){
+			console.log(res,"你好");
+			
+			var layer=layui.layer;
+			//工具
+			var util=layui.util;
+
+			
+
+			//固定块
+			util.fixbar({
+				bar1:true,
+				css:{
+					right:10,bottom:200
+				},
+				click:function(type){
+					if(type=='bar1'){
+						layer&&layer.load(0,{time:2000});
+						window.location.href="tel://"+"{$list[mobile]}";
+					}
+				}
+			})
+		})
+		var app=new Vue({
+			el:"#app",
+			beforeCreate:function(){
+			},
+			methods:{
+				clearsession:function(){
+					window.sessionStorage.clear("dataarr");
+				}
+			}
+
+		});
+		function order(id){
+			if(id){
+				var href="{:U('Store/product',array('id'=>'idval'))}";
+				href=href.replace("idval",id);
+				window.location.assing(href);
+			}else{
+				layer.msg("商品id返回错误");
+			}
+		}
+		function no_order(id){
+		   
+		   $.ajax({
+              url:"{:U('/api/login')}",
+              type:'GET',
+
+              success:function(res){
+              	console.log("是否登录",res);
+              	
+              }
+		    });
+		   //alert('暂未开放退款功能，需要退款请联系客服人员');
+		   layer.confirm("确定要取消订单吗",{title:"玖泽提醒"},function(ind){
+		   	layer.close(ind);
+		   	layer.load(0);
+            $.ajax({
+              url:"{:U('/Mobile/Order/return_money')}",
+              type:'POST',
+              data:{id:id},
+              dataType:'json',
+              success:function(res){
+              	layer.load(0,{time:1});
+              	console.log("取消订单",res);
+              	if(res){
+					layer.msg(res.msg);
+	              	if(res.code==1||res.code==200){
+	              		var second=3;
+	              		var setI=setInterval(function(){
+	              			layer.msg((second--)+"秒后跳转经销商");
+	              			if(second<0){
+	              				clearInterval(setI);
+	              				location.href="{:U('Mobile/User/butor_index')}";
+	              			}
+	              		},1000);
+	              		
+	              	}
+	              }else{
+	              	layer.msg("取消订单失败");
+	              }
+              },
+              error:function(){
+              	layer.load(0,{time:1});
+              }
+		    });
+		   	
+		   })
+		}
+		function pay($id) {
+			if(!$id){
+			    alert('参数错误');return;
+			}
+            $.ajax({
+                type:"POST",
+                url:"{:U('/Mobile/Order/butor_pays')}",
+                data:{
+                    id:$id
+				},
+                dataType:"json",
+                success:function(res) {
+                    console.log(res);
+
+                    if(res.code == 200){
+                    	var data=res.data;
+                    	data.go_url="{:U('Mobile/User/order_index',array(type=>'0'))}";
+                        callpay(data);
+                    }
+                    if(res.code == 0){
+                        layer.alert(res.msg);
+                    }
+
+
+                }
+            });
+
+        }
+  </script>
+  <script type="text/javascript">
+
+      //调用微信JS api 支付
+
+      function jsApiCall(params)
+
+      {
+          WeixinJSBridge.invoke(
+              'getBrandWCPayRequest',JSON.parse(params.params),
+              function(res){
+                  //WeixinJSBridge.log(res.err_msg);
+                  if(res.err_msg == "get_brand_wcpay_request:ok") {
+                      location.href=params.go_url;
+                      window.location.assign("{:U('Mobile/User/butor_index')}");
+                  }else{
+                      location.href=params.back_url;
+                  }
+              }
+
+          );
+      }
+      function callpay(params)
+      {
+          if (typeof WeixinJSBridge == "undefined"){
+              if( document.addEventListener ){
+                  document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+              }else if (document.attachEvent){
+                  document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                  document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+              }
+          }else{
+              jsApiCall(params);
+          }
+      }
+  </script>
+</body>

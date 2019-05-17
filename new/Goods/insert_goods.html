@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>编辑商品</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<!-- jquery -->
+		<script src="__STATIC__/js/jquery.js"></script>
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+		<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+		<!-- layer.js -->
+		<script type="text/javascript" src="__STATIC__/jzqg/js/layer.js" ></script>
+		<style>
+			.a-row{
+				margin-bottom:0.05rem;
+				display:flex;
+				align-items:center;
+				min-height:1rem;
+				background-color:#fff;
+			}
+			.a-col-3{
+				width:22%;
+			}
+			.a-col-4{
+				width:25%;
+			}
+			.a-col-9{
+				width:60%;
+			}
+			.a-text-input{
+				width:100%;
+				padding-right:0.7rem;
+				box-sizing:border-box;
+				font-size:0.3rem;
+			}
+			.a-text-input:active,.a-text-input:focus,.a-text-input{
+				background:transparent;
+				border:none;
+				outline:none;
+			}
+			.a-text-name{
+				text-indent:0.7rem;
+				font-size:0.3rem;
+				color:#000;
+			}
+			.a-select{
+				display:flex;
+				padding-right:0.7rem;
+			}
+			.a-select:active{
+				opacity:0.6;
+			}
+			.as-title {
+				font-size: 0.3rem;
+				color: #000000;
+			}
+			.as-icon{
+				text-align:right;
+				flex:1;
+			}
+			.as-icon::after{
+				content:"";
+				display:inline-block;
+				border:0.2rem solid rgb(96,96,96);
+				border-bottom:0;
+				margin-left:0.5rem;
+				border-left-color:transparent;
+				border-right-color:transparent;
+			}
+			
+			.ac-frame{
+				display:flex;
+				align-items:center;
+				padding:0.3rem 0 0 0.7rem;
+			}
+			.ac-f-status{
+				position:relative;
+			}
+			.afs-checkbox{
+				position:absolute;
+				top:0;
+				left:0;
+				right:0;
+				bottom:0;
+				width:100%;
+				height:100%;
+				z-index:2;
+				margin:0;
+				padding:0;
+				opacity:0;
+			}
+			.afs-shape{
+				width:0.5rem;
+				height:0.5rem;
+				padding-top:0.1rem;
+				box-sizing: border-box;
+				display:flex;
+				justify-content:center;
+				border-radius:50%;
+				animation:all 0.5s;
+				background-image:url(__STATIC__/jzqg/img/edit-checkbox-no.png);
+				background-position:0 0;
+				background-size:0.5rem 0.5rem;
+				background-repeat:no-repeat;
+				transition:all .3s;
+			}
+			.afs-checkbox:checked+.afs-shape{
+				background-image: url(__STATIC__/jzqg/img/edit-checkbox.png);
+				
+			}
+			.a-submit{
+				padding:1rem 0.5rem;
+				width:100%;
+				box-sizing: border-box;
+				background-color:#fff;
+			}
+			.a-s-btn{
+				width:100%;
+				height:1rem;
+				text-align:center;
+				border-radius:1rem;
+				background-color: #ff4444;
+				border:none;
+				font-size:0.3rem;
+				color:#fff;
+				outline:none;
+				line-height:1rem;
+			}
+			.ac-f-text{
+				font-size: 0.33rem;
+				font-weight: normal;
+				font-stretch: normal;
+				letter-spacing: 0rem;
+				color: #000000;
+				padding:0 0.1rem;
+			}
+			
+			/*营业执照*/
+			.issue-row{
+				background-color:#fff;
+			}
+			.issue-row>.a-text-name{
+				line-height:1rem;
+			}
+			.issue-ul{
+				padding-bottom:2rem;
+				background-color:#fff;
+			}
+			.iul-img{
+				width:100%;
+				height:100%;
+			}
+			.idcard-ul{
+				display:flex;
+				padding:0 0.7rem;
+				flex-wrap:wrap;
+			}
+			.iu-item,.iu-img{
+				width:2rem;
+				height:2rem;
+				border:0.01rem solid rgba(0,0,0,0.2);
+				display:inline-flex;
+				align-items:center;
+				position:relative;
+				justify-content:center;
+				
+				margin:0 0.3rem 0.2rem 0;
+			}
+			.iu-img{
+				opacity:0.5;
+				border-color:#ff4444;
+				background-color:rgba(236,238,238,1);
+			}
+			.add-img{
+				font-size:1rem;
+				color:#ff4444;
+			}
+			.upload{
+				position:absolute;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				
+				height:100%;
+				margin:0;
+				padding:0;
+				z-index:999;
+				opacity:0;
+			}
+			.iul-cancel{
+				width:0.4rem;
+				height:0.4rem;
+				position:absolute;
+				right:-0.2rem;
+				top:-0.2rem;
+				z-index:2;
+			}
+			.iul-cancel:active{
+				opacity:0.8;
+			}
+			.sheel-book{
+				font-size:0.3rem;
+				color:#FC852A;
+			}
+			
+			.a-checkbox{
+				display:inline-block;
+				margin-right:0.5rem;
+			}
+			
+			.checkbox-edit{
+				background-color:#fff;
+				padding-bottom:0.3rem;
+			}
+			
+			/*添加颜色和尺码*/
+			.item-list{
+				border-bottom: 0.2rem solid rgba(236,238,238,1);
+				background-color:#fff;
+				padding-bottom:0.3rem;
+			}
+			.il-top{
+				display:flex;
+				align-items:center;
+				line-height: 1rem;
+				height:1rem;
+				padding:0 0.7rem;
+			}
+			.il-name{
+				font-size:0.3rem;
+				color:#000;
+			}
+			.il-add{
+				flex:1;
+				text-align:right;
+			}
+			.il-add>span{
+				color:#FF9933;
+				font-size:0.3rem;
+			}
+			.il-data{
+				padding-bottom:1rem;
+				display: flex;
+				flex-wrap:wrap;
+				padding:0 0.7rem;
+			}
+			.id-item{
+				display:inline-flex;
+				align-items:center;
+				margin-right:0.5rem;
+				margin-bottom:0.5rem;
+			}
+			.id-i-del,.id-i-val{
+				height:0.6rem;
+				line-height:0.6rem;
+				padding:0 0.2rem;
+			}
+			.id-i-val{
+				background-color:#E7E7E7;
+				color:#000;
+				font-size:0.3rem;
+			}
+			.id-i-del{
+				background-color:#FF4444;
+				color:#fff;
+				font-size:0.25rem;
+			}
+			.id-i-del:active{
+				color:#000;
+			}
+			.cr-text{
+				font-size:0.3rem;
+				color:#000;
+			}
+			.cr-icon{
+				width:0.4rem;
+				height:0.4rem;
+			}
+			.classify-right:active{
+				opacity:0.7;
+			}
+			.classify-right{
+				flex:1;
+				display:flex;
+				align-items: center;
+				justify-content: flex-end;
+				padding-right:0.3rem;
+			}
+			
+			/*添加商品弹窗*/
+			.fade-leave-to,
+			.fade-enter{
+				transition:transform 0.2s;
+			}
+			.fade-leave-active,
+			.fade-enter-active{
+				transform:translateY(-15rem);
+			}
+			
+			.zhe-leave-to,.zhe-enter{
+				transition:all 0.2s;
+			}
+			.zhe-leave-active,.zhe-enter-active{
+				background-color:transparent;
+			}
+			.zhe{
+				background-color:rgba(0,0,0,0.5);
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				height:100%;
+				z-index:999;
+				
+				transition:all 0.2s;
+				display:none;
+			}
+			.ewm-plug{
+				transition:transform 0.2s;
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				margin:auto;
+				
+				
+				width:8rem;
+				z-index:1000;
+				text-align:center;
+				height:11rem;
+				min-height:11rem;
+				display:none;
+			}
+			.ep-code{
+				background-color:#fff;
+			}
+			
+			.ep-footer{
+				height:1rem;
+				background-color:#fff;
+				border:none;
+				color:#FF0000;
+				font-size:0.4rem;
+				
+				position:absolute;
+				left:0;
+				right:0;
+				width:100%;
+				bottom:0;
+			}
+			.plug-topic{
+				position:relative;
+				text-align:center;
+				
+				height:0.6rem;
+			}
+			.p-header{
+				padding:0.3rem;
+			}
+			.plug-title{
+				margin:auto;
+				height:0.6rem;
+				font-size:0.35rem;
+				color:#000;
+			}
+			.plug-cancel{
+				width:0.6rem;
+				height:0.6rem;
+				position:absolute;
+				right:0;
+				top:0;
+				z-index:2;
+			}
+			.plug-cancel:active{
+				opacity:0.7;
+			}
+			.plug-content{
+				padding:1rem;
+				
+			}
+			.pc-input{
+				width:100%;
+				border:none;
+				outline:none;
+				height:1rem;
+				line-height:1rem;
+				border-bottom:0.01rem solid #adabab;
+				text-align:center;
+				color:#000000;
+			}
+			.pc-input:placeholder{
+				color:#adabab;
+				font-size:0.35rem;
+				text-align:center;
+			}
+			.plug-footer{
+				padding:0.3rem;
+			}
+			.pf-confirm{
+				width:100%;
+				height:1rem;
+				line-height:1rem;
+				text-align:center;
+				color:#fff;
+				background-color:#ff0000;
+				font-size:0.35rem;
+			}
+			.pf-confirm:active{
+				opacity:0.8;
+			}
+			/*下拉列表*/
+			#classify{
+				display:none;
+				position:absolute;
+				right:0;
+				top:0;
+				background-color:#fff;
+				padding:0 0.6rem;
+				z-index:999;
+				box-shadow:0 -0.1rem 0.5rem rgba(0,0,0,0.1);
+			}
+			#classify li{
+				padding-left:0.2rem;
+			}
+			.class-value{
+				height:1rem;
+				font-size:0.3rem;
+				color:#000;
+				line-height:1rem;
+				opacity:0.8;
+			}
+			.class-value.active{
+				color:#ff4444;
+				opacity:1;
+			}
+			.classify-div{
+				position:relative;
+				
+			}
+			/*选择类型*/
+			.pnu-name{
+				font-size:0.3rem;
+				color:#000;
+				margin-bottom:0.3rem;
+				text-indent:0.7rem;
+			}
+			.pnu-list{
+				display:flex;
+				padding:0;
+				margin:0;
+				flex-wrap:wrap;
+				padding:0 0.7rem;
+			}
+			.pl-li{
+				margin-right:0.35rem;
+				position:relative;
+				margin-bottom:0.35rem;
+			}
+			.pl-status{
+				font-size:0.3rem;
+				padding:0.05rem 0.3rem;
+				background-color: #e7e7e7;
+				border-radius: 0.07rem;
+				transition:all .4s;
+			}
+			.pl-checkbox{
+				position:absolute;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				height:100%;
+				z-index:2;
+				margin:0;
+				opacity:0;
+			}
+			.pl-checkbox:checked+.pl-status{
+				color:#fff;
+				background-color:#fe5455;
+			}
+			.ps-btn{
+				line-height:1rem;
+				width: 100%;
+			    height: 1rem;
+			    text-align: center;
+			    border-radius: 1rem;
+			    background-color: #ff4444;
+			    border: none;
+			    font-size: 0.42rem;
+			    color: #fff;
+			    outline: none;
+			}
+			.p-n-ul{
+				background-color:#fff;
+				padding:0.2rem 0;
+				margin-bottom:0.1rem;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app" @click="closeplug()">
+			<lw-back back-v="编辑商品"></lw-back>
+			
+			
+			<form action="#" id="edit" enctype="multipart/form-data" >
+			    <div class="p-n-ul">
+		  			<div class="pnu-name">选择类型</div>
+		  			<ul class="pnu-list">
+		  			  <volist name="new_cate" id="type">
+		  				<li class="pl-li">
+		  					<input type="radio" name="new_cate" class="pl-checkbox" value="{$type.ad_id}" />
+		  					<div class="pl-status">
+		  						{$type.ad_name}
+		  					</div>
+		  				</li>
+		  			  </volist>
+		  			</ul>
+		  		</div>
+				<div class="a-ul">
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">商品名称</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入商品名称" class="a-text-input" name="goods_name" />
+						</div>
+					</div>
+					<!-- <div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">排序</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入商品排序" class="a-text-input"  name="sort"/>
+						</div>
+					</div> -->
+					<div>
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">分类</div>
+						</div>
+						<div class="classify-right" @click="controlfn()">
+							<span class="cr-text">
+								{{oneval}} {{twoval}} {{threeval}}
+							</span>
+							<img src="__STATIC__/jzqg/img/arrow-right.png" class="cr-icon" />
+						</div>
+					</div>
+					<div class="classify-div">
+						
+						<ul id="classify">
+						   <volist name="list" id="list">
+						      <li class="oneli">
+						         <div  data-id="{$list.id}" data-parent="{$list.parent_id}" class="class-value" @click.stop="oneFn($event)">{$list.name}</div>
+						         <ul>
+								   <volist name="list.pid" id="ltwo">
+								      <li class="twoli">
+								         <div  data-id="{$ltwo.id}" data-parent="{$ltwo.parent_id}" class="class-value" @click.stop="twoFn($event)">{$ltwo.name}</div>
+								         <ul>
+										   <volist name="ltwo.pid" id="lthree">
+										      <li class="threeli">
+										         <div  data-id="{$lthree.id}" data-parent="{$lthree.parent_id}" class="class-value" @click.stop="threeFn($event)">{$lthree.name}</div>
+										      </li>
+										   </volist>
+										 </ul>
+								      </li>
+								   </volist>
+								 </ul>
+						      </li>
+						   </volist>
+					       <li class="oneli">
+					         <div class="class-value">没有更多数据</div>
+					       </li>
+						</ul>
+						
+					</div>
+					</div>
+					
+					
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">货号</div>
+						</div>
+						<div class="a-col-4">
+							<input type="text" placeholder="请输入货号" class="a-text-input"  name="goods_sn"/>
+						</div>
+						
+						<div class="a-col-3">
+							<div class="a-text-name">每箱装</div>
+						</div>
+						<div class="a-col-4">
+							<input type="text" placeholder="请输入数量" class="a-text-input"  name="xnum"/>
+						</div>
+					</div>
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">零售价</div>
+						</div>
+						<div class="a-col-4">
+							<input type="text" placeholder="输入零售价" class="a-text-input"  name="shop_price"/>
+						</div>
+						
+						<div class="a-col-3">
+							<div class="a-text-name">原价</div>
+						</div>
+						<div class="a-col-4">
+							<input type="text" placeholder="零售价原价" class="a-text-input"  name="market_price" v-model="mpvalue" />
+						</div>
+					</div>
+					
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">批发价</div>
+						</div>
+						<div class="a-col-4">
+							<input type="text" placeholder="输入批发价" class="a-text-input"  name="wholesale_price"/>
+						</div>
+						
+						<div class="a-col-3">
+							<div class="a-text-name">原价</div>
+						</div>
+						<div class="a-col-4">
+							<input type="text" placeholder="批发价原价" class="a-text-input" name="market_price" v-model="mpvalue" />
+						</div>
+					</div>
+					
+					
+				</div>
+				
+				<div class="edit-ul">
+					<div class="item-list" v-bind:dataid="guige[1].id">
+						<div class="il-top">
+							<div class="il-name">
+								{{guige[1].name}}
+							</div>
+							<div class="il-add">
+								<span @click="showone('colorarr')">添加</span>
+								<!-- <span @click="add_text('colorarr')">添加</span> -->
+							</div>
+						</div>
+						<div class="il-data">
+							<template v-for="(value,index) in colorarr">
+								
+								<div class="id-item">
+									<div class="id-i-val">{{value}}</div>
+									<div class="id-i-del" @click="del_text(index,'colorarr')">删除</div>
+								</div>
+							</template>
+							
+						</div>
+					</div>
+					<div class="item-list">
+						<div class="il-top" v-bind:dataid="guige[0].id">
+							<div class="il-name">
+								{{guige[0].name}}
+							</div>
+							<div class="il-add">
+								<span @click="showone('sizearr')">添加</span>
+								<!-- <span @click="add_text('sizearr')">添加</span> -->
+							</div>
+						</div>
+						<div class="il-data">
+							<template v-for="(value,index) in sizearr">
+								
+								<div class="id-item">
+									<div class="id-i-val">{{value}}</div>
+									<div class="id-i-del" @click="del_text(index,'sizearr')">删除</div>
+								</div>
+							</template>
+							
+						</div>
+					</div>
+				</div>
+				<div class="a-ul">
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">品名</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入品名" class="a-text-input" name="p_name" />
+						</div>
+					</div>
+					<!-- <div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">价格</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入价格" class="a-text-input" name="price" />
+						</div>
+					</div> -->
+					
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">颜色</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入颜色" class="a-text-input" name="color" />
+							
+						</div>
+					</div>
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">鞋面材质</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入鞋面材质" class="a-text-input" name="material" />
+						</div>
+					</div>
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">内里</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入内里" class="a-text-input" name="neri" />
+						</div>
+					</div>
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">鞋垫</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入鞋垫" class="a-text-input" name="insole" />
+						</div>
+					</div>
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">底材</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入底材" class="a-text-input" name="base_material"/>
+						</div>
+					</div>
+					
+					
+					<div class="issue-row">
+						
+						<div class="a-text-name">主图</div>
+						<ul class="idcard-ul">
+						      <li v-for='(item ,index ) in homeimgs' class="iu-item">
+						          <img :src="item" class="iul-img">
+						          <img src="__STATIC__/jzqg/img/edit-cancel.png" alt="" class="iul-cancel" @click="del_img(index,'homeimgs')" />
+						      </li>
+						      <li style="position:relative" v-show="homeimgs.length>=9 ? false : true" class="iu-img">
+						          <span class="add-img">+</span>
+						          <input data-name="home" class="upload" @change='more_img($event,"homeimgs")'  type="file" accept="image/*" name="original_img" id="original_img" multiple >
+						      </li>
+						</ul>
+						<div class="checkbox-edit">
+							<div class="a-checkbox">
+								<div class="ac-frame">
+									<div class="ac-f-status">
+										<input type="checkbox" class="afs-checkbox butor_see" checked=""/>
+										<div class="afs-shape"></div>
+									</div>
+									<span class="ac-f-text">主图经销商可见</span>
+									
+								</div>
+							</div>
+							<div class="a-checkbox">
+								<div class="ac-frame">
+									<div class="ac-f-status">
+										<input type="checkbox" class="afs-checkbox user_see"  checked="" />
+										<div class="afs-shape"></div>
+									</div>
+									<span class="ac-f-text">主图用户可见</span>
+									
+								</div>
+							</div>
+						</div>
+						<div class="a-text-name">详情图</div>
+						<ul class="idcard-ul">
+						      <li v-for='(item ,index ) in detailsimgs' class="iu-item">
+						          <img :src="item" class="iul-img">
+						          <img src="__STATIC__/jzqg/img/edit-cancel.png" alt="" class="iul-cancel" @click="del_img(index,'detailsimgs')" />
+						      </li>
+						      <li style="position:relative" class="iu-img" v-show="detailsimgs.length>=9 ? false : true">
+						          <span class="add-img">+</span>
+						          <input data-name="details" class="upload" @change='more_img($event,"detailsimgs")'  type="file" accept="image/*" name="other_img" id="other_img" multiple="">
+						      </li>
+						</ul>
+					</div>
+					<div class="checkbox-edit">
+							<div class="a-checkbox">
+								<div class="ac-frame">
+									<div class="ac-f-status">
+										<input type="checkbox" class="afs-checkbox" id="is_on_sale" />
+										<div class="afs-shape"></div>
+									</div>
+									<span class="ac-f-text">是否上架</span>
+									
+								</div>
+							</div>
+							<div class="a-checkbox">
+								<div class="ac-frame">
+									<div class="ac-f-status">
+										<input type="checkbox" class="afs-checkbox" id="is_recommend" />
+										<div class="afs-shape"></div>
+									</div>
+									<span class="ac-f-text">是否设为首页推荐</span>
+									
+								</div>
+							</div>
+						</div>
+				</div>
+				
+				<div class="a-submit">
+					<div class="a-s-btn" @click="aSubmit();return false;">保存</div>
+				</div>
+			</form>
+			<transition leave-active-class="zhe-leave-active zhe-leave-to"  enter-active-class="zhe-enter-active zhe-enter">
+			<!--遮布-->
+			<div class="zhe" v-on:click="closeorder()" v-if="show" :style="{display:(show?'block':'none')}"></div>
+			</transition>
+			
+			<transition name="fade">
+				<!--添加商品弹窗-->
+				<div class="ewm-plug" v-if="show" :style="{display:(show?'block':'none')}">
+					
+					<div class="ep-code">
+						<div class="p-header">
+							<div class="plug-topic">
+								<div class="plug-title">添加</div>
+								<img src="__STATIC__/jzqg/img/cancel-hui.png" alt="" class="plug-cancel" @click="closeorder()" />
+								 
+							</div>
+						</div>
+						<div class="plug-content">
+							<input type="text" placeholder="请输入规格名" class="pc-input" v-model="standard" />
+						</div>
+						<div class="plug-footer">
+							<div class="pf-confirm" @click="addone()">确认</div>
+						</div>
+					</div>
+				</div>
+			</transition>
+		</div>
+		
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+		    layer&&layer.load(1);
+		    document.onreadystatechange=function(){
+		    	if(document.readyState=="complete"){
+		    		layer.load(1,{time:1});
+		    	}
+		    }
+		    function ok(jointObj){
+		    	var judgeture=true;
+		    	var keyarr = ["goods_name", "goods_sn", "xnum", "shop_price", "market_price", "wholesale_price", "p_name",  "color", "material", "neri", "insole", "base_material", "carr", "sarr", "original_img", "other_img","cat_id1"],maxi=0;
+	            
+			    for(var vi=0;vi<=maxi;vi++){
+			      
+			      switch(keyarr[vi]){
+			      	
+			        // 商品名称
+			        case "goods_name":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"请输入商品名称",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 货号
+			        case "goods_sn":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var tel=Number(jointObj[keyarr[vi]].val);
+			          if(/^\d{1,}$/.test(tel)){
+			          	++maxi;
+			          }else{
+			          	alertobj={val:"货号类型为整数",show:true};
+			            judgeture = false;
+			            return;
+			          }
+			          })():(()=>{
+			            alertobj={val:"货号不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 每箱装
+			        case "xnum":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var tel=Number(jointObj[keyarr[vi]].val);
+			          if(/^\d{1,}$/.test(tel)){
+			          	++maxi;
+			          }else{
+			          	alertobj={val:"每箱装请填写整数",show:true};
+			            judgeture = false;
+			            return;
+			          }
+			          })():(()=>{
+			            alertobj={val:"每箱装不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 零售价
+			        case "shop_price":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var tel=Number(jointObj[keyarr[vi]].val);
+			          if(tel){
+			          	++maxi;
+			          }else{
+			          	alertobj={val:"零售价填写格式有错",show:true};
+			            judgeture = false;
+			            return;
+			          }
+			          })():(()=>{
+			            alertobj={val:"零售价不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        
+			        // 原价
+			        case "market_price":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var tel=Number(jointObj[keyarr[vi]].val);
+			          if(tel){
+			          	++maxi;
+			          }else{
+			          	alertobj={val:"原价填写格式有错",show:true};
+			            judgeture = false;
+			            return;
+			          }
+			          })():(()=>{
+			            alertobj={val:"原价不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 批发价
+			        case "wholesale_price":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var tel=Number(jointObj[keyarr[vi]].val);
+			          if(tel){
+			          	++maxi;
+			          }else{
+			          	alertobj={val:"批发填写格式有错",show:true};
+			            judgeture = false;
+			            return;
+			          }
+			          })():(()=>{
+			            alertobj={val:"批发价不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 品名
+			        case "p_name":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"请填写品名",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+
+			        // 颜色
+			        case "color":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"请填写颜色",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 鞋面材质
+			        case "material":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"请填写鞋面材质",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+
+			        // 内里
+			        case "neri":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"请填写内里",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 鞋垫
+			        case "insole":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"请填写鞋垫",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 底材
+			        case "base_material":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          ++maxi;
+			          })():(()=>{
+			            alertobj={val:"请输入底材",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        
+			        // 分类
+			        case "cat_id1":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          
+			          	++maxi;
+			          })():(()=>{
+			            alertobj={val:"分类不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+ 	 				// 颜色组
+			        case "carr":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var imgarr=jointObj[keyarr[vi]].val;
+			          if(imgarr[1].length>=1){
+			          	++maxi;
+			          }else{
+			          	alertobj={val:"颜色组最少一组",show:true};
+			            judgeture = false;
+			            return;
+			          }
+			          })():(()=>{
+			            alertobj={val:"颜色组不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 尺码组
+			        case "sarr":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var imgarr=jointObj[keyarr[vi]].val;
+			          if(imgarr[1].length>=1){
+			          	++maxi;
+			          }else{
+			          	alertobj={val:"尺码组最少一组",show:true};
+			            judgeture = false;
+			            return;
+			          }
+			          })():(()=>{
+			            alertobj={val:"尺码组不能为空",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 主图
+			        case "original_img":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var imgarr=jointObj[keyarr[vi]].val;
+			          if(imgarr.length>=1){
+			          	++maxi;
+			          }else{
+			          	alertobj={val:"主图最少一张",show:true};
+			            judgeture = false;
+			            return;
+			          }
+			          })():(()=>{
+			            alertobj={val:"主图最少一张",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        // 详情图
+			        case "other_img":jointObj[keyarr[vi]].val?
+			        (()=>{
+			          var imgarr=jointObj[keyarr[vi]].val;
+			          if(imgarr.length>=1){
+			          	++maxi;
+			          }else{
+			          	alertobj={val:"详情图最少一张",show:true};
+			            judgeture = false;
+			            return;
+			          }
+			          })():(()=>{
+			            alertobj={val:"详情图最少一张",show:true};
+			            judgeture = false;
+			            return;
+			        })();break;
+			        default:if(maxi<keyarr.length){
+			        	++maxi;
+
+			        }
+			      }
+			    }
+			    
+			    if(judgeture){
+			    	alertobj={val:"符合",show:false};
+			    }
+			    return alertobj;
+		    }
+			var app=new Vue({
+				el:"#app",
+				data:{
+					listarr:"{$list}",
+					mpvalue:"",//零售价原价
+					classstr:"分类1",
+					standard:"",
+					selectindex:"",
+					show:false,
+					colorarr:["红色"],//添加颜色
+					sizearr:['37'],//添加尺寸
+					detailsimgs:[],
+					homeimgs:[],
+					classstatus:false,
+					cat_id1:'',
+					cat_id2:'',
+					cat_id3:'',
+					onepId:'',
+					twopId:'',
+					threpId:'',
+					oneval:'点击此处选择分类',
+					twoval:'',
+					threeval:'',
+					dataobj:{},//表单参数
+					guige:[
+					{
+						name:"尺寸组"
+					},{
+						name:"颜色组"
+					}],
+
+				},
+				created:function(){
+					console.log(this.listarr,"listarr");
+				},
+				methods:{
+					//提交
+					aSubmit:function(){
+						
+						var form=new FormData();
+						var tar=$("#edit").serializeArray();
+						var data=this.dataobj||{};
+						tar.map((a)=>{ data[a.name]=a.value;});
+						
+						
+						
+						
+						
+						for(var i in data){
+							
+							form.append(i,data[i]);
+						}
+						if(!data['new_cate']){
+							layer.msg("请选择类型",{icon:2});
+							return false;
+						}
+						// 颜色组和尺寸组
+
+                        var carr = [this.guige[1].id,this.colorarr];
+                        var sarr = [this.guige[0].id,this.sizearr];
+
+                        data['carr']=carr;
+                        data['sarr']=sarr;
+                        //分类1
+						data["cat_id1"]=this.cat_id1;
+						//分类2
+						data["cat_id2"]=this.cat_id2;
+						//分类3
+						data["cat_id3"]=this.cat_id3;
+
+						data["original_img"]=this.homeimgs;
+						data["other_img"]=this.detailsimgs;
+
+						
+
+						//前端判断开始
+						var jointObj={};
+						for(var i in data){
+							jointObj[i]={val:data[i]};
+							
+						}
+						
+						var result=ok(jointObj);
+						if(result.show){
+							layer.msg(result.val,{icon:2});
+							return false;
+						}
+						//前端判断结束
+						layer.load(2);
+                        carr = JSON.stringify( carr );
+                        sarr = JSON.stringify( sarr );
+
+						form.append("spect1",carr);
+						form.append("spect2",sarr);
+						//是否上架
+						form.append("is_on_sale",$("#is_on_sale").prop("checked")?1:0);
+						
+						//是否设为首页推荐
+						form.append("is_recommend",$("#is_recommend").prop("checked")?1:0);
+
+						//主图用户是否可见
+						form.append("user_see",$(".user_see").prop("checked")?1:0);
+						
+						//主图经销商是否可见
+						form.append("butor_see",$(".butor_see").prop("checked")?1:0);
+						
+						//主图
+						form.append("original_img",this.homeimgs);
+						//详情图
+						form.append("other_img",this.detailsimgs);
+						
+						//分类1
+						form.append("cat_id1",this.cat_id1);
+						//分类2
+						form.append("cat_id2",this.cat_id2);
+						//分类3
+						form.append("cat_id3",this.cat_id3);
+						
+						$.ajax({
+							type:"POST",
+							url:"{:U('/Mobile/Goods/add_goods')}",
+							data:form,
+							processData : false, //必须false才会自动加上正确的Content-Type
+					        dataType: 'json',
+					        contentType : false ,//必须false才会避开jQuery对 formdata 的默认处理 
+							success:function(res){
+								layer.load(2,{time:1});
+								if(res.code==0){
+								}else if(res.code==1){
+									layer.msg(res.msg,{icon:1});
+									
+									setTimeout(
+										function(){
+											window.location.assign("{:U('Mobile/Store/store_msg')}");
+											layer.load(0,{time:1});
+										},
+												2000);
+								}else if(res.code==2){
+									setTimeout(
+										function(){
+											window.location.assign('{:U('Mobile/Store/index')}');
+											layer.load(0,{time:1});
+										},
+												2000);
+								}
+								layer.alert(res.msg);
+							},
+							error:function(err){
+								layer.alert("请求错误");
+								layer.load(2,{time:2});
+							}
+						});
+						
+						
+						return false;
+					},
+					oneFn:function(a){
+						// 一级菜单
+						var tar=a.target;
+						if($(tar).hasClass("class-value")){
+							$("#classify .active").removeClass("active");
+							this.onepId=$(tar).attr("data-parent");
+							this.cat_id1=$(tar).attr("data-id")||1;
+							this.oneval=$.trim($(tar).text());
+							
+							
+							//获取第二级
+							var twotar=$(tar).next().find(".twoli").eq(0).children().first()[0];
+							this.twopId=$(twotar).attr("data-parent");
+							this.cat_id2=$(twotar).attr("data-id")||1;
+							this.twoval=$.trim($(twotar).text());
+							//获取第三级
+							var threetar=$(twotar).next().find(".threeli").eq(0).children().first()[0];
+							this.threepId=$(threetar).attr("data-parent");
+							this.cat_id3=$(threetar).attr("data-id")||1;
+							this.threeval=$.trim($(threetar).text());
+							
+							
+							$(tar).addClass("active");
+							$(twotar).addClass("active");
+							$(threetar).addClass("active");
+							
+							this.classifyfn(this.cat_id3);
+							
+						}
+					},
+					twoFn:function(a){
+						// 二级菜单
+						var tar=a.target;
+						if($(tar).hasClass("class-value")){
+							$("#classify .active").removeClass("active");
+							
+							this.twopId=$(tar).attr("data-parent");
+							this.cat_id2=$(tar).attr("data-id")||1;
+							this.twoval=$.trim($(tar).text());
+							
+							
+							//获取第一级
+							var onetar=$(tar).parents(".oneli").children().first()[0];
+							this.onepId=$(onetar).attr("data-parent");
+							this.cat_id1=$(onetar).attr("data-id")||1;
+							this.oneval=$.trim($(onetar).text());
+							console.log(onetar,$(tar).parents(".oneli"));
+							//获取第三级
+							var threetar=$(tar).next().find(".threeli").eq(0).children().first()[0];
+							this.threepId=$(threetar).attr("data-parent");
+							this.cat_id3=$(threetar).attr("data-id")||1;
+							this.threeval=$.trim($(threetar).text());
+							
+							
+							$(tar).addClass("active");
+							$(onetar).addClass("active");
+							$(threetar).addClass("active");
+							
+							this.classifyfn(this.cat_id3);
+						}
+					},
+					threeFn:function(a){
+						// 三级菜单
+						var tar=a.target;
+						if($(tar).hasClass("class-value")){
+							$("#classify .active").removeClass("active");
+							
+							this.threepId=$(tar).attr("data-parent");
+							this.cat_id3=$(tar).attr("data-id")||1;
+							this.threeval=$.trim($(tar).text());
+							
+							
+							//获取第一级
+							var onetar=$(tar).parents(".oneli").children().first()[0];
+							this.onepId=$(onetar).attr("data-parent");
+							this.cat_id1=$(onetar).attr("data-id")||1;
+							this.oneval=$.trim($(onetar).text());
+							console.log(onetar,$(tar).parents(".oneli"));
+							//获取第二级
+							var twotar=$(tar).parents(".twoli").children().first()[0];
+							this.twopId=$(twotar).attr("data-parent");
+							this.cat_id2=$(twotar).attr("data-id")||1;
+							this.twoval=$.trim($(twotar).text());
+							
+							
+							$(tar).addClass("active");
+							$(onetar).addClass("active");
+							$(twotar).addClass("active");
+							
+							this.classifyfn(this.cat_id3);
+						}
+					},
+					closeplug:function(){
+						
+						if(this.classstatus){
+							this.controlfn();
+						}
+					},
+					//打开下拉列表
+					controlfn:function(){
+						
+						$("#classify,").slideToggle(200,"linear",(e)=>{
+							var le=$("#classify:hidden").length;
+							console.log($("#classify:hidden").length);
+							if(le){
+								this.classstatus=false;
+							}else{
+								this.classstatus=true;
+							}
+						})
+					},
+					// 获取分类的接口
+					classifyfn:function(id){
+						layer.load(2);
+						console.log("是否点击");
+						var that=this;
+						$.ajax({
+							type:"POST",
+							url:"{:U('Mobile/Goods/get_spec')}",
+							dataType:"json",
+							data:{
+								id:id
+							},
+							success:function(res){
+								if(res.code){
+									var data=res.data;
+									if(data[0]&&data[1]){
+										that.guige=data;
+										that.colorarr=["红色"];
+										that.sizearr=[234];
+									}
+									that.controlfn();
+									
+								}
+								layer.load(2,{time:2});
+								console.log(res.msg,res.code,"请求成功");
+							},
+							err:function(){
+								layer.alert("请求失败");
+							}
+						})
+					},
+					showone:function(text){
+						
+						//赋值standard,可知晓往哪个数组加子集
+						this.selectindex=text;
+						//开启弹窗
+						this.closeorder();
+					},
+					//添加规格方法1
+					addone:function(){
+						var ind=this.selectindex;
+						var arr=this[ind];
+						console.log(ind,arr);
+						if(arr){
+							var data=this.standard;
+							if(Number(data)){
+								data=Number(data);
+							}
+							
+							if(!arr.includes(data)){
+								data&&arr.push(data);
+							}else{
+								layer.alert("已添加过",{shadeClose:true});
+							}
+						}
+						//关闭前清空selectindex值
+						this.selectindex="";
+						
+						this.closeorder();
+					},
+					//控制添加商品弹窗的显隐
+					closeorder:function(){
+						this.show=!this.show;
+						//清空standard和selectindex值
+						this.standard="";
+					},
+					add_text(count){
+						
+						var data=window.prompt("添加数据");
+						
+						if(Number(data)){
+							data=Number(data);
+						}
+						var arr=this[count];
+						
+						if(!arr.includes(data)){
+							data&&this[count].push(data);
+						}else{
+							layer.alert("已添加过");
+						}
+					},
+					main_img(event){
+						layer.load(1);
+						var that=this;
+						var form=new FormData()
+						
+						
+						var files=event.target.files;
+						if(files.length){
+							form.append("img",files[0]);
+							$.ajax({
+								type:"POST",
+								url:"{:U('/Mobile/Goods/upload_img')}",
+								data:form,
+								processData : false, //必须false才会自动加上正确的Content-Type
+						        dataType: 'json',
+						        contentType : false ,//必须false才会避开jQuery对 formdata 的默认处理 
+								success:function(res){
+									if(res.code){
+										that.original_img=(res.data.img.urlpath);
+										that.homeimgs.push(res.data.img.urlpath);
+									}
+									layer.load(1,{time:1});
+								},
+								error:function(err){
+									layer.alert("请求错误");
+									layer.load(1,{time:1});
+								}
+							});
+						}else{
+							layer.load(1,{time:1});
+						}
+					},
+					ajax_upload_img(file,name){
+						var that=this;
+						layer.load(1);
+						var form=new FormData();
+						form.append("img",file);
+						$.ajax({
+							type:"POST",
+							url:"{:U('/Mobile/Goods/upload_img')}",
+							data:form,
+							processData : false, //必须false才会自动加上正确的Content-Type
+					        dataType: 'json',
+					        contentType : false ,//必须false才会避开jQuery对 formdata 的默认处理 
+							success:function(res){
+								console.log(res,"res");
+								if(res.code){
+									if(!that[name]){
+										that[name]=[];
+									}
+									that[name].push(res.data.img.urlpath);
+								}else{
+									layer.alert(res.data);
+								}
+								layer.load(1,{time:1});
+							},
+							error:function(err){
+								window.alert("请求错误");
+								layer.load(1,{time:1});
+							}
+						});
+					},
+					more_img(event,name){
+						
+						var that=this;
+						
+						var files=event.target.files;
+						
+						for(var i=0;i<files.length;i++){
+							that.ajax_upload_img(files[i],name);
+						}
+						
+					},
+					/*增加图片*/
+					add_img(event){
+						
+						var name=event.srcElement.dataset.name+'imgs';
+						console.log(name,this[name]);
+						var imgarr=[];
+						var files=event.target.files;
+						for(var i=0;i<files.length;i++){
+							
+							var imgData=files[i];
+							
+				            if(imgData.name){	            
+				               this[name].push(window.URL.createObjectURL(imgData));	
+				            }
+						}
+
+				   },
+				   /*删除图片*/
+				   del_img(count,src,clear){
+				   	console.log(src,count,clear);
+				   	   src&&this[src].splice(count,1);
+				   	   clear&&$("#"+clear).attr("title","").val("");
+				   },
+				   /*删除文本*/
+				   del_text(count,src){
+				   	console.log(src,count);
+				   	src&&console.log("没理由啊");
+				   	   src&&this[src].splice(count,1);
+				   }
+				}
+			});
+		</script>
+	</body>
+</html>

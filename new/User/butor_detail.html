@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>经销商订单详情</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<script src="__STATIC__/jzqg/js/jquery.min.js"></script>
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+
+		<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+		<!-- layer.js -->
+		<script type="text/javascript" src="__STATIC__/jzqg/js/layer.js" ></script>
+		<style>
+
+			/*支付弹窗*/
+			
+			.zhe{
+				background-color:rgba(0,0,0,0.5);
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				height:100%;
+				z-index:-1;
+			}
+			.ewm-plug{
+				transition:transform 0.2s;
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				margin:auto;
+				
+				
+				width:8rem;
+				z-index:-1;;
+				text-align:center;
+				height:11rem;
+				min-height:11rem;
+			}
+			.ep-code{
+				background:#fff;
+				margin-bottom:1rem;
+			}
+			.ep-footer{
+				height:1rem;
+				background-color:#fff;
+				border:none;
+				color:#FF0000;
+				font-size:0.4rem;
+				
+				position:absolute;
+				left:0;
+				right:0;
+				width:100%;
+				bottom:0;
+			}
+			.ep-footer:active{
+				opacity:0.6;
+			}
+			.ec-topic{
+				font-size:0.4rem;
+				color:#000;
+				padding:0.5rem 0;
+			}
+			.ec-text{
+				width:6rem;
+				margin:auto;
+				font-size:0.3rem;
+				padding:0.5rem 0;
+			}
+			.ewm-cancel{
+				margin-top:0.5rem;
+			}
+			.e-i{
+				width:1rem;
+				height:1rem;
+			}
+			
+			.fade-leave-to,
+			.fade-enter{
+				transition:transform 0.2s;
+			}
+			.fade-leave-active,
+			.fade-enter-active{
+				transform:translateY(-15rem);
+			}
+
+			/*支付弹窗结束*/
+			#orderData{
+				padding-bottom:2rem;
+			}
+			.cd-li{
+				display:flex;
+				align-items:center;
+				margin-bottom:0.05rem;
+				padding:0.5rem;
+				
+				background-color:#fff;
+			}
+			.cl-r-icon{
+				width:0.5rem;
+				height:0.5rem;
+			}
+			.crt-topic{
+				font-size:0.42rem;
+				color:#000;
+			}
+			.cl-r-text{
+				padding:0 0.5rem;
+			}
+			.crt-address{
+				font-size:0.33rem;
+				color:#6a6a6a;
+			}
+			.cl-right{
+				flex:1;
+				align-items:center;
+				display:flex;
+			}
+			.cl-choose{
+				font-size: 0.39rem;
+				color: #ff4444;
+			}
+			.choose-add{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				width:100%;
+				height: 1.25rem;
+				background-color: #ff4444;
+				border:none;
+				outline:none;
+				font-size:0.42rem;
+				color:#fff;
+			}
+			.issue-arrow{
+				width:0.7rem;
+				height:0.7rem;
+			}
+			/*分类商品的样式*/
+			
+			.sc-item{
+				display:flex;
+				background-color:#fff;
+				margin-bottom:0.05rem;
+				padding:0.4rem 0.2rem;
+			}
+			.si-left{
+				width:2.1rem;
+				height:2.1rem;
+				display:flex;
+				align-items:center;
+				justify-content: center;
+				text-align:center;
+			}
+			.shop-img{
+				width:2.1rem;
+				height:2.1rem;
+				background-color: #ffffff;
+				border-radius: 0.07rem;
+			}
+			.si-l-img{
+				width:1.25rem;
+				height:1.25rem;
+				border-radius:100%;
+			}
+			.si-right{
+				flex:1;
+				display:flex;
+				flex-direction: column;
+				justify-content: space-between;
+				padding-left:0.2rem;
+
+			}
+			.si-r-name {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.36rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #000000;
+			}
+			.sra-icon {
+				width: 0.31rem;
+				height: 0.35rem;
+				margin-top:0.04rem;
+			}
+			.sra-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.31rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #999999;
+			}
+			/*商品的样式*/
+			.shop-title{
+				overflow:hidden;
+				text-overflow:ellipsis;
+				white-space:nowrap;
+				width:7rem;
+			}
+			.sn-pic {
+				width: 0.56rem;
+				height: 0.56rem;
+				border-radius:50%;
+				vertical-align: middle;
+			}
+			.sn-span {
+				font-family: PingFang-SC-Medium;
+				font-size: 0.3rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.56rem;
+				letter-spacing: 0rem;
+				color: #7d7d7d;
+				display:flex;
+				align-items:center;
+			}
+			.l-icon{
+				font-size:0.3rem;
+			}
+			.shop-bottom{
+				display:flex;
+				align-items:center;
+			}
+			.s-l-money{
+				font-family: PingFang-SC-Bold;
+				font-size: 0.3rem;
+				font-weight: normal;
+				font-stretch: normal;
+				line-height: 0.53rem;
+				letter-spacing: 0rem;
+				color: #fe5455;
+			}
+			.sb-right{
+				flex:1;
+				text-align:right;
+			}
+			
+			/*提交订单修改的*/
+			.so-self{
+				padding:0.1rem 0.3rem;
+				margin-bottom:0.04rem;
+				background-color:#fff;
+			}
+			.so-self>.shop-name{
+				display:flex;
+				align-items:center;
+			}
+			.sn-span:active{
+				opacity:0.7;
+			}
+			.so-self .sn-span{
+			    text-indent:0.2rem;
+			}
+			.sb-right-cut{
+				width:0.3rem;
+				height:0.3rem;
+			}
+			.sb-hui{
+				color:#999;
+				font-size:0.3rem;
+				display:inline-block;
+				height: 0.44rem;
+				line-height:0.44rem;
+				text-align:center;
+				
+			}
+			.sf-frame{
+				display:flex;
+				background-color:#fff;
+				height:1rem;
+				
+			}
+			.sb-footer{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				height:1rem;
+				
+			}
+			.sf-left{
+				width:70%;
+				display:flex;
+				padding:0 0.2rem;
+			}
+			.sf-right{
+				width:100%;
+				height: 1rem;
+				background-color: #ff4444;
+				border:none;
+				outline:none;
+				font-size:0.39rem;
+				color:#fff;
+				line-height:1rem;
+				text-align:center;
+			}
+			.sf-right:active{
+				opacity:0.7;
+			}
+			.sl-count{
+				line-height:1rem;
+				font-size:0.3rem;
+			}
+			.sl-price{
+				margin:auto 0;
+				text-align:right;
+				width:100%;
+				font-size:0.3rem;
+			}
+			.sp-active{
+				color:#FF0000;
+			}
+			.sp-text{
+				font-size:0.25rem;
+				color:#999;
+			}
+			.ss-data{
+				width:100%;
+				padding:0.5rem 0;
+				background-image:linear-gradient(45deg,#FF4444 20%,#FF4D00 100%);
+			}
+			.ss-d-item{
+				width:24%;
+				line-height:0.5rem;
+				color:#fff;
+				text-align: center;
+				display:inline-block;
+			}
+			.sdi-count{
+				font-size:0.4rem;
+				line-height:0.7rem;
+			}
+			.sdi-text{
+				font-size:0.2rem;
+			}
+			
+			.s-c-data{
+				border-bottom: 0.05rem solid rgba(236,238,238,1);
+			}
+			
+			.sdi-i-input{
+				color:#fff;
+				width:60%;
+				text-align:center;
+				font-size:0.4rem;
+				background-color:transparent;
+				border:none;
+				outline:none;
+				border-bottom:0.02rem solid #fff;
+				line-height:0.7rem;
+			}
+			.sdi-i-input::placeholder{
+				color:#ffffff;
+				opacity:0.5;
+				
+			}
+			.ep-topic{
+				display:flex;
+				height:2rem;
+				align-items: center;
+				padding:0 0.5rem;
+				background-image:linear-gradient(to top,#FF4444 20%,#FF4D00 100%);
+				color:#fff;
+			}
+			.et-left{
+			  	flex:1;	
+			  	text-align:left;
+			  	font-size:0.4rem;
+			}
+			.et-right{
+				width:0.8rem;
+				height:0.8rem;
+			}
+			.ec-img{
+				width:6rem;
+			}
+			.ep-footer{
+				height:1rem;
+				background-color:#fff;
+				border:none;
+				color:#FF0000;
+				font-size:0.4rem;
+				
+				position:absolute;
+				left:0;
+				right:0;
+				width:100%;
+				bottom:0;
+			}
+			.ep-footer:active{
+				opacity:0.6;
+			}
+			.ec-text{
+				width:6rem;
+				margin:auto;
+				font-size:0.4rem;
+			}
+			.fade-leave-to,
+			.fade-enter{
+				transition:transform 0.2s;
+			}
+			.fade-leave-active,
+			.fade-enter-active{
+				transform:translateY(-15rem);
+			}
+			
+			/*表格*/
+			.sb-select{
+				margin-bottom:0.1rem;
+			}
+			.sc-table{
+				text-align:center;
+				width:100%;
+				background-color:#fff;
+			}
+			.sc-result{
+				background-color:rgba(236,238,238,1);
+			}
+			.sc-table td,.sc-table th{
+				height:1.5rem;
+			}
+			.sc-table thead th{
+				text-align:center;
+				color:#999;
+				font-size:.39rem;
+			}
+			
+			.sc-table tbody td{
+				font-size:.39rem;
+				color:#000000;
+			}
+			.sc-table .sd-unit{
+				color:#999;
+				font-size:.3rem;
+			}
+			.sc-table .sd-num{
+				color:#FF0000;
+				font-size:.39rem;
+				line-height:0.8rem;
+				height:0.8rem;
+				display:block;
+			}
+			.sc-table td>span,.sc-table th>span{
+				line-height:0.8rem;
+				height:0.8rem;
+				display:block;
+			}
+			.sc-table .sd-input{
+				background-color:transparent;
+				outline:none;
+				border:none;
+				color:#FF9000;
+				font-size:0.39rem;
+				
+				border-bottom:0.01rem solid #FF9000;
+				width:2rem;
+				text-align: center;
+				line-height:0.8rem;
+				height:0.8rem;
+			}
+			.sc-table .sd-input::placeholder{
+				color:#FF9000;
+				font-size:0.39rem;
+			}
+			.sr-input{
+				line-height:0.8rem;
+				height:0.8rem;
+				border:none;
+				border-bottom:0.01rem solid rgba(0,0,0,0.2);
+				font-size:0.39rem;
+				color:#000;
+				width:2rem;
+				
+				background-color:transparent;
+				outline:none;
+				text-align: center;
+			}
+			.sr-input::placeholder{
+				color:#999;
+				font-size:0.3rem;
+			}
+			
+			/*产品属性*/
+			
+			.pp-ul,.pp-u-li{
+				padding:0;
+				margin:0;
+			}
+			
+			.pp-ul{
+				background-color:#fff;
+				margin-bottom:0.1rem;
+			}
+			.pp-u-li{
+				display:flex;
+				padding:0.2rem 0;
+			}
+			.pul-left{
+				/*width:30%;*/
+				text-indent:0.3rem;
+				font-size:0.39rem;
+				color:#999;
+			}
+			.pul-left:after{
+				content:"：";
+			}
+			.pul-right{
+				font-size:0.39rem;
+				color:#000;
+			}
+			
+			/*头部共有*/
+			.status-item{
+				margin-bottom:1rem;
+			}
+			.order-status{
+				display:flex;
+				align-items:center;
+				padding:0.6rem 0.3rem;
+				background-image:linear-gradient(to right,#FA8C26 20%,#FC852A 100%);
+				border-bottom:0.2rem solid rgba(236,238,238,1);
+			}
+			.os-right{
+				flex:1;
+				text-align:right;
+			}
+			.ol-title{
+				font-size:0.4rem;
+				color:#fff;
+			}
+			.ol-info{
+				font-size:0.3rem;
+				color:#fff;
+			}
+			.ol-icon{
+				font-size:1.2rem;
+				color:#fff;
+			}
+			
+			/*代发货*/
+			
+			/*代收货*/
+			.getOrder{
+				text-align:center;
+				
+			}
+			.go-fade{
+				font-size:0.3rem;
+				color:#000;
+				width:100%;
+				background-color:rgba(236,238,238,1);
+			}
+			.gg-order{
+				width: 100%;
+			    height: 1rem;
+			    background-color: #ff4444;
+			    border: none;
+			    outline: none;
+			    font-size: 0.39rem;
+			    color: #fff;
+			    line-height: 1rem;
+			    text-align: center;
+			}
+			.fade-text{
+				font-size:0.3rem;
+				
+			}
+			.fl-prop{
+				height:1rem;
+				line-height:1rem;
+			}
+			.fp-name{
+				width:30%;
+				font-size:0.4rem;
+				color:#000;
+				display:inline-block;
+			}
+			.fp-val{
+				width:65%;
+				text-align:right;
+				font-size:0.4rem;
+				display:inline-block;
+			}
+			.fade-li{
+				padding:0 0.3rem;
+			}
+			
+			/*等待支付*/
+			
+			.pay-cancel,.pay-order{
+				
+			    height: 1.2rem;
+			   
+			    border: none;
+			    outline: none;
+			    font-size: 0.39rem;
+			    color: #fff;
+			    line-height: 1.2rem;
+			    text-align: center;
+			}
+			.pay-order{
+				flex:2;
+				background-color: #ff4444;
+			}
+			.pay-cancel{
+				flex:1;
+				background-color:#ff8855;
+			}
+			.pay-get{
+				display:flex;
+			}
+			.cc-control{
+				display:inline-flex;
+				align-items:center;
+			}
+			.cc-val{
+				width:1rem;
+				height:0.5rem;
+				border:1px solid #BFBFBF;
+				text-align:center;
+			}
+			.cc-prev,.cc-next{
+				height:0.5rem;
+				width:0.5rem;
+				line-height:0.5rem;
+				text-align:center;
+				border:1px solid #BFBFBF;
+				font-size:0.4rem;
+			}
+			.cc-prev:active,.cc-next:active{
+				color:red;
+			}
+			.fp-input{
+				width:50%;
+				display:inline-block;
+			}
+			.fi-i{
+				width:100%;
+				outline:none;
+				border:none;
+				font-size:0.4rem;
+				background-color:transparent;
+			}
+			.pay-li{
+				padding-bottom:2rem;
+			}
+			
+			/*已完成*/
+			.alert-order{
+				padding:0.3rem 0;
+			}
+			/*联系客服*/
+			.kefu{width:20px;text-align: center;border-radius: 8px ;font-size:12px;padding:8px 0;border:1px solid #adadab;color:#000000;background-color: #fff;position: fixed;right: 6px;bottom: 200px;}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			
+			<lw-back back-v="经销商订单详情"></lw-back>
+			<form action="#" id="orderData">
+			  <!--代发货-->
+			  <div class='status-item'>
+			  	
+				<div class="order-status">
+
+
+					<div class="os-left">
+
+						<p class="ol-title">
+
+					 		<template v-if="{$list.pay_status}==1">
+					 		    <template>
+					 		       <template v-if="{$list.shipping_status}==1">
+					 		           <template>
+					 		              <template v-if="{$list.order_status}==2">
+									 			   已收货
+					 		              </template>
+					 		              <template v-else-if="{$list.order_status}==4">
+									 			   已完成
+					 		              </template>
+					 		           </template>
+					 		       </template>
+					 		       <template v-else-if="{$list.shipping_status}==0">
+							 			   备料中
+					 		       </template>
+					 		    </template>
+					 		</template>
+				 		    <template v-else>
+						 			   未付款
+				 		    </template>
+						</p>
+						<!-- <p class="ol-title">{$list[status]}</p> -->
+						<p class="ol-info">{$list[order_type]?'批发订单':'普通订单'}</p>
+					</div>
+					<div class="os-right">
+						
+					 		<template v-if="{$list.pay_status}==1">
+					 		    <template>
+					 		       <template v-if="{$list.shipping_status}==1">
+					 		           <template>
+					 		              <template v-if="{$list.order_status}==2">
+									 			   <i class="layui-icon layui-icon-component ol-icon"></i>
+					 		              </template>
+					 		              <template v-else-if="{$list.order_status}==4">
+									 			   <i class="layui-icon layui-icon-ok-circle ol-icon"></i>
+					 		              </template>
+					 		           </template>
+					 		       </template>
+					 		       <template v-else-if="{$list.shipping_status}==0">
+							 			   <i class="layui-icon layui-icon-release ol-icon"></i>
+					 		       </template>
+					 		    </template>
+					 		</template>
+				 		    <template v-else>
+						 			   <i class="layui-icon layui-icon-close-fill ol-icon"></i>
+				 		    </template>
+					</div>
+				</div>
+				<div class="choose-data">
+					<div class="cd-li">
+						<div class="cl-right">
+							<img src="__STATIC__/jzqg/img/choose-location.png" alt="" class="cl-r-icon" />
+							<div class="cl-r-text">
+								<div class="crt-topic">
+									<span class="crt-t-name">{$list.consignee}</span>
+									<span class="crt-t-phone">{$list.mobile}</span>
+								</div>
+								<div class="crt-address">
+									{$list.address}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="so-self">
+					
+					<div class="shop-name"  onclick="navfn('{$list[store_id]}');">
+						<img src="{$list[store_logo]}" class="sn-pic" onerror="imgerr(this,'user')" />
+						<div class="sn-span">{$list[store_name]} <i class="l-icon layui-icon layui-icon-right"></i></div>
+					</div>
+				</div>
+				<foreach name="list.goods" item="vo">
+
+					<div class="s-c-data">
+						<div class="sc-item">
+							<div class="si-left">
+								<img src="{$vo['original_img']}" alt="" class="shop-img" onerror="imgerr(this)" />
+							</div>
+							<div class="si-right">
+								<div>
+									<div class="si-r-name shop-title">
+										{$vo['goods_name']}
+									</div>
+								</div>
+								<div class="shop-bottom">
+									<div class="sb-left">
+										<span class="sb-hui">工厂货号：<if condition="$vo['goods_sn']">{$vo['goods_sn']}<else/>暂无</if></span>
+									</div>
+									<div class="sb-right">
+										<span class="s-l-money">{$vo['goods_price']}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="sb-select">
+						<div> 
+							<div class="ss-content">
+								<table class="sc-table">
+									<thead class="sc-head">
+									  <tr>
+										<th><span>
+											尺码
+										</span></th>
+										<th><span>
+											颜色
+										</span></th>
+										<th><span>
+											配码
+										</span></th>
+									  </tr>
+									</thead>
+									<tbody class="sc-body">
+									  <foreach name="vo.spec" item="bigitem">
+									     <foreach name="bigitem.n" item="twoitem">
+
+									         <tr>
+												<td>
+													<span>{$twoitem[0]}</span>
+												</td>
+												
+												<td>
+													<span>{$twoitem[1]}</span>
+												</td>
+												
+												<td>
+													<span>{$twoitem[2]}</span>
+												</td>
+											 </tr>
+									     </foreach>
+
+									         <tr class="sc-result">
+												<td>
+													<div class="sr-div">
+														<span class="sd-num">{$vo.xnum}</span>
+														<p class="sd-unit">每箱装（个）</p>
+													</div>
+												</td>
+												
+												<td>
+													<div class="sr-div">
+														<span class="sd-num">{$bigitem.xnum}</span>
+														<p class="sd-unit">箱数（箱）</p>
+													</div>
+												</td>
+												
+												<td>
+													<div class="sr-div">
+														<span class="sd-num num-all">{$bigitem.num}</span>
+														<p class="sd-unit">
+															该尺码总对数（对）
+														</p>
+													</div>
+												</td>
+										    </tr>
+									  </foreach>
+									</tbody>
+								</table>
+							</div>
+							<div class="ss-data">
+								<div class="ss-d-item">
+									<p class="sdi-count">{$vo.xum||0}</p>
+									<p class="sdi-text">总箱数</p>
+								</div>
+								<div class="ss-d-item">
+									<p class="sdi-count">{$vo.all_num||0}</p>
+									<p class="sdi-text">总对数</p>
+								</div>
+								<div class="ss-d-item">
+									<p class="sdi-count">￥{$vo.all_price||0}</p>
+									<p class="sdi-text">商品总价</p>
+								</div>
+								<div class="ss-d-item">
+									<div class="sdi-input">
+										<span>{$vo.goods_sn}</span>
+									</div>
+									<p class="sdi-text">所填货号</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</foreach>
+
+				<!--购买信息-->
+				<div class="p-property">
+				 	<ul class="pp-ul">
+
+				 	    <li class="pp-u-li" v-if="'{$list.add_time}'">
+				 			<div class="pul-left">
+				 				订单生成时间
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.add_time}
+				 			</div>
+				 		</li>
+				 		<li class="pp-u-li" v-if="'{$list.order_sn}'">
+				 			<div class="pul-left">
+				 				订单号
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.order_sn}
+				 			</div>
+				 		</li>
+				 		<li class="pp-u-li" v-if="'{$list.pay_time}'">
+				 			<div class="pul-left">
+				 				支付时间
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.pay_time}
+				 			</div>
+				 		</li>
+				 		<li class="pp-u-li" v-if="'{$list.shipping_time}'">
+				 			<div class="pul-left">
+				 				发货时间
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.shipping_time}
+				 			</div>
+				 		</li>
+
+				 		<template v-if="{$list.pay_status}==1">
+				 		    <template>
+				 		       <template v-if="{$list.shipping_status}==1">
+				 		           <template>
+				 		              <template v-if="{$list.order_status}==2">
+
+						 		          <li class="pp-u-li">
+								 			<div class="pul-left">
+								 			  订单状态
+								 			</div>
+								 			<div class="pul-right">
+								 			   已收货
+								 			</div>
+								 		  </li>
+				 		              </template>
+				 		              <template v-else-if="{$list.order_status}==4">
+
+						 		          <li class="pp-u-li">
+								 			<div class="pul-left">
+								 			  订单状态
+								 			</div>
+								 			<div class="pul-right">
+								 			   已完成
+								 			</div>
+								 		  </li>
+				 		              </template>
+				 		           </template>
+				 		       </template>
+				 		       <template v-else-if="{$list.shipping_status}==0">
+				 		          <li class="pp-u-li">
+						 			<div class="pul-left">
+						 			  发货状态
+						 			</div>
+						 			<div class="pul-right">
+						 			   备料中
+						 			</div>
+						 		  </li>
+				 		       </template>
+				 		    </template>
+				 		</template>
+			 		    <template v-else>
+					 		<li class="pp-u-li">
+					 			<div class="pul-left">
+					 			  支付状态
+					 			</div>
+					 			<div class="pul-right">
+					 			   未付款
+					 			</div>
+					 		</li>
+			 		    </template>
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				定金
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.first_money}
+				 			</div>
+				 		</li>
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				包装款
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.b_money||0}
+				 			</div>
+				 		</li>
+
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				尾款
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.last_money}
+				 			</div>
+				 		</li>
+				 		<li class="pp-u-li">
+				 			<div class="pul-left">
+				 				总金额
+				 			</div>
+				 			<div class="pul-right">
+				 				{$list.total_amount}
+				 			</div>
+				 		</li>
+				 		
+				 	</ul>
+				</div>
+				<div class="sb-footer">
+					<div class="sf-frame">
+						<div class="sf-right" @click="closeorder()">
+							付款二维码
+						</div>
+					</div>
+				</div>
+				
+			  </div>
+			  
+			</form>
+			<div onclick="follow_wx()" class="kefu">
+			     联系客户
+			</div>
+			<!--遮布-->
+			<div class="zhe" v-on:click="closeorder()" v-if="show" :style="{zIndex:(show?2:-1)}"></div>
+			<transition name="fade">
+				<!--扫码弹窗-->
+				<div class="ewm-plug" v-if="show" :style="{zIndex:(show?2:-1)}">
+					<div class="ep-code">
+						<p class="ec-topic">收款二维码</p>
+						<img :src="payimg" alt="" class="ec-img" id="payimg" onerror="codeerr(this)"  onclick="prevAll(this.getAttribute('src'))" />
+						<p class="ec-text">
+							长按图片识别二维码付款
+						</p>
+					</div>
+					<div class="ewm-cancel">
+						<img src="__STATIC__/jzqg/img/cancel-plug.png" alt="" class="e-i" @click="closeorder()" />
+					</div>
+				</div>
+			</transition>
+		</div>
+		<include file="Public/wx_api" />
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+	        function prevAll(tar){
+	        	if(wx){
+	        		wx.previewImage({
+						current:tar||"__STATIC__/jzqg/img/no-img.png",
+						urls:[tar]
+					});
+	        	}
+	        }
+			function follow_wx()
+
+			{
+			      layer.open({
+			        type: 1 
+			        ,title: '客服二维码'
+			        ,shade: 0
+			        ,offset:50,
+			        // ,maxmin: true
+			        shade:0.5,
+			        shadeClose:true
+			        ,content: `<img onerror="codeerr(this)" onclick="prevAll('{$list.store_weima}')" src="{$list.store_weima}" width="300">`
+			        ,btn: [ '关闭弹窗'] //只是为了演示
+			        ,yes: function(ind){
+			        	 layer.close(ind);
+			        }
+			        
+			        ,zIndex: layer.zIndex //重点1
+			        ,success: function(layero){
+			          layer.setTop(layero); //重点2
+			        }
+			      });
+
+			}
+
+		    //跳转商家主页
+		    function navfn(sid){
+
+		 		var href="{:U('Mobile/Store/homemerchan',array('store_id'=>'store_val'))}";
+
+		 	    href=href.replace('store_val',sid);
+
+		 	    window.location.assign(href);
+		    }
+		    //图片不存在
+		    function imgerr(ind,user){
+
+		        ind&&(()=>{
+		          var src="__STATIC__/jzqg/img/";
+		          if(user){
+		          	src="__STATIC__/images/1440439367001464442.png";
+		          }else{
+		          	src+="no-img.png";
+		          }
+		          ind.setAttribute("src",src);
+		        })();
+
+		    };
+		    //二维码错误
+		    function codeerr(ind){
+		    	imgerr(ind);
+		    	layer.alert("暂无二维码图片，请关注玖泽公众号并反馈此问题，联系此经销商尽快补上二维码",{title:"玖泽提醒"});
+		    }
+			var app=new Vue({
+				el:"#app",
+				data:{
+					payimg:"{$list.store_apy_money}",
+					show:false,
+					chooseCount:0,
+					store_apy_money:"{$list.store_apy_money}",
+					store_weima:"{$list.store_weima}"
+				},
+				
+				methods:{
+					//选择数量加减方法
+					ccFn:function(count){
+						console.log(count);
+						
+						var countVal=parseInt(this.chooseCount)||0;
+						countVal+=count||0;
+						console.log(countVal);
+						if(countVal<=0){
+							this.chooseCount=0;
+						}else{
+							this.chooseCount=countVal;
+						}
+					},
+					closeorder:function(){
+						this.show=!this.show;
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

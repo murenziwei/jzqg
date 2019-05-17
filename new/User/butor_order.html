@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>发布</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<script src="__STATIC__/jzqg/js/flexible.js"></script>
+		<script src="__STATIC__/jzqg/js/vue.js"></script>
+		<!--公共样式-->
+		<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+		<style>
+			
+			.cd-li{
+				display:flex;
+				align-items:center;
+				margin-bottom:0.05rem;
+				padding:0.5rem;
+				
+				background-color:#fff;
+			}
+			.cd-li:active{
+				opacity:0.8;
+			}
+			.cl-r-icon{
+				width:0.5rem;
+				height:0.5rem;
+			}
+			.crt-topic{
+				font-size:0.42rem;
+				color:#000;
+			}
+			.cl-r-text{
+				padding:0 0.5rem;
+			}
+			.crt-address{
+				font-size:0.33rem;
+				color:#6a6a6a;
+			}
+			.cl-right{
+				flex:1;
+				align-items:center;
+				display:flex;
+			}
+			.issue-arrow{
+				width:0.7rem;
+				height:0.7rem;
+			}
+			
+			.choose-add{
+				position:fixed;
+				bottom:0;
+				left:0;
+				right:0;
+				width:100%;
+				height: 1.25rem;
+				background-color: #ff4444;
+				border:none;
+				outline:none;
+				font-size:0.42rem;
+				color:#fff;
+			}
+			
+			.a-row{
+				
+				display:flex;
+				align-items:center;
+				min-height:1rem;
+				background-color:#fff;
+			}
+			.a-col-3{
+				width:30%;
+			}
+			.a-col-9{
+				width:69%;
+			}
+			.a-text-input{
+				width:100%;
+				padding-right:0.7rem;
+				box-sizing:border-box;
+				font-size:0.39rem;
+			}
+			.a-text-input:active,.a-text-input:focus,.a-text-input{
+				background:transparent;
+				border:none;
+				outline:none;
+			}
+			.a-text-name{
+				text-indent:0.7rem;
+				font-size:0.39rem;
+				color:#000;
+			}
+			.a-select{
+				display:flex;
+				padding-right:0.7rem;
+			}
+			.a-select:active{
+				opacity:0.6;
+			}
+			.as-title {
+				font-size: 0.39rem;
+				color: #000000;
+			}
+			.as-icon{
+				text-align:right;
+				flex:1;
+			}
+			.as-icon::after{
+				content:"";
+				display:inline-block;
+				border:0.2rem solid rgb(96,96,96);
+				border-bottom:0;
+				margin-left:0.5rem;
+				border-left-color:transparent;
+				border-right-color:transparent;
+			}
+			.issue-row{
+				background-color:#fff;
+			}
+			.issue-row>.a-text-name{
+				line-height:1rem;
+			}
+			.issue-ul{
+				padding-bottom:2rem;
+				background-color:#fff;
+			}
+			
+			
+			.a-submit{
+				padding:1rem 0.5rem;
+				width:100%;
+				box-sizing: border-box;
+			}
+			.a-s-btn{
+				width:100%;
+				height:1rem;
+				text-align:center;
+				border-radius:1rem;
+				background-color: #ff4444;
+				border:none;
+				font-size:0.42rem;
+				color:#fff;
+				outline:none;
+			}
+			.ac-f-text{
+				font-size: 0.33rem;
+				font-weight: normal;
+				font-stretch: normal;
+				letter-spacing: 0rem;
+				color: #000000;
+				padding:0 0.1rem;
+			}
+			
+			/*图片样式*/
+			.iul-img{
+				width:100%;
+				height:100%;
+			}
+			.idcard-ul{
+				display:flex;
+				padding:0 0.7rem;
+				flex-wrap:wrap;
+			}
+			.iu-item,.iu-img{
+				width:3rem;
+				height:3rem;
+				border:0.01rem solid rgba(0,0,0,0.2);
+				display:inline-flex;
+				align-items:center;
+				position:relative;
+				justify-content:center;
+				
+				margin:20px 20px 20px 0;
+			}
+			.iu-img{
+				opacity:0.5;
+			}
+			.add-img{
+				font-size:1.5rem;
+				color:rgba(0,0,0,0.2);
+			}
+			.upload{
+				position:absolute;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				height:100%;
+				margin:0;
+				padding:0;
+				z-index:999;
+				opacity:0;
+			}
+			.iul-cancel{
+				width:0.5rem;
+				height:0.5rem;
+				position:absolute;
+				right:-0.25rem;
+				top:-0.25rem;
+				z-index:2;
+			}
+			.iul-cancel:active{
+				opacity:0.8;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			
+			<lw-back back-v="发布"></lw-back>
+			<form action="#" id="issue">
+				<div class="choose-data">
+					<div class="cd-li" onclick="location.assign('../chooseaddress/index.html')">
+						<div class="cl-right">
+							<img src="__STATIC__/jzqg/img/choose-location.png" alt="" class="cl-r-icon" />
+							<div class="cl-r-text">
+								<div class="crt-topic">
+									<span class="crt-t-name">李伟</span>
+									<span class="crt-t-phone">13825000114</span>
+								</div>
+								<div class="crt-address">
+									广州市天河区天河达到1953号
+								</div>
+							</div>
+						</div>
+						<img src="__STATIC__/jzqg/img/arrow-right.png" alt="" class="issue-arrow" />
+					</div>
+				</div>
+				
+				<div class="a-ul issue-ul">
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">货号</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入货号" class="a-text-input" />
+						</div>
+					</div>
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">数量（对）</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" placeholder="请输入数量" class="a-text-input" />
+						</div>
+					</div>
+					
+					<div class="a-row">
+						<div class="a-col-3">
+							<div class="a-text-name">诚意金</div>
+						</div>
+						<div class="a-col-9">
+							<input type="text" value="$21" placeholder="请输入诚意金" class="a-text-input" />
+						</div>
+					</div>
+					<div class="issue-row">
+						
+						<div class="a-text-name">图片</div>
+						<ul class="idcard-ul">
+						      <li v-if="imgs.length>0" v-for='(item ,index ) in imgs' class="iu-item">
+						          <img :src="item" class="iul-img">
+						          <img src="__STATIC__/jzqg/img/cancel-red.png" alt="" class="iul-cancel" @click="del_img(index)" />
+						      </li>
+						      <li style="position:relative" v-if="imgs.length>=9 ? false : true" class="iu-img">
+						          <span class="add-img">+</span><input class="upload" @change='add_img'  type="file" accept="image/*" multiple>
+						      </li>
+						</ul>
+
+					</div>
+				</div>
+				
+				<div class="a-submit">
+					<button class="a-s-btn">￥0&nbsp;&nbsp;立即支付</button>
+				</div>
+			</form>
+		</div>
+		<!--必须放在Vue实例化前，否则无效-->
+		<script src="__STATIC__/jzqg/js/component.js"></script>
+		<script>
+			var app=new Vue({
+				el:"#app",
+				data:{
+					imgs:[]
+				},
+				methods:{
+					add_img(event){
+						console.log(event);
+						var files=event.target.files;
+						for(var i=0;i<files.length;i++){
+							
+							var imgData=files[i];
+							
+				            if(imgData.name){	            
+				               this.imgs.push(window.URL.createObjectURL(imgData));	
+				            }
+						}
+				   },
+				   del_img(count){
+				   	   this.imgs.splice(count,1);
+				   }
+				}
+			});
+		</script>
+	</body>
+</html>

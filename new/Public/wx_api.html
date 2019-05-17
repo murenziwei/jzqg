@@ -1,0 +1,39 @@
+<!-- 微信api -->
+<script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script>
+
+    // 微信配置
+
+	wx.config({
+
+	    debug: false, 
+
+	    appId: "{$signPackage['appId']}", 
+
+	    timestamp: '{$signPackage["timestamp"]}', 
+
+	    nonceStr: '{$signPackage["nonceStr"]}', 
+
+	    signature: '{$signPackage["signature"]}',
+
+	    jsApiList: ['getLocation','openLocation','previewImage'] // 功能列表，我们要使用JS-SDK的什么功能
+
+	});
+
+	wx.ready(function(){
+
+	});
+	wx.error(function(){
+		console.log("执行了？");
+    	//信息流
+	});
+	//预览图片
+	function prevI(tar,allarr){
+		var aa=allarr||[];
+		tar&&aa.push(tar);
+		wx.previewImage({
+			current:tar||"__STATIC__/images/1440439367001464442.png",
+			urls:aa
+		});
+	}
+</script>

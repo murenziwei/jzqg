@@ -1,0 +1,447 @@
+
+<!DOCTYPE html>
+<head>
+	<title>我的发布</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script src="__STATIC__/jzqg/js/flexible.js"></script>
+	<script src="__STATIC__/jzqg/js/vue.js"></script>
+	<script src="__STATIC__/js/jquery.js"></script>
+
+	<!--vue公共组件-->
+	<script src="__STATIC__/jzqg/js/component.js"></script>
+	<!--公共样式-->
+	<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+	
+	<link rel="stylesheet" href="__STATIC__/jzqg/js/css/layui.css" />
+	<!-- layer.js -->
+	<script type="text/javascript" src="__STATIC__/jzqg/js/layui.js" ></script>
+
+
+	<style>
+		/*用户图片*/
+		.sra-icon{
+			width:0.5rem;
+		}
+		.my-header{
+			/*display:flex;
+			flex-direction: column;
+			align-items:center;*/
+			/*background-image:linear-gradient(45deg,#4c6aff 20%,#90a0f0 100%);*/
+			/*margin-bottom:0.1rem;*/
+			background-image:url(__STATIC__/images/userbg.png);
+			background-position:0 0;
+			background-size:100% 100%;
+			background-repeat: no-repeat;
+		}
+		.my-user{
+			text-align:center;
+			padding:1rem 0;
+		}
+		.user-img{
+			width:2.5rem;
+			height:2.5rem;
+			border-radius:50%;
+		}
+		.user-name{
+			font-size:0.4rem;
+			color:#fff;
+		}
+		.grade{
+			color:#fff;
+			padding:0.05rem 0.1rem;
+			background-color:rgba(255,255,255,0.2);
+			border:.01rem solid rgba(255,255,255,0.2);
+			font-size:0.3rem;
+			display:inline-block;
+			margin:0.09rem 0;
+		}
+		.user-proper{
+			display:flex;
+			align-items:center;
+			justify-content: space-around;
+			color:#fff;
+			width:80%;
+			margin:0 auto;
+			height:1rem;
+			border-top:.01rem solid rgba(255,255,255,0.5);
+		}
+		.ui-count{
+			font-size:0.4rem;
+		}
+		.ui-text{
+			font-size:0.3rem;
+			padding-left: 0.1rem;
+		}
+		.up-item{
+			color:#ffffff !important;
+		}
+		
+		/*发布内容为空*/
+		.main:empty+.data-empty{
+			display:block;
+		}
+		.data-empty{
+			padding:.8rem 0;
+			text-align:center;
+			width:100%;
+			display:none;
+		}
+		.de-img{
+			width:4rem;
+			height:4rem;
+			margin-bottom:1rem;
+		}
+		.de-text{
+			font-size:0.5rem;
+			color:#000;
+		}
+		.de-info{
+			font-size:0.3rem;
+			color:#999;
+		}
+		
+		/*商品*/
+		.main-item{
+			margin-bottom:0.2rem;
+			background-color:#fff;
+		}
+		.mi-header{
+			display:flex;
+			align-items:center;
+			justify-content: space-between;
+			height:1.2rem;
+			
+			background: -webkit-gradient(linear, right bottom, left top, color-stop(30%, #ffc107), to(red));
+		    background: linear-gradient(to top left, #ffc107 30%, red);
+		    padding:0 0.3rem;
+		}
+		
+		.mh-item{
+			color:#fff;
+			
+		}
+		.m-i-count{
+			font-size:0.4rem;
+			
+		}
+		.m-i-text{
+			font-size:0.3rem;
+		}
+		
+		.mc-class{
+			width:2rem;
+			height:2rem;
+			
+		}
+		.mi-content{
+			display:flex;
+			flex-wrap:wrap;
+			padding:0.3rem;
+		}
+		.mi-footer{
+			padding:0.3rem;
+			display:flex;
+			align-items:center;
+			
+		}
+		
+		.mf-left{
+			color:#999;
+		}
+		.mf-right{
+			flex:1;
+			text-align:right;
+		}
+		.edit-btn{
+			border-color:#FFA866;
+			color:#FFA866;
+			background-color:#fff;
+		}
+		.ser-btn{
+			height:0.7rem;
+			line-height:0.7rem;
+			font-size:0.3rem;
+			text-align:center;
+			padding:0 0.5rem;
+			border:0.02rem solid;
+			margin-left:0.3rem;
+			border-radius:5px;
+			display:inline-block;
+			white-space:nowrap;
+		}
+		.mc-flex{
+			width:25%;
+			margin-bottom:0.1rem;
+		}
+		
+		.fixed-label{
+			position:fixed;
+			right:0;
+			bottom:4rem;
+			
+		}
+		.fixed-text{
+			background-color:#ff9000;
+			color:#fff;
+			padding:0.2rem 0.4rem;
+			border-radius:5rem;
+			font-size:0.4rem;
+			border-top-right-radius:0;
+			border-bottom-right-radius:0;
+		}
+		.ft-img{
+			width:0.4rem;
+			height:0.4rem;
+			vertical-align: middle;
+			margin-right:0.1rem;
+		}
+
+		
+		  /*最底部的文字*/
+		  .info-text{
+		    font-size:0.4rem;
+		    color:#000;
+		    text-decoration:none;
+
+		  }
+
+		  .info-item{
+		    text-align:center;
+		    width:100%;
+		  }
+	</style>
+		
+
+</head>
+<body>
+  <div id="app">
+
+		<!-- <div class="my-header">
+			<div class="my-user">
+				<img src="{$butor['qc_img']}"  class="user-img" onerror="imgerr(this,'user')"/>
+
+				
+				<p class="user-name"></p>
+				<div class="grade">
+					<img src="__STATIC__/jzqg/img/position.png" alt="" class="sra-icon"> {$butor['address']}
+				</div>
+			</div>
+		</div> -->
+	  <div class="main" id="main"></div>
+	  <div class="data-empty">
+	  	  <img src="__STATIC__/jzqg/img/empty-content.png" alt="" class="de-img" />
+	  	  <p class="de-text">你还没有发布过内容</p>
+	  	  <p class="de-info">注意：只有经销商才可发布</p>
+	  	  
+	  </div>
+
+      <div class="info-item">
+        <p class="info-text">
+          微玖仟提供技术支持
+        </p>
+        <p class="info-text">wei9000.com</p>
+      </div>
+	  <div class="fixed-label">
+	    <a class="fixed-text" href="{:U('Mobile/User/butor_put_order')}" @click="clearsession()" >
+	      <image src="__STATIC__/jzqg/img/pencil.png" class="ft-img"></image>发布
+	    </a>
+	  </div>
+	  <div style="height:50px;"></div>
+	  <lw-tabbar page-active="2" />
+  </div>
+  <script>
+
+	    //图片不存在
+	    function imgerr(ind,user){
+
+	        ind&&(()=>{
+	          var src="__STATIC__/jzqg/img/";
+	          if(user){
+	          	src="__STATIC__/images/1440439367001464442.png";
+	          }else{
+	          	src+="no-img.png";
+	          }
+	          ind.setAttribute("src",src);
+	        })();
+
+	    };
+	    layui.use(["flow","layer","util"],function(res){
+			console.log(res,"你好");
+			var flow=layui.flow;
+			var layer=layui.layer;
+			//工具
+			var util=layui.util;
+
+			
+
+			//固定块
+			util.fixbar({
+				bar1:false,
+				css:{
+					right:10,bottom:200
+				},
+				click:function(type){
+
+				}
+			})
+			// 信息流加载
+			
+	    	flow.load({
+	    		elem:"#main",
+	    		done:function(page,next){
+	    			console.log(page);
+	    			var lis = [];
+			        //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+			        $.ajax({
+			        	type:"POST",
+			        	url:"{:U('/Mobile/User/butor_index_msg')}",
+			        	dataType:"json",
+			        	data:{
+			        		page:page
+			        	},
+			        	success:function(res){
+			        		console.log(res,"请求成功");
+			        		if(res.code){
+			        		 var data=res.data;
+			        		 console.log(data,"data");
+			        		 if(data.length){
+			        		 	layui.each(data,function(index, item){
+			        		 		var imgs=[];
+			        		 		var status='';
+			        		 		var result=item.imgs;
+
+			        		 		for(var i in result){
+			        		 			var vl=`
+			        		 			<div class="mc-flex">
+											<img src="${result[i]}" alt="" class="mc-class" onerror="imgerr(this)" />
+										</div>
+			        		 			`;
+			        		 			imgs.push(vl);
+			        		 		}
+
+			        // 		 		if(item.pay_status==0){
+			        // 		 			status=`
+			        // 		 			        <div class="mf-right">
+											// 		<div class="mr-btn ser-btn edit-btn" onclick="pay(${item.id})">去支付</div>
+											// 	</div>
+											// 	<div class="mf-right">
+											// 		<div class="mr-btn ser-btn edit-btn" onclick="no_order(${item.id})">取消订单</div>
+											// 	</div>
+			        // 		 			`;
+			        // 		 		}else if(item.pay_status==1){
+			        // 		 			status=`
+			        // 		 				<div class="mf-right">
+											// 		<div class="mr-btn ser-btn edit-btn" onclick="order('${item.goods_id}')">去购买</div>
+											// </div>
+			        // 		 			`;
+			        // 		 		}	
+									
+
+			        		 		var href="{:U('Mobile/user/butor_order_detail',array('id'=>'store_val'))}";
+
+			        		 	    href=href.replace('store_val',item.id);			
+
+			        		 		
+						        	var str=`
+									<div class="main-item" onclick="layer&&layer.load(1);window.location.href=('${href}');">
+										<div class="mi-header">
+											<div class="mh-item">
+												<span class="m-i-count">
+													${item.order_sn}
+												</span>
+												<span class="m-i-text">
+													货号
+												</span>
+											</div>
+											<div class="mh-item">
+												<span class="m-i-count">
+													${item.num}
+												</span>
+												<span class="m-i-text">
+													数量
+												</span>
+											</div>
+											<div class="mh-item">
+												<span class="m-i-count">
+													￥${item.money}
+												</span>
+												<span class="m-i-text">
+													诚意金
+												</span>
+											</div>
+											<div class="mh-item">
+												<span class="m-i-count">
+												${item.status_name}
+												</span>
+												<span class="m-i-text">
+													状态
+												</span>
+											</div>
+										</div>
+										<div class="mi-content">
+												${imgs.join('')}
+										</div>
+										<div class="mi-footer">
+											<div class="mf-left">
+												${item.user_name}在${item.add_time}发布
+											</div>
+										</div>
+									</div>
+						        	`;
+						          lis.push(str);
+					            });
+					            //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+						        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+						        next(lis.join(''), true);
+			        		 }else{
+			        		 	
+			        		 	next(lis.join(''),false);
+			        		 }	
+			        		}else{
+			        			next(lis.join(''),false);
+			        		}
+			        	},
+			        	error:function(){
+			        		console.error("请求失败");
+			        	}
+
+			        })
+	    		}
+	    	});
+
+		})
+		var app=new Vue({
+			el:"#app",
+			beforeCreate:function(){
+			},
+			methods:{
+				clearsession:function(){
+					layer&&layer.load(1);
+					window.sessionStorage.clear("dataarr");
+				}
+			}
+
+		});
+		function no_order($id){
+		    alert('暂未开放退款功能，需要退款请联系客服人员');
+//            if(confirm('确定要取消订单吗')==true){
+//
+//               $.ajax({
+//                   url:"{:U('/Mobile/User/no_order')}",
+//                   type:'POST',
+//                   data:{id:id},
+//
+//                   success:function(res){
+//
+//                   }
+//			   });
+//
+//                return true;
+//            }else{
+//                return false;
+//            }
+		}
+  </script>
+</body>

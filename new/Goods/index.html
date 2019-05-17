@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<head>
+	<title>我的发布</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script src="__STATIC__/jzqg/js/flexible.js"></script>
+	<script src="__STATIC__/jzqg/js/vue.js"></script>
+	<!--vue公共组件-->
+	<script src="__STATIC__/jzqg/js/component.js"></script>
+	<!--公共样式-->
+	<link rel="stylesheet" href="__STATIC__/jzqg/css/public.css" />
+	
+	<style>
+		
+		
+		/*发布内容为空*/
+		.main:empty+.data-empty{
+			display:block;
+		}
+		.data-empty{
+			padding:.8rem 0;
+			text-align:center;
+			width:100%;
+			display:none;
+		}
+		.de-img{
+			width:4rem;
+			height:4rem;
+			margin-bottom:1rem;
+		}
+		.de-text{
+			font-size:0.5rem;
+			color:#000;
+		}
+		.de-info{
+			font-size:0.3rem;
+			color:#999;
+		}
+		
+		/*商品*/
+		.main-item{
+			margin-bottom:0.2rem;
+			background-color:#fff;
+		}
+		.mi-header{
+			display:flex;
+			align-items:center;
+			justify-content: space-between;
+			height:1.2rem;
+			
+			background: -webkit-gradient(linear, right bottom, left top, color-stop(30%, #ffc107), to(red));
+		    background: linear-gradient(to top left, #ffc107 30%, red);
+		    padding:0 0.3rem;
+		}
+		
+		.mh-item{
+			color:#fff;
+			
+		}
+		.m-i-count{
+			font-size:0.4rem;
+			
+		}
+		.m-i-text{
+			font-size:0.3rem;
+		}
+		
+		.mc-class{
+			width:2rem;
+			height:2rem;
+			
+		}
+		.mi-content{
+			display:flex;
+			flex-wrap:wrap;
+			padding:0.3rem;
+		}
+		.mi-footer{
+			padding:0.3rem;
+			display:flex;
+			align-items:center;
+			
+		}
+		
+		.mf-left{
+			
+		}
+		.mf-right{
+			flex:1;
+			text-align:right;
+		}
+		.edit-btn{
+			border-color:#FFA866;
+			color:#FFA866;
+			background-color:#fff;
+		}
+		.ser-btn{
+			height:0.7rem;
+			line-height:0.7rem;
+			font-size:0.3rem;
+			text-align:center;
+			padding:0 0.5rem;
+			border:0.02rem solid;
+			margin-left:0.3rem;
+			border-radius:5px;
+			display:inline-block;
+		}
+		.mc-flex{
+			width:25%;
+			margin-bottom:0.1rem;
+		}
+		
+		.fixed-label{
+			position:fixed;
+			right:0;
+			bottom:4rem;
+			
+		}
+		.fixed-text{
+			background-color:#ff9000;
+			color:#fff;
+			padding:0.2rem 0.4rem;
+			border-radius:5rem;
+			font-size:0.4rem;
+			border-top-right-radius:0;
+			border-bottom-right-radius:0;
+		}
+		.ft-img{
+			width:0.4rem;
+			height:0.4rem;
+			vertical-align: middle;
+			margin-right:0.1rem;
+		}
+	</style>
+		
+
+</head>
+<body>
+  <div id="app">
+	  <div class="main">
+	  	<div class="main-item">
+	  		<div class="mi-header">
+	  			<div class="mh-item">
+	  				<span class="m-i-count">
+	  					7323
+	  				</span>
+	  				<span class="m-i-text">
+	  					货号
+	  				</span>
+	  			</div>
+	  			<div class="mh-item">
+	  				<span class="m-i-count">
+	  					7323
+	  				</span>
+	  				<span class="m-i-text">
+	  					数量
+	  				</span>
+	  			</div>
+	  			<div class="mh-item">
+	  				<span class="m-i-count">
+	  					￥7323
+	  				</span>
+	  				<span class="m-i-text">
+	  					诚意金
+	  				</span>
+	  			</div>
+	  			<div class="mh-item">
+	  				<span class="m-i-count">
+	  					待接单
+	  				</span>
+	  				<span class="m-i-text">
+	  					状态
+	  				</span>
+	  			</div>
+	  		</div>
+	  		<div class="mi-content">
+	  			<div class="mc-flex">
+	  				
+	  				<img src="__STATIC__/jzqg/img/search/test-data.png" alt="" class="mc-class" />
+	  			</div>
+	  			<div class="mc-flex">
+	  				
+	  				<img src="__STATIC__/jzqg/img/search/test-data.png" alt="" class="mc-class" />
+	  			</div>
+	  			<div class="mc-flex">
+	  				
+	  				<img src="__STATIC__/jzqg/img/search/test-data.png" alt="" class="mc-class" />
+	  			</div>
+	  			<div class="mc-flex">
+	  				
+	  				<img src="__STATIC__/jzqg/img/search/test-data.png" alt="" class="mc-class" />
+	  			</div>
+	  			<div class="mc-flex">
+	  				
+	  				<img src="__STATIC__/jzqg/img/search/test-data.png" alt="" class="mc-class" />
+	  			</div>
+	  		</div>
+	  		<div class="mi-footer">
+	  			<div class="mf-left">
+	  				2019-06-05 13:21:01发布
+	  			</div>
+	  			<div class="mf-right">
+	  				<div class="mr-btn ser-btn edit-btn">取消订单</div>
+	  			</div>
+	  		</div>
+	  	</div>
+	  </div>
+	  <div class="data-empty">
+	  	  <img src="__STATIC__/jzqg/img/empty-content.png" alt="" class="de-img" />
+	  	  <p class="de-text">你还没有发布过内容</p>
+	  	  <p class="de-info">注意：只有经销商才可发布</p>
+	  	  
+	  </div>
+	  <div class="fixed-label">
+	    <div class="fixed-text">
+	      <image src="__STATIC__/jzqg/img/pencil.png" class="ft-img"></image>发布
+	    </div>
+	  </div>
+	  <lw-tabbar page-active="2" />
+  </div>
+  <script>
+		var app=new Vue({
+			el:"#app"
+		});
+  </script>
+</body>
